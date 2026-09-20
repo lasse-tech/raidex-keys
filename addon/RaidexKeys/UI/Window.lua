@@ -18,6 +18,7 @@ local BASE = {
     PAD = 14, ACCENT = 7, COL_L = 16, COL_R = 16, GAP = 7,
     TAB_W = 76, ICON = 20, OPTIONS_H = 18, ARROW = 8, GRIP = 16,
     DOT = 6, DOT_GAP = 2, SLOT = 9, SLOT_GAP = 4,
+    MARK = 12, MARK_GAP = 5,
     NAME_MAX = 210,
     BAR_W = 4, BAR_HIT = 10, THUMB_MIN = 16,
     EMPTY_HINT = 300, EMPTY_ACTION = 240,
@@ -118,7 +119,8 @@ function Window.SetMain(guid)
     Window:Refresh()
 end
 
-function Window.View()
+function Window.View(which)
+    local function shows(what) return which == nil or which == what end
     local db = T.DB:Data()
     local guid = T.Plain(UnitGUID("player"))
     local player = T.Plain(UnitName("player"))
@@ -136,6 +138,7 @@ function Window.View()
             vault = char.vault, week = char.week, runs = char.week and #char.week or 0,
             seenAt = char.updatedAt,
             own = charGuid == guid,
+            runs = true,
         }
     end
     local seen = {}
@@ -160,7 +163,8 @@ function Window.View()
     local own = mainGuid and db.chars[mainGuid]
     view.goalName = own and own.name
     view.mainName = T.DB:Settings().main == mainGuid and own and own.name or nil
-    if own and own.best and next(db.maps) and (next(own.best) or (own.rating or 0) == 0) then
+    if shows("goal") and own and own.best and next(db.maps)
+        and (next(own.best) or (own.rating or 0) == 0) then
         local bests = {}
         for mapId in pairs(db.maps) do
             local run = own.best[mapId]
@@ -169,8 +173,8 @@ function Window.View()
         view.goalRating = math.floor((own.rating or 0) + 0.5)
         view.goals = Window.Goals(view, view.goalRating, bests, T.Rating.LevelCap(own.best))
     end
-    view.board = T.Board:View()
-    view.raids = T.Raids:View()
+    if shows("board") then view.board = T.Board:View() end
+    if shows("raids") then view.raids = T.Raids:View() end
     return view
 end
 
@@ -233,7 +237,7 @@ local function boardEntries(posts)
                 note = count[day] == 1 and L["1 key"] or L["%d keys"]:format(count[day]) }
         end
         entries[#entries + 1] = {
-            board = true, id = post.id, name = post.name, classFile = post.classFile,
+            board = true, id = post.id, name = post.name, who = post.who, classFile = post.classFile,
             mapId = post.mapId, level = post.level, dungeon = mapName(post.mapId),
             syncText = T.BoardPane.TimeText(post.at),
             rating = #post.applicants,
@@ -603,6 +607,10 @@ function Window.SetHint(value)
     if footer then footer.hint:SetText(value or "") end
 end
 
+function Window.ListHeight()
+    return R.listH
+end
+
 function Window.Metrics()
     local f = metrics()
     return M, f
@@ -914,6 +922,10 @@ local function createEntry()
     entry.instance:SetWordWrap(false)
     entry.bosses = {}
 
+    entry.mark = entry:CreateTexture(nil, "OVERLAY")
+    entry.mark:SetTexture(ICON, "CLAMP", "CLAMP", "TRILINEAR")
+    entry.mark:Hide()
+
     entry.dots = {}
     for i = 1, DOTS do entry.dots[i] = entry:CreateTexture(nil, "ARTWORK") end
 
@@ -930,12 +942,14 @@ local function createEntry()
         if not row then return end
         hovered = entry
         entry.hover:Show()
+        if entry.marked then entry.mark:Show() end
         footer.hint:SetText((row.board or row.raid) and L["Click: details and sign-up"]
             or (row.guid and not row.main and not entry.sample) and L["Click: make this your main"] or "")
     end)
     entry:SetScript("OnLeave", function()
         if hovered == entry then hovered = nil end
         entry.hover:Hide()
+        entry.mark:Hide()
         footer.hint:SetText("")
     end)
     entry:SetScript("OnMouseUp", function(_, button)
@@ -955,6 +969,7 @@ local function createEntry()
 end
 
 local function hideRow(entry)
+    entry.mark:Hide()
     entry.dungeon:Hide()
     entry.key:Hide()
     entry.rating:Hide()
@@ -1011,6 +1026,15 @@ local function drawRow(entry, row, pos, sample)
     entry.name:SetText(row.name or (row.plan and "-" or "?"))
     local color = classColor(row.classId, row.classFile) or (row.plan and not row.name and C.dim) or C.text
     tint(entry.name, color)
+
+    entry.marked = row.runs == true or (row.who ~= nil and T.Exchange:RunsAddon(row.who))
+    if entry.marked then
+        local width = math.min(entry.name:GetStringWidth() or 0, pos.name.w - M.MARK_GAP - M.MARK)
+        entry.mark:SetSize(M.MARK, M.MARK)
+        entry.mark:ClearAllPoints()
+        entry.mark:SetPoint("LEFT", entry.name, "LEFT", math.max(0, width) + M.MARK_GAP, 0)
+    end
+    entry.mark:SetShown(entry.marked and hovered == entry)
 
     if column(entry.dungeon, pos, "dungeon") then
         entry.dungeon:SetText(row.dungeon or "-")
@@ -1190,6 +1214,10 @@ end
 local function cursorY(region)
     local _, y = GetCursorPosition()
     return y / region:GetEffectiveScale()
+end
+
+function Window.CursorY(region)
+    return cursorY(region)
 end
 
 local function createScrollBar()
@@ -1514,13 +1542,13 @@ end
 
 function Window:Refresh()
     if not frame or not frame:IsShown() then return end
-    local view = preview and T.Sample.View() or Window.View()
-    Window.view = view
-    local groupOpen = view.sample == true or IsInGroup() == true
+    local groupOpen = preview or IsInGroup() == true
     if tab == "party" and not groupOpen then
         tab, offset = "chars", 0
         T.DB:Settings().window.tab = tab
     end
+    local view = preview and T.Sample.View() or Window.View(tab)
+    Window.view = view
     local rows, sample = Window.Rows(view, tab)
     local sort = sorts[tab]
     local entries = Window.Entries(rows, tab, sort)

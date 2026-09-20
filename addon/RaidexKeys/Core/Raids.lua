@@ -198,6 +198,7 @@ local function onMessage(_, prefix, message, channel, from)
     if prefix ~= PREFIX or channel ~= "GUILD" then return end
     message, from = Plain(message), T.Board.FullName(Plain(from))
     if not (message and from) or from == me() then return end
+    T.Exchange:HeardFrom(from)
     local guild = store()
     if not guild then return end
 
@@ -662,12 +663,19 @@ function Raids:SetRole(key, who, role)
     return true
 end
 
-local PROGRESS_FRESH = 60
-local PROGRESS_RETRY = 5
+local PROGRESS_FRESH = 600
+local PROGRESS_RETRY = 60
+local PROGRESS_WAIT = 2
+local PROGRESS_APART = 30
+local JOURNAL_RETRY = 60
 
 local journal
+local journalAt
 local raidBosses = {}
+local bossesAt = {}
 local progress = {}
+local wanted = {}
+local scanning, scannedAt
 
 local function readJournal()
     local found = { byMap = {}, byName = {} }
@@ -696,6 +704,8 @@ end
 local function journalInstance(name, mapId)
     local instanceId = lookup(name, mapId)
     if instanceId then return instanceId end
+    if journalAt and GetTime() - journalAt < JOURNAL_RETRY then return nil end
+    journalAt = GetTime()
     journal = readJournal()
     return lookup(name, mapId)
 end
@@ -708,6 +718,8 @@ local function bossesOf(name, mapId)
     local instanceId = journalInstance(name, mapId)
     if not instanceId then return nil end
     if raidBosses[instanceId] then return raidBosses[instanceId] end
+    if bossesAt[instanceId] and GetTime() - bossesAt[instanceId] < JOURNAL_RETRY then return nil end
+    bossesAt[instanceId] = GetTime()
     local theirs = EncounterJournal and EncounterJournal.instanceID
     EJ_SelectInstance(instanceId)
     local list, i = {}, 1
@@ -723,67 +735,123 @@ local function bossesOf(name, mapId)
     return raidBosses[instanceId]
 end
 
-function Raids.Progress(raidName, difficultyName, mapId, difficultyId)
+local function progressKey(raidName, difficultyName, mapId, difficultyId)
     local difficultyText = difficultyId and GetDifficultyInfo and Plain((GetDifficultyInfo(difficultyId)))
         or difficultyName
-    if not ((raidName or mapId) and difficultyText and GetGuildCategoryList and GetCategoryNumAchievements
-        and GetAchievementInfo) then
-        return nil
-    end
-    local cacheKey = tostring(mapId or raidName) .. "|" .. tostring(difficultyId or difficultyText)
-    local held = progress[cacheKey]
-    local fresh = held and held.killed and held.killed > 0 and PROGRESS_FRESH or PROGRESS_RETRY
-    if held and GetTime() - held.at < fresh then
-        return held.killed, held.bosses
-    end
+    if not ((raidName or mapId) and difficultyText) then return nil end
+    return tostring(mapId or raidName) .. "|" .. tostring(difficultyId or difficultyText), difficultyText
+end
 
-    local bosses = bossesOf(raidName, mapId) or {}
-    local byEncounter, byName, down, spoken = {}, {}, {}, false
-    for i, boss in ipairs(bosses) do
-        if boss.encounter then byEncounter[boss.encounter] = i end
-        byName[boss.name] = i
+local function stale(cacheKey)
+    local held = progress[cacheKey]
+    if not (held and held.at) then return true end
+    local fresh = held.killed and held.killed > 0 and PROGRESS_FRESH or PROGRESS_RETRY
+    return GetTime() - held.at >= fresh
+end
+
+local function criteriaOf(id)
+    local list = {}
+    for i = 1, GetAchievementNumCriteria and Plain(GetAchievementNumCriteria(id)) or 0 do
+        local text, _, done, quantity, required, _, _, asset = GetAchievementCriteriaInfo(id, i)
+        list[i] = { text = Plain(text), done = Plain(done), quantity = Plain(quantity),
+            required = Plain(required), asset = Plain(asset) }
     end
-    for _, category in ipairs(#bosses > 0 and GetGuildCategoryList() or {}) do
+    return list
+end
+
+function Raids.ReadProgress()
+    scanning, scannedAt = nil, GetTime()
+    if not (GetGuildCategoryList and GetCategoryNumAchievements and GetAchievementInfo) then return end
+
+    local asked = {}
+    for cacheKey, want in pairs(wanted) do
+        if stale(cacheKey) then
+            local bosses = bossesOf(want.raidName, want.mapId)
+            if bosses and #bosses > 0 then
+                local byEncounter, byName = {}, {}
+                for i, boss in ipairs(bosses) do
+                    if boss.encounter then byEncounter[boss.encounter] = i end
+                    byName[boss.name] = i
+                end
+                asked[#asked + 1] = { cacheKey = cacheKey, difficultyText = want.difficultyText,
+                    bosses = bosses, byEncounter = byEncounter, byName = byName, down = {} }
+            end
+        end
+    end
+    if #asked == 0 then return end
+
+    for _, category in ipairs(GetGuildCategoryList() or {}) do
         for index = 1, Plain((GetCategoryNumAchievements(category, true))) or 0 do
             local id, name, _, completed, _, _, _, description = GetAchievementInfo(category, index)
             id, name, description = Plain(id), Plain(name) or "", Plain(description) or ""
-            if id and (name .. " " .. description):find(difficultyText, 1, true) then
-                for criterion = 1, GetAchievementNumCriteria and Plain(GetAchievementNumCriteria(id)) or 0 do
-                    local text, _, done, quantity, required, _, _, asset = GetAchievementCriteriaInfo(id, criterion)
-                    asset, text = Plain(asset), Plain(text)
-                    local boss = asset and byEncounter[asset] or text and byName[text]
-                    if boss then
-                        spoken = true
-                        quantity, required = Plain(quantity), Plain(required)
-                        if Plain(done) or (quantity and required and required > 0 and quantity >= required) then
-                            down[boss] = true
+            local title = name .. " " .. description
+            local criteria
+            for _, ask in ipairs(asked) do
+                if id and title:find(ask.difficultyText, 1, true) then
+                    criteria = criteria or criteriaOf(id)
+                    for _, criterion in ipairs(criteria) do
+                        local boss = criterion.asset and ask.byEncounter[criterion.asset]
+                            or criterion.text and ask.byName[criterion.text]
+                        if boss then
+                            ask.spoken = true
+                            if criterion.done or (criterion.quantity and criterion.required
+                                and criterion.required > 0 and criterion.quantity >= criterion.required) then
+                                ask.down[boss] = true
+                            end
                         end
                     end
-                end
-                for i, boss in ipairs(bosses) do
-                    if name:find(boss.name, 1, true) then
-                        spoken = true
-                        if Plain(completed) then down[i] = true end
+                    for i, boss in ipairs(ask.bosses) do
+                        if name:find(boss.name, 1, true) then
+                            ask.spoken = true
+                            if Plain(completed) then ask.down[i] = true end
+                        end
                     end
                 end
             end
         end
     end
-    local killed = 0
-    for _ in pairs(down) do killed = killed + 1 end
-    held = { at = GetTime() }
-    if spoken then held.killed, held.bosses = killed, #bosses end
+
     local guild = store()
-    if guild then
-        guild.progress = guild.progress or {}
-        local kept = guild.progress[cacheKey]
-        if held.killed and (not kept or held.killed >= kept.killed) then
-            guild.progress[cacheKey] = { killed = held.killed, bosses = held.bosses }
-        elseif kept then
-            held.killed, held.bosses = kept.killed, kept.bosses
+    for _, ask in ipairs(asked) do
+        local held = { at = GetTime() }
+        if ask.spoken then
+            local killed = 0
+            for _ in pairs(ask.down) do killed = killed + 1 end
+            held.killed, held.bosses = killed, #ask.bosses
         end
+        if guild then
+            guild.progress = guild.progress or {}
+            local kept = guild.progress[ask.cacheKey]
+            if held.killed and (not kept or held.killed >= kept.killed) then
+                guild.progress[ask.cacheKey] = { killed = held.killed, bosses = held.bosses }
+            elseif kept then
+                held.killed, held.bosses = kept.killed, kept.bosses
+            end
+        end
+        progress[ask.cacheKey] = held
     end
-    progress[cacheKey] = held
+    if T.Window then T.Window:Refresh() end
+end
+
+function Raids.ScanProgress()
+    if scanning then return end
+    scanning = true
+    local since = scannedAt and GetTime() - scannedAt or PROGRESS_APART
+    C_Timer.After(math.max(PROGRESS_WAIT, PROGRESS_APART - since), Raids.ReadProgress)
+end
+
+function Raids.Progress(raidName, difficultyName, mapId, difficultyId)
+    local cacheKey, difficultyText = progressKey(raidName, difficultyName, mapId, difficultyId)
+    if not cacheKey then return nil end
+    wanted[cacheKey] = { raidName = raidName, mapId = mapId, difficultyText = difficultyText }
+    local held = progress[cacheKey]
+    if not held then
+        local guild = store()
+        local kept = guild and guild.progress and guild.progress[cacheKey]
+        held = { killed = kept and kept.killed, bosses = kept and kept.bosses }
+        progress[cacheKey] = held
+    end
+    if stale(cacheKey) then Raids.ScanProgress() end
     return held.killed, held.bosses
 end
 
@@ -874,6 +942,7 @@ function Raids.Build(key, raid, signups, player, calendar)
 end
 
 function Raids:View()
+    wanted = {}
     local guild = store()
     if not guild then return nil end
     if next(raids) == nil and guild.calendar then raids = guild.calendar end

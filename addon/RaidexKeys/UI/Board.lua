@@ -11,6 +11,8 @@ local WEEKDAYS = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frid
 
 local pane
 local mode, postId
+local listOffset = 0
+local listRows, listTop, listLineH = 0, 0, 0
 local form = { day = 0, minutes = 19 * 60 }
 local W, C
 
@@ -115,7 +117,7 @@ end
 
 local function whisper(name)
     local tell = (ChatFrameUtil and ChatFrameUtil.SendTell) or ChatFrame_SendTell
-    if tell and name then tell(name) end
+    if tell and name and name ~= T.Board.Me() then tell(name) end
 end
 BoardPane.Whisper = whisper
 
@@ -140,7 +142,7 @@ function BoardPane:Create(frame, list)
     pane:SetAllPoints(list)
     pane:EnableMouse(true)
     pane:EnableMouseWheel(true)
-    pane:SetScript("OnMouseWheel", function() end)
+    pane:SetScript("OnMouseWheel", function(_, delta) BoardPane:Scroll(-delta) end)
     local background = W.Fill(pane, C.bg, 1)
     background:SetAllPoints()
 
@@ -153,7 +155,7 @@ function BoardPane:Create(frame, list)
     pane.message = W.Text(pane, 12, C.muted)
 
     pane.lines = {}
-    for i = 1, T.Board.MAX_APPLICANTS do
+    for i = 1, T.Board.MAX_APPLICANTS + 1 do
         local line = CreateFrame("Button", nil, pane)
         line.label = W.Text(line, 12, C.body)
         line.label:SetPoint("LEFT")
@@ -171,6 +173,41 @@ function BoardPane:Create(frame, list)
             end
         end)
     end
+    pane.bar = CreateFrame("Frame", nil, pane)
+    pane.bar:SetFrameLevel(pane:GetFrameLevel() + 2)
+    pane.bar:EnableMouse(true)
+    pane.bar:SetScript("OnMouseDown", function(_, click)
+        if click ~= "LeftButton" then return end
+        local y, top, bottom = W.CursorY(pane.bar), pane.thumb:GetTop(), pane.thumb:GetBottom()
+        if type(y) ~= "number" then return end
+        if type(top) == "number" and y > top then BoardPane:Scroll(-listRows)
+        elseif type(bottom) == "number" and y < bottom then BoardPane:Scroll(listRows) end
+    end)
+
+    pane.thumb = CreateFrame("Frame", nil, pane.bar)
+    pane.thumb:EnableMouse(true)
+    pane.thumb.fill = W.Fill(pane.thumb, C.edge, 1, "ARTWORK")
+    pane.thumb.fill:SetAllPoints()
+    local function shade(color) pane.thumb.fill:SetColorTexture(color[1], color[2], color[3], 1) end
+    pane.thumb:SetScript("OnEnter", function() shade(C.faint) end)
+    pane.thumb:SetScript("OnLeave", function() if not pane.thumb.dragging then shade(C.edge) end end)
+    pane.thumb:SetScript("OnMouseDown", function(_, click)
+        if click ~= "LeftButton" then return end
+        pane.thumb.dragging = { y = W.CursorY(pane.thumb), offset = listOffset }
+        pane.thumb:SetScript("OnUpdate", function()
+            local room, most = pane.barRoom or 0, math.max(0, (pane.listCount or 0) - listRows)
+            local y = W.CursorY(pane.thumb)
+            if room <= 0 or most <= 0 or type(y) ~= "number" then return end
+            BoardPane:ScrollTo(pane.thumb.dragging.offset + math.floor((pane.thumb.dragging.y - y) / room * most + 0.5))
+        end)
+    end)
+    pane.thumb:SetScript("OnMouseUp", function()
+        pane.thumb.dragging = nil
+        pane.thumb:SetScript("OnUpdate", nil)
+        if not pane.thumb:IsMouseOver() then shade(C.edge) end
+    end)
+    pane.bar:Hide()
+
     pane.withdraw = button(L["Take back sign-up"], function() T.Board:Withdraw(postId) end)
     pane.remove = button(L["Take posting down"], function()
         T.Board:Remove(postId)
@@ -199,6 +236,21 @@ function BoardPane:Create(frame, list)
     pane.cancel = button(L["Cancel"], function() BoardPane:Close() end)
 
     pane:Hide()
+end
+
+local function listGeometry()
+    local M, factor = W.Metrics()
+    local function gap(value) return math.floor(value * factor + 0.5) end
+    local function heightOf(region)
+        local height = region.GetStringHeight and region:GetStringHeight()
+        return type(height) == "number" and height or 0
+    end
+    local lineH = gap(18)
+    local top = gap(12) + heightOf(pane.title) + gap(6) + heightOf(pane.sub)
+        + gap(8) + heightOf(pane.note) + gap(12)
+    local foot = M.OPTIONS_H + gap(6) + gap(10) + gap(8)
+    local room = (W.ListHeight() or 0) - top - foot
+    return top, lineH, math.max(1, math.floor(room / lineH))
 end
 
 function BoardPane:Arrange()
@@ -251,30 +303,46 @@ function BoardPane:Arrange()
     pane.note:ClearAllPoints()
     pane.note:SetPoint("TOPLEFT", pane.sub, "BOTTOMLEFT", 0, -gap(8))
     pane.note:SetPoint("RIGHT", pane, "RIGHT", -pad, 0)
-    local lineH = gap(18)
+    local lineH = listLineH > 0 and listLineH or select(2, listGeometry())
     for i, line in ipairs(pane.lines) do
         line:ClearAllPoints()
         line:SetPoint("TOPLEFT", pane.note, "BOTTOMLEFT", 0, -gap(12) - (i - 1) * lineH)
         line:SetPoint("RIGHT", pane, "RIGHT", -pad, 0)
         line:SetHeight(lineH)
     end
-    local first
-    for _, name in ipairs({ "T", "H", "D" }) do
-        local role = pane.roles[name]
-        role:ClearAllPoints()
-        if first then role:SetPoint("LEFT", first, "RIGHT", gap(16), 0)
-        else role:SetPoint("BOTTOMLEFT", pad, gap(10)) end
-        first = role
+    local listH = listRows * lineH
+    pane.bar:ClearAllPoints()
+    pane.bar:SetPoint("TOPRIGHT", pane, "TOPRIGHT", -3, -listTop)
+    pane.bar:SetSize(M.BAR_W, math.max(lineH, listH))
+    local most = math.max(0, (pane.listCount or 0) - listRows)
+    if most == 0 then
+        pane.barRoom = 0
+        pane.bar:Hide()
+    else
+        local height = math.max(M.THUMB_MIN, math.floor(listH * listRows / (pane.listCount or 1)))
+        pane.barRoom = listH - height
+        pane.thumb:ClearAllPoints()
+        pane.thumb:SetSize(M.BAR_W, height)
+        pane.thumb:SetPoint("TOP", pane.bar, "TOP", 0, -math.floor(pane.barRoom * listOffset / most + 0.5))
+        pane.bar:Show()
     end
-    pane.withdraw:ClearAllPoints()
-    pane.withdraw:SetPoint("BOTTOMLEFT", pad, gap(10))
-    pane.remove:ClearAllPoints()
-    pane.remove:SetPoint("BOTTOMLEFT", pad, gap(10))
+
+    local previous
+    local function place(widget, air)
+        if not widget:IsShown() then return end
+        widget:ClearAllPoints()
+        if previous then widget:SetPoint("LEFT", previous, "RIGHT", gap(air or 16), 0)
+        else widget:SetPoint("BOTTOMLEFT", pad, gap(10)) end
+        previous = widget
+    end
+    for _, name in ipairs({ "T", "H", "D" }) do place(pane.roles[name]) end
+    place(pane.withdraw, 28)
+    place(pane.remove, 28)
     pane.message:ClearAllPoints()
     pane.message:SetPoint("BOTTOMRIGHT", -pad, gap(12))
 end
 
-local POST_PARTS = { "holder", "note", "withdraw", "remove" }
+local POST_PARTS = { "holder", "note", "withdraw", "remove", "bar" }
 local FORM_PARTS = { "dayLabel", "dayPrev", "dayNext", "timeLabel", "timePrev", "timeNext",
     "noteLabel", "noteBox", "submit", "cancel" }
 
@@ -298,30 +366,51 @@ local function drawPost()
     pane.title:SetText(("%s+%d|r %s"):format(keyColor(), post.level or 0, W.MapName(post.mapId) or "?"))
     pane.sub:SetText(("%s · %s · %s"):format(BoardPane.DayText(post.at), BoardPane.TimeText(post.at), L["Key holder:"]))
     pane.holderName = post.holder
-    pane.holder:SetLabel(named(post.name, post.classFile))
+    pane.holder:SetLabel(post.role and ("%s · %s"):format(named(post.name, post.classFile),
+        BoardPane.RoleName(post.role)) or named(post.name, post.classFile))
     pane.holder:Show()
     pane.note:SetText(post.note ~= "" and post.note or L["No note."])
     pane.note:Show()
 
+    local members = { { who = post.holder, name = post.name, classFile = post.classFile,
+        role = post.role, rating = post.rating } }
+    for _, s in ipairs(post.applicants) do
+        members[#members + 1] = { who = s.who, name = T.Exchange.ShortName(s.who),
+            classFile = s.classFile, role = s.role, rating = s.rating }
+    end
+
+    local rows
+    listTop, listLineH, rows = listGeometry()
+    listRows = math.min(rows, #pane.lines)
+    listOffset = math.max(0, math.min(listOffset, #members + (#post.applicants == 0 and 1 or 0) - listRows))
+
     for i, line in ipairs(pane.lines) do
-        local s = post.applicants[i]
-        if s then
-            line.who = s.who
-            line.label:SetText(("%d. %s · %s · %d"):format(i, named(T.Exchange.ShortName(s.who), s.classFile),
-                BoardPane.RoleName(s.role), s.rating or 0))
+        local member = members[listOffset + i]
+        if member and i <= listRows then
+            line.who = member.who
+            local parts = { named(member.name, member.classFile) }
+            parts[#parts + 1] = member.role and BoardPane.RoleName(member.role) or L["no role yet"]
+            if member.rating then parts[#parts + 1] = tostring(member.rating) end
+            line.label:SetText(("%d. %s"):format(listOffset + i, table.concat(parts, " · ")))
+            line:Show()
+        elseif i <= listRows and listOffset + i == #members + 1 and #post.applicants == 0 then
+            line.who = nil
+            line.label:SetText(L["Nobody has signed up yet."])
             line:Show()
         else
             line.who = nil
-            line:SetShown(i == 1)
-            if i == 1 then line.label:SetText(L["Nobody has signed up yet."]) end
+            line:Hide()
         end
     end
+    pane.listCount = #members + (#post.applicants == 0 and 1 or 0)
 
     local full = #post.applicants >= T.Board.MAX_APPLICANTS
     local canSign = not post.own and not post.signedUp and not full
     for letter, role in pairs(pane.roles) do
-        role:SetLabel(L["Sign up as %s"]:format(BoardPane.RoleName(letter)))
-        role:SetShown(canSign)
+        role:SetLabel(post.own and L["Role: %s"]:format(BoardPane.RoleName(letter))
+            or L["Sign up as %s"]:format(BoardPane.RoleName(letter)))
+        role:SetShown(canSign or post.own)
+        role:SetEnabled(not post.own or post.role ~= letter)
     end
     pane.withdraw:SetShown(post.signedUp)
     pane.remove:SetShown(post.own)
@@ -343,7 +432,7 @@ local function drawForm()
 
     local mapId, level = T.Snapshot:OwnKey()
     pane.title:SetText(mapId and ("%s+%d|r %s"):format(keyColor(), level, W.MapName(mapId) or "?") or L["No keystone in your bags."])
-    pane.sub:SetText(T.Board:OwnPost() and L["Posting it replaces your earlier posting."] or L["Pin your key for a day and a time."])
+    pane.sub:SetText(L["Pin your key for a day and a time."])
     pane.dayLabel:SetText(BoardPane.DayText(BoardPane.FormTime(form.day, 0)))
     pane.timeLabel:SetText(BoardPane.ClockText(form.minutes))
     pane.noteLabel:SetText(L["Note, e.g. \"a few more keys afterwards\""])
@@ -368,12 +457,25 @@ function BoardPane:Refresh()
     end
 end
 
+function BoardPane:Scroll(by)
+    self:ScrollTo(listOffset + (by or 0))
+end
+
+function BoardPane:ScrollTo(to)
+    local most = math.max(0, ((pane and pane.listCount) or 0) - listRows)
+    to = math.max(0, math.min(to or 0, most))
+    if to == listOffset then return end
+    listOffset = to
+    self:Refresh()
+end
+
 function BoardPane:IsOpen()
     return mode ~= nil
 end
 
 function BoardPane:Open(id)
     mode, postId = "post", id
+    listOffset = 0
     if pane then pane.message:SetText("") end
     T.Window:Refresh()
 end

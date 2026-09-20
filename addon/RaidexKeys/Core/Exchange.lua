@@ -23,6 +23,17 @@ local function isSelf(name)
     return fullName(name) == fullName(UnitName("player"))
 end
 
+local running = {}
+
+function Exchange:HeardFrom(who)
+    if who then running[who] = true end
+end
+
+function Exchange:RunsAddon(who)
+    if not who then return false end
+    return running[who] == true or isSelf(who)
+end
+
 local function currentGuild()
     if not IsInGuild() then return nil end
     local name, _, _, realm = GetGuildInfo("player")
@@ -41,8 +52,17 @@ local function rosterClasses()
     return key and T.DB:Data().roster[key] or {}
 end
 
+local ROSTER_APART = 15
+local rosterAt
+
 local function readRoster()
     if not (IsInGuild() and GetGuildRosterInfo and GetNumGuildMembers) then return end
+    local since = rosterAt and GetTime() - rosterAt
+    if since and since < ROSTER_APART then
+        Addon:Debounce("roster", ROSTER_APART - since, readRoster)
+        return
+    end
+    rosterAt = GetTime()
     local classes = {}
     for i = 1, (GetNumGuildMembers() or 0) do
         local name, _, _, _, _, _, _, _, _, _, classFile = GetGuildRosterInfo(i)
@@ -187,7 +207,8 @@ function Exchange:PartyKeys()
 
     local mapId, level = T.Snapshot:OwnKey()
     local _, classId = UnitClassBase("player")
-    local list = { { name = Plain(UnitName("player")), mapId = mapId, level = level,
+    local list = { { name = Plain(UnitName("player")), who = fullName(Plain(UnitName("player"))),
+        mapId = mapId, level = level,
         rating = math.floor(T.Snapshot:Rating() + 0.5), classId = classId,
         seenAt = GetServerTime() } }
 
@@ -201,7 +222,7 @@ function Exchange:PartyKeys()
             if not isSelf(who) then
                 local entry = memberKey(who) or {}
                 local _, memberClass = UnitClassBase(unit)
-                list[#list + 1] = { name = name, mapId = entry.mapId, level = entry.level,
+                list[#list + 1] = { name = name, who = who, mapId = entry.mapId, level = entry.level,
                     rating = entry.rating, classId = Plain(memberClass), seenAt = entry.seenAt }
             end
         end
@@ -227,7 +248,8 @@ local function ownGuildKey()
     if not level then return nil end
     local _, classId = UnitClassBase("player")
     return {
-        name = Plain(UnitName("player")), mapId = mapId, level = level,
+        name = Plain(UnitName("player")), who = fullName(Plain(UnitName("player"))),
+        mapId = mapId, level = level,
         rating = math.floor(T.Snapshot:Rating() + 0.5), classId = Plain(classId),
         seenAt = GetServerTime(),
     }
@@ -242,7 +264,7 @@ function Exchange:GuildView()
     local classes = rosterClasses()
     for who, entry in pairs(guild.keys) do
         if entry.level and (entry.seenAt or 0) >= since then
-            keys[#keys + 1] = { name = shortName(who), mapId = entry.mapId, level = entry.level,
+            keys[#keys + 1] = { name = shortName(who), who = who, mapId = entry.mapId, level = entry.level,
                 rating = entry.rating, classFile = classes[who], seenAt = entry.seenAt }
         end
     end

@@ -259,6 +259,7 @@ local function onMessage(_, prefix, message, channel, from)
     if prefix ~= PREFIX or channel ~= "GUILD" then return end
     message, from = Plain(message), fullName(Plain(from))
     if not (message and from) or from == me() then return end
+    T.Exchange:HeardFrom(from)
     local guild = store()
     if not guild then return end
 
@@ -325,7 +326,7 @@ end
 local function applicantsOf(post)
     local list = {}
     for _, s in pairs(post.signups or {}) do
-        if not s.removed then list[#list + 1] = s end
+        if not s.removed and s.who ~= post.holder then list[#list + 1] = s end
     end
     table.sort(list, function(a, b)
         if (a.signedAt or 0) ~= (b.signedAt or 0) then return (a.signedAt or 0) < (b.signedAt or 0) end
@@ -335,26 +336,16 @@ local function applicantsOf(post)
     return list
 end
 
-function Board:OwnPost()
-    local guild = store()
-    if not guild then return nil end
-    local player = me()
-    for _, post in pairs(guild.posts) do
-        if post.holder == player and not post.removed and not expired(post) then return post end
-    end
-    return nil
+function Board.HolderEntry(post)
+    local entry = post and post.signups and post.holder and post.signups[post.holder]
+    if not entry or entry.removed then return nil end
+    return entry
 end
 
 function Board:Post(at, note)
     local guild = store()
     local mapId, level = T.Snapshot:OwnKey()
     if not (guild and mapId) then return nil end
-    local old = self:OwnPost()
-    if old then
-        old.removed = true
-        bump(old)
-        sendBundle(old)
-    end
     local holder = me()
     local now = GetServerTime()
     local post = {
@@ -392,9 +383,12 @@ function Board:SignUp(id, role)
     local guild = store()
     local post = guild and guild.posts[id]
     local player = me()
-    if not post or post.removed or post.holder == player then return false end
+    if not post or post.removed then return false end
     local mine = post.signups[player]
-    if not (mine and not mine.removed) and #applicantsOf(post) >= Board.MAX_APPLICANTS then return false end
+    if post.holder ~= player and not (mine and not mine.removed)
+        and #applicantsOf(post) >= Board.MAX_APPLICANTS then
+        return false
+    end
     local classFile = UnitClassBase("player")
     local entry = mine or { who = player }
     entry.role = ROLES[role] and role or playerRole()
@@ -429,7 +423,7 @@ function Board:CheckOverflow()
     local player = me()
     for id, post in pairs(guild.posts) do
         local mine = post.signups[player]
-        if mine and not mine.removed and not post.removed then
+        if mine and not mine.removed and not post.removed and post.holder ~= player then
             local inside = false
             for _, s in ipairs(applicantsOf(post)) do
                 if s.who == player then inside = true end
@@ -453,12 +447,14 @@ function Board:View()
     for id, post in pairs(guild.posts) do
         if not post.removed and not expired(post, now) then
             local applicants = applicantsOf(post)
+            local holder = Board.HolderEntry(post)
             local signedUp = false
             for _, s in ipairs(applicants) do
                 if s.who == player then signedUp = true end
             end
             list[#list + 1] = {
-                id = id, holder = post.holder, name = T.Exchange.ShortName(post.holder),
+                id = id, holder = post.holder, who = post.holder, name = T.Exchange.ShortName(post.holder),
+                role = holder and holder.role, rating = holder and holder.rating,
                 classFile = T.Exchange:ClassOf(post.holder), mapId = post.mapId, level = post.level,
                 at = post.at, note = post.note, applicants = applicants,
                 own = post.holder == player, signedUp = signedUp,

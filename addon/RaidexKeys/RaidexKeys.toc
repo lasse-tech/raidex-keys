@@ -3,8 +3,8 @@
 ## Notes: Keystones of all your characters, your group and your guild, a key board, a raid calendar and a Mythic+ timer.
 ## Notes-deDE: Keystones aller Twinks, deiner Gruppe und deiner Gilde, eine Pinnwand, ein Raidkalender und ein Mythic+-Timer.
 ## Author: Lars Gossard
-## Version: 0.7.0
-## X-Build: 244
+## Version: 0.8.0
+## X-Build: 254
 ## X-Email: raidex@incudex.de
 ## X-Website: https://raidex.app/keys/
 ## X-License: GPL-3.0-or-later
