@@ -1,0 +1,8 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Project>
+  <!-- Every build fails on a warning, not only the lint: a warning is fixed, never let through. -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

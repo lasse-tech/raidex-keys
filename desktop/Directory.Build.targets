@@ -1,0 +1,28 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Project>
+  <!--
+    The build number: the count of commits up to the one built
+    (git rev-list - -count HEAD). It rises with every commit and is the same
+    for app and addon built from one state; the addon packer gets it
+    as an argument. -p:BuildNumber=… sets it by hand; without git it is "dev".
+    It lands in the assembly as AssemblyMetadata("BuildNumber"), which the
+    about dialog and raidex-keys - -diagnose read (Core/BuildInfo.cs).
+  -->
+  <Target Name="RaidexKeysBuildNumber" BeforeTargets="GetAssemblyAttributes">
+    <Exec Condition="'$(BuildNumber)' == ''" Command="git rev-list --count HEAD"
+          WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true"
+          IgnoreExitCode="true" StandardOutputImportance="low" StandardErrorImportance="low">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_RaidexKeysGitCount" />
+      <Output TaskParameter="ExitCode" PropertyName="_RaidexKeysGitExit" />
+    </Exec>
+    <PropertyGroup Condition="'$(BuildNumber)' == ''">
+      <BuildNumber Condition="'$(_RaidexKeysGitExit)' == '0'">$(_RaidexKeysGitCount)</BuildNumber>
+      <BuildNumber Condition="'$(_RaidexKeysGitExit)' != '0'">dev</BuildNumber>
+    </PropertyGroup>
+    <ItemGroup>
+      <AssemblyMetadata Include="BuildNumber" Value="$(BuildNumber)" />
+      <AssemblyMetadata Include="StoreBuild" Value="true" Condition="'$(StoreBuild)' == 'true'" />
+    </ItemGroup>
+  </Target>
+</Project>

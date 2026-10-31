@@ -1,0 +1,60 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<!--
+  Raidex Keys - brand palette, type and glyph.
+
+  Source: the Raidex Keys brand guide (Claude Design), sections 03 "Farbe & Typografie" and 05 "Desktop". Values are taken over,
+  not invented; the few derived ones are marked.
+
+-->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- The colours come from the chosen theme (AppThemes). -->
+  <!-- A keystone in Blizzard's colour for it, in every theme. -->
+  <Color x:Key="KeystoneColor">#A335EE</Color>
+  <SolidColorBrush x:Key="KeystoneBrush" Color="{StaticResource KeystoneColor}" />
+
+  <!-- Type (section 03): display, UI, data -->
+  <FontFamily x:Key="DisplayFont">avares://RaidexKeys/Assets/Fonts#Chakra Petch</FontFamily>
+  <FontFamily x:Key="BodyFont">avares://RaidexKeys/Assets/Fonts#IBM Plex Sans</FontFamily>
+  <FontFamily x:Key="MonoFont">avares://RaidexKeys/Assets/Fonts#IBM Plex Mono</FontFamily>
+
+  <!--
+    The glyph (RaidexIcon.dc.html), 1:1 in its 100 x 100 box. The transparent
+    square keeps that box; without it the image would take the hexagon's
+    bounds and sit off-centre next to text.
+  -->
+  <DrawingImage x:Key="GlyphImage">
+    <DrawingGroup>
+      <GeometryDrawing Brush="Transparent" Geometry="M0,0 H100 V100 H0 Z" />
+      <GeometryDrawing Geometry="M50,4 L90,27 L90,73 L50,96 L10,73 L10,27 Z">
+        <GeometryDrawing.Brush>
+          <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0" Color="#A78BFF" />
+            <GradientStop Offset="0.55" Color="#7C5CFF" />
+            <GradientStop Offset="1" Color="#4B2FC9" />
+          </LinearGradientBrush>
+        </GeometryDrawing.Brush>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#24FFFFFF" Geometry="M50,4 L90,27 L50,50 L10,27 Z" />
+      <GeometryDrawing Brush="#2E0A0C18" Geometry="M10,73 L50,50 L50,96 Z" />
+      <GeometryDrawing Geometry="M50,14 L82,32 L82,68 L50,86 L18,68 L18,32 Z">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#590A0C18" Thickness="2" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#0A0C18">
+        <GeometryDrawing.Geometry>
+          <EllipseGeometry Center="50,39" RadiusX="11" RadiusY="11" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#0A0C18" Geometry="M43,47 L57,47 L60,71 L40,71 Z" />
+      <GeometryDrawing Brush="#A78BFF">
+        <GeometryDrawing.Geometry>
+          <EllipseGeometry Center="50,39" RadiusX="4.5" RadiusY="4.5" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingImage>
+</ResourceDictionary>

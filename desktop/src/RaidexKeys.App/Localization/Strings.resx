@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Interface strings, German. German is the neutral language: every key lives here first. -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>Raidex Keys</value></data>
+  <data name="NavOverview" xml:space="preserve"><value>Übersicht</value></data>
+  <data name="NavKeystones" xml:space="preserve"><value>Keystones</value></data>
+  <data name="NavRoutes" xml:space="preserve"><value>Routen</value></data>
+  <data name="NavGuild" xml:space="preserve"><value>Gilde</value></data>
+  <data name="NavSettings" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="PreviewBadge" xml:space="preserve"><value>BEISPIELDATEN</value></data>
+  <data name="OverviewTitle" xml:space="preserve"><value>Diese Woche</value></data>
+  <data name="ResetInDaysHours" xml:space="preserve"><value>Reset in {0} Tagen, {1} Std</value></data>
+  <data name="ResetInOneDayHours" xml:space="preserve"><value>Reset in 1 Tag, {0} Std</value></data>
+  <data name="ResetInHours" xml:space="preserve"><value>Reset in {0} Std</value></data>
+  <data name="StatScore" xml:space="preserve"><value>M+-WERTUNG</value></data>
+  <data name="StatInTime" xml:space="preserve"><value>IN TIME</value></data>
+  <data name="CardNextRun" xml:space="preserve"><value>NÄCHSTER LAUF</value></data>
+  <data name="RouteLine" xml:space="preserve"><value>Route „{0}“ · {1} · {2} Pulls</value></data>
+  <data name="CardGoal" xml:space="preserve"><value>ZIEL {0}</value></data>
+  <data name="RunsNeeded" xml:space="preserve"><value>{0} Läufe nötig</value></data>
+  <data name="OneRunNeeded" xml:space="preserve"><value>1 Lauf nötig</value></data>
+  <data name="MoreRuns" xml:space="preserve"><value>und {0} weitere</value></data>
+  <data name="GoalLower" xml:space="preserve"><value>Ziel 100 niedriger</value></data>
+  <data name="GoalRaise" xml:space="preserve"><value>Ziel 100 höher</value></data>
+  <data name="ShowPlan" xml:space="preserve"><value>Alle Läufe anzeigen</value></data>
+  <data name="PlanTitle" xml:space="preserve"><value>PLAN FÜR {0}</value></data>
+  <data name="PlanNote" xml:space="preserve"><value>Punkte ohne Zeitbonus, mit Bonus bis zu 15 mehr.</value></data>
+  <data name="ColDungeon" xml:space="preserve"><value>DUNGEON</value></data>
+  <data name="ColBestTime" xml:space="preserve"><value>BESTZEIT</value></data>
+  <data name="ColKey" xml:space="preserve"><value>KEY</value></data>
+  <data name="ColCharacter" xml:space="preserve"><value>CHARAKTER</value></data>
+  <data name="ColScore" xml:space="preserve"><value>WERTUNG</value></data>
+  <data name="ColRoute" xml:space="preserve"><value>ROUTE</value></data>
+  <data name="ColPulls" xml:space="preserve"><value>PULLS</value></data>
+  <data name="ColForces" xml:space="preserve"><value>GEGNERISCHE KRÄFTE</value></data>
+  <data name="KeystonesTitle" xml:space="preserve"><value>Keystones</value></data>
+  <data name="KeystonesSubtitle" xml:space="preserve"><value>{0} Charaktere</value></data>
+  <data name="GuildTitle" xml:space="preserve"><value>Gilde</value></data>
+  <data name="GuildSubtitle" xml:space="preserve"><value>{0} Keys diese Woche</value></data>
+  <data name="RoutesTitle" xml:space="preserve"><value>Routen</value></data>
+  <data name="RoutesSubtitleCount" xml:space="preserve"><value>{0} Routen aus Mythic Dungeon Tools</value></data>
+  <data name="RoutesSubtitleOne" xml:space="preserve"><value>1 Route aus Mythic Dungeon Tools</value></data>
+  <data name="EmptyNoDataTitle" xml:space="preserve"><value>Noch keine Daten</value></data>
+  <data name="EmptyNoDataBody" xml:space="preserve"><value>, dann einen Charakter ein- und ausloggen.</value></data>
+  <data name="EmptyNoDataLink" xml:space="preserve"><value>Installiere das Addon Raidex Keys</value></data>
+  <data name="EmptyNoDataLinkStore" xml:space="preserve"><value>Installiere das Addon Raidex Keys von CurseForge</value></data>
+  <data name="EmptyGuildTitle" xml:space="preserve"><value>Gilde noch nicht verbunden</value></data>
+  <data name="EmptyGuildBody" xml:space="preserve"><value>Mit einem Charakter in einer Gilde einloggen.</value></data>
+  <data name="EmptyRoutesTitle" xml:space="preserve"><value>Noch keine Routen</value></data>
+  <data name="EmptyRoutesBody" xml:space="preserve"><value>In MDT eine Route anlegen. Sie erscheint nach /reload oder dem Ausloggen.</value></data>
+  <data name="EmptyMdtTitle" xml:space="preserve"><value>Mythic Dungeon Tools nicht gefunden</value></data>
+  <data name="EmptyMdtBody" xml:space="preserve"><value>Mythic Dungeon Tools (MDT) installieren und eine Route anlegen.</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="SettingsLanguage" xml:space="preserve"><value>SPRACHE</value></data>
+  <data name="SettingsLanguageHint" xml:space="preserve"><value>Die Oberfläche stellt sofort um.</value></data>
+  <data name="SettingsMonoFont" xml:space="preserve"><value>SCHRIFT FÜR ZAHLEN</value></data>
+  <data name="SettingsMonoFontHint" xml:space="preserve"><value>Für Zahlen, Zeiten und Key-Stufen.</value></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>FARBTHEME</value></data>
+  <data name="SettingsThemeHint" xml:space="preserve"><value>Wie im Addon.</value></data>
+  <data name="MonoFontDefault" xml:space="preserve"><value>{0} (Standard)</value></data>
+  <data name="SettingsPlanning" xml:space="preserve"><value>ZIELPLANUNG</value></data>
+  <data name="PlanLevels0" xml:space="preserve"><value>Nur Stufen, die du schon in der Zeit hattest</value></data>
+  <data name="PlanLevels1" xml:space="preserve"><value>Bis eine Stufe darüber</value></data>
+  <data name="PlanLevels2" xml:space="preserve"><value>Bis zwei Stufen darüber</value></data>
+  <data name="PlanLevels3" xml:space="preserve"><value>Bis drei Stufen darüber</value></data>
+  <data name="SettingsPlanningHint" xml:space="preserve"><value>Stufen über deinem höchsten Key in der Zeit.</value></data>
+  <data name="LanguageSystem" xml:space="preserve"><value>Systemsprache</value></data>
+  <data name="LanguageGerman" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="Tagline" xml:space="preserve"><value>Deine Mythic+-Woche im Blick – auch wenn WoW zu ist.</value></data>
+  <data name="VersionFormat" xml:space="preserve"><value>Version {0} (Build {1})</value></data>
+  <data name="LicenseLine" xml:space="preserve"><value>Quelloffen unter der MIT-Lizenz – ohne jede Gewährleistung.</value></data>
+  <data name="AboutReportBug" xml:space="preserve"><value>Fehler melden</value></data>
+  <data name="CreditsTitle" xml:space="preserve"><value>DANK</value></data>
+  <data name="CreditLibKeystone" xml:space="preserve"><value>Keystone-Austausch im Format von LibKeystone (BigWigs)</value></data>
+  <data name="CreditLibraries" xml:space="preserve"><value>Avalonia und CommunityToolkit.Mvvm (MIT-Lizenz)</value></data>
+  <data name="CreditFonts" xml:space="preserve"><value>Schriften: Chakra Petch, IBM Plex Sans und Mono, JetBrains Mono, Source Code Pro, Fira Mono, Cascadia Mono (SIL Open Font License)</value></data>
+  <data name="Trademark" xml:space="preserve"><value>World of Warcraft ist eine Marke von Blizzard Entertainment, Inc. Raidex Keys steht in keiner Verbindung zu Blizzard.</value></data>
+  <data name="NoKeystone" xml:space="preserve"><value>Kein Keystone</value></data>
+  <data name="KeystonesSubtitleOne" xml:space="preserve"><value>1 Charakter</value></data>
+  <data name="AsOf" xml:space="preserve"><value>Stand {0}</value></data>
+  <data name="GuildSubtitleOne" xml:space="preserve"><value>1 Key diese Woche</value></data>
+  <data name="EmptyGuildNoKeysTitle" xml:space="preserve"><value>Diese Woche noch keine Keys gesehen</value></data>
+  <data name="EmptyGuildNoKeysBody" xml:space="preserve"><value>Das Addon fragt deine Gilde beim Einloggen und alle zehn Minuten. Antworten kommen von allen, die Raidex Keys, BigWigs oder ein anderes Addon mit LibKeystone nutzen.</value></data>
+  <data name="SetupTitle" xml:space="preserve"><value>Wo liegen deine WoW-Addons?</value></data>
+  <data name="SetupBody" xml:space="preserve"><value>Wähle den AddOns-Ordner deiner WoW-Installation (Retail).</value></data>
+  <data name="SetupLater" xml:space="preserve"><value>Später</value></data>
+  <data name="SetupLaterHint" xml:space="preserve"><value>Änderbar unter Einstellungen.</value></data>
+  <data name="FolderLabel" xml:space="preserve"><value>ADDONS-ORDNER</value></data>
+  <data name="FolderBrowse" xml:space="preserve"><value>Durchsuchen …</value></data>
+  <data name="FolderApply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="FolderAlsoFound" xml:space="preserve"><value>AUCH GEFUNDEN</value></data>
+  <data name="FolderPickTitle" xml:space="preserve"><value>AddOns-Ordner wählen</value></data>
+  <data name="FolderNothingFound" xml:space="preserve"><value>Kein Ordner gefunden. Über „Durchsuchen …“ wählen.</value></data>
+  <data name="FolderWrong" xml:space="preserve"><value>Kein AddOns-Ordner einer Retail-Installation.</value></data>
+  <data name="FolderNoAddon" xml:space="preserve"><value>Addon Raidex Keys nicht installiert.</value></data>
+  <data name="FolderNoData" xml:space="preserve"><value>Addon gefunden. Noch keine Daten – einmal ein- und ausloggen.</value></data>
+  <data name="FolderOk" xml:space="preserve"><value>Addon gefunden, Daten von: {0}</value></data>
+  <data name="FolderSaved" xml:space="preserve"><value>Gespeichert.</value></data>
+  <data name="FilesLabel" xml:space="preserve"><value>GELESEN</value></data>
+  <data name="FilesNone" xml:space="preserve"><value>Noch keine Datei mit Daten.</value></data>
+  <data name="SettingsFolderHint" xml:space="preserve"><value>Hier liest die App die Daten des Addons.</value></data>
+  <data name="DetailFolder" xml:space="preserve"><value>AddOns-Ordner: {0}</value></data>
+  <data name="DetailFolderAuto" xml:space="preserve"><value>AddOns-Ordner: automatisch</value></data>
+  <data name="DetailFiles" xml:space="preserve"><value>Gefundene Daten-Dateien: {0}</value></data>
+  <data name="DetailNoFiles" xml:space="preserve"><value>Keine Daten-Datei gefunden (WTF/Account/…/SavedVariables/RaidexKeys.lua)</value></data>
+  <data name="DetailDiagnose" xml:space="preserve"><value>Mehr dazu im Terminal: raidex-keys --diagnose</value></data>
+  <data name="NoRunsYet" xml:space="preserve"><value>{0} ist in dieser Saison noch keinen Key gelaufen.</value></data>
+  <data name="RunsIncomplete" xml:space="preserve"><value>{0}: M+-Wertung {1}, aber keine Läufe gespeichert. Im Spiel /reload, dann ausloggen.</value></data>
+  <data name="DetailTimer" xml:space="preserve"><value>ZEITLIMIT</value></data>
+  <data name="TimerValue" xml:space="preserve"><value>{0} · +2 unter {1} · +3 unter {2}</value></data>
+  <data name="DetailBest" xml:space="preserve"><value>BESTWERT</value></data>
+  <data name="DetailYourBest" xml:space="preserve"><value>BESTWERT VON {0} HIER</value></data>
+  <data name="RunValue" xml:space="preserve"><value>+{0} in {1}</value></data>
+  <data name="UnderTime" xml:space="preserve"><value>{0} unter der Zeit</value></data>
+  <data name="OverTime" xml:space="preserve"><value>{0} über der Zeit</value></data>
+  <data name="Points" xml:space="preserve"><value>{0} Punkte</value></data>
+  <data name="NotRunYet" xml:space="preserve"><value>noch nicht gelaufen</value></data>
+  <data name="DetailVault" xml:space="preserve"><value>GROSSE SCHATZKAMMER</value></data>
+  <data name="DetailWeekRuns" xml:space="preserve"><value>LÄUFE DIESE WOCHE</value></data>
+  <data name="ColVault" xml:space="preserve"><value>SCHATZKAMMER</value></data>
+  <data name="SortTip" xml:space="preserve"><value>Sortieren</value></data>
+  <data name="VaultSlotOpen" xml:space="preserve"><value>Platz {0}: +{1}</value></data>
+  <data name="VaultSlotOpenIlvl" xml:space="preserve"><value>Platz {0}: +{1}, Gegenstandsstufe {2}</value></data>
+  <data name="VaultSlotRuns" xml:space="preserve"><value>Platz {0}: noch {1} Läufe</value></data>
+  <data name="VaultSlotRun" xml:space="preserve"><value>Platz {0}: noch 1 Lauf</value></data>
+  <data name="VaultWaiting" xml:space="preserve"><value>Belohnung wartet: {0} von {1} Plätzen aus der Vorwoche</value></data>
+  <data name="VaultClaim" xml:space="preserve"><value>ABHOLEN</value></data>
+  <data name="VaultClaimTip" xml:space="preserve"><value>Belohnung der Vorwoche in der Großen Schatzkammer</value></data>
+  <data name="DetailSaved" xml:space="preserve"><value>STAND</value></data>
+  <data name="DetailSeen" xml:space="preserve"><value>GESEHEN</value></data>
+  <data name="DetailOwnKey" xml:space="preserve"><value>DEIN KEY</value></data>
+  <data name="DetailNextLevel" xml:space="preserve"><value>NÄCHSTE STUFE</value></data>
+  <data name="DetailGain" xml:space="preserve"><value>WERTUNGSGEWINN</value></data>
+  <data name="DetailGainFor" xml:space="preserve"><value>GEWINN FÜR {0}</value></data>
+  <data name="GainValue" xml:space="preserve"><value>+{0} in der Zeit: +{1} bis +{2} Punkte</value></data>
+  <data name="GainNone" xml:space="preserve"><value>+{0} in der Zeit: kein Gewinn</value></data>
+  <data name="LinkWowhead" xml:space="preserve"><value>Wowhead</value></data>
+  <data name="LinkRaiderIo" xml:space="preserve"><value>Raider.IO</value></data>
+  <data name="ShowDetails" xml:space="preserve"><value>Details anzeigen</value></data>
+  <data name="RouteDefault" xml:space="preserve"><value>Standard</value></data>
+  <data name="MapOwnWindow" xml:space="preserve"><value>Eigenes Fenster</value></data>
+  <data name="MapOwnWindowTip" xml:space="preserve"><value>In eigenem Fenster öffnen</value></data>
+  <data name="MapFoldTip" xml:space="preserve"><value>Karte ein- oder ausblenden</value></data>
+  <data name="RouteTextTitle" xml:space="preserve"><value>ROUTE IN TEXTFORM</value></data>
+  <data name="RouteTextFoldTip" xml:space="preserve"><value>Pulls ein- oder ausblenden</value></data>
+  <data name="MapArrows" xml:space="preserve"><value>Richtungspfeile</value></data>
+  <data name="MapArrowsTip" xml:space="preserve"><value>Reihenfolge als Pfeile</value></data>
+  <data name="MapShowRoute" xml:space="preserve"><value>Route einblenden</value></data>
+  <data name="MapRouteTitle" xml:space="preserve"><value>LAUFWEG</value></data>
+  <data name="PullForces" xml:space="preserve"><value>+{0} → {1}</value></data>
+  <data name="MapFloor" xml:space="preserve"><value>Ebene {0}</value></data>
+  <data name="MapWindowTitle" xml:space="preserve"><value>{0} – {1}</value></data>
+  <data name="PasteTitle" xml:space="preserve"><value>ROUTE AUS EINEM MDT-STRING</value></data>
+  <data name="PastePlaceholder" xml:space="preserve"><value>MDT-String hier einfügen (!~MDT2~…)</value></data>
+  <data name="PasteButton" xml:space="preserve"><value>Aus Zwischenablage</value></data>
+  <data name="PasteClear" xml:space="preserve"><value>Leeren</value></data>
+  <data name="PasteHint" xml:space="preserve"><value>Geteilte Route vor dem Import ansehen.</value></data>
+  <data name="PasteNotMdt" xml:space="preserve"><value>Kein MDT-String.</value></data>
+  <data name="PasteBroken" xml:space="preserve"><value>String unvollständig.</value></data>
+  <data name="PasteUnknownDungeon" xml:space="preserve"><value>„{0}“ ({1} Pulls): Dungeon unbekannt. MDT aktualisieren.</value></data>
+  <data name="PasteNoMdt" xml:space="preserve"><value>„{0}“ ({1} Pulls): Für Details Mythic Dungeon Tools installieren.</value></data>
+  <data name="PasteKnown" xml:space="preserve"><value>Diese Route hast du schon in MDT.</value></data>
+  <data name="PasteNew" xml:space="preserve"><value>Neu. Im Spiel in MDT importieren.</value></data>
+  <data name="PasteSave" xml:space="preserve"><value>In Raidex speichern</value></data>
+  <data name="PasteShareMe" xml:space="preserve"><value>Nur für mich</value></data>
+  <data name="PasteShareGuild" xml:space="preserve"><value>Für meine Gilde</value></data>
+  <data name="PasteLoginToSave" xml:space="preserve"><value>Zum Speichern mit Raidex verbinden</value></data>
+  <data name="PasteSavedMe" xml:space="preserve"><value>In Raidex gespeichert – nur für dich.</value></data>
+  <data name="PasteSavedGuild" xml:space="preserve"><value>In Raidex gespeichert – für {0}.</value></data>
+  <data name="StoredTitle" xml:space="preserve"><value>IN RAIDEX GESPEICHERT</value></data>
+  <data name="StoredLoggedOut" xml:space="preserve"><value>Mit Raidex verbinden, um Routen zu speichern und zu teilen.</value></data>
+  <data name="StoredEmpty" xml:space="preserve"><value>Noch keine gespeicherten Routen.</value></data>
+  <data name="DetailStored" xml:space="preserve"><value>IN RAIDEX</value></data>
+  <data name="StoredOnlyYou" xml:space="preserve"><value>nur für dich</value></data>
+  <data name="StoredForGuild" xml:space="preserve"><value>für {0}</value></data>
+  <data name="StoredFromMember" xml:space="preserve"><value>von {0}, für {1}</value></data>
+  <data name="StoredShare" xml:space="preserve"><value>Mit Gilde teilen</value></data>
+  <data name="StoredUnshare" xml:space="preserve"><value>Nicht mehr teilen</value></data>
+  <data name="StoredDelete" xml:space="preserve"><value>Aus Raidex löschen</value></data>
+  <data name="StoredDeleteConfirm" xml:space="preserve"><value>Wirklich löschen?</value></data>
+  <data name="SettingsRaidex" xml:space="preserve"><value>RAIDEX</value></data>
+  <data name="RaidexIntro" xml:space="preserve"><value>Routen speichern und teilen, Gilden-Keys und Raidkalender. Anmeldung mit Battle.net.</value></data>
+  <data name="RaidexLogin" xml:space="preserve"><value>Mit Raidex verbinden</value></data>
+  <data name="RaidexLoggingIn" xml:space="preserve"><value>Diesen Code auf Raidex bestätigen:</value></data>
+  <data name="RaidexCancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="RaidexLogout" xml:space="preserve"><value>Trennen</value></data>
+  <data name="RaidexLoggedIn" xml:space="preserve"><value>Verbunden als {0}</value></data>
+  <data name="RaidexServer" xml:space="preserve"><value>Server: {0}</value></data>
+  <data name="RaidexUnreachable" xml:space="preserve"><value>Raidex ist gerade nicht erreichbar.</value></data>
+  <data name="RaidexMaintenance" xml:space="preserve"><value>Raidex wird gerade aktualisiert.</value></data>
+  <data name="RaidexExpired" xml:space="preserve"><value>Verbindung abgelaufen. Neu verbinden.</value></data>
+  <data name="RaidexNoGuild" xml:space="preserve"><value>Keine aktive Gilde in Raidex.</value></data>
+  <data name="RaidexRefused" xml:space="preserve"><value>Raidex hat abgelehnt ({0}).</value></data>
+  <data name="DetailRouteSelected" xml:space="preserve"><value>IN MDT</value></data>
+  <data name="RouteSelectedTip" xml:space="preserve"><value>Für „Nächster Lauf“ gewählt</value></data>
+  <data name="PullsCount" xml:space="preserve"><value>{0} Pulls</value></data>
+  <data name="PullsOne" xml:space="preserve"><value>1 Pull</value></data>
+  <data name="PullLabel" xml:space="preserve"><value>PULL {0}</value></data>
+  <data name="PullValue" xml:space="preserve"><value>+{0} → {1} · {2}</value></data>
+  <data name="PullEmpty" xml:space="preserve"><value>keine Gegner</value></data>
+  <data name="EnemyKills" xml:space="preserve"><value>{0}× {1}</value></data>
+  <data name="DetailMissing" xml:space="preserve"><value>ES FEHLEN</value></data>
+  <data name="CreditMdt" xml:space="preserve"><value>Routen und Karten aus deinem installierten Mythic Dungeon Tools (Nnoggie, GPL)</value></data>
+  <data name="CreditThirdParty" xml:space="preserve"><value>Wowhead und Raider.IO: Namen und Logos gehören ihren Eigentümern; die Dungeon-Bilder stammen von Blizzard Entertainment.</value></data>
+  <data name="DetailSpec" xml:space="preserve"><value>SPEZIALISIERUNG</value></data>
+  <data name="SpecIlvl" xml:space="preserve"><value>{0} · Gegenstandsstufe {1}</value></data>
+  <data name="IlvlOnly" xml:space="preserve"><value>Gegenstandsstufe {0}</value></data>
+  <data name="DetailReported" xml:space="preserve"><value>GEMELDET</value></data>
+  <data name="ReportedBy" xml:space="preserve"><value>{0} · über Raidex, von {1}</value></data>
+  <data name="RaidexLastReport" xml:space="preserve"><value>Keys an Raidex gemeldet: {0} · {1} übernommen</value></data>
+  <data name="RaidexRefusedAccount" xml:space="preserve"><value>Nicht übernommen, nicht auf deinem Battle.net-Konto: {0}</value></data>
+  <data name="RaidexRefusedGuild" xml:space="preserve"><value>Nicht in deiner Gilde, nicht übernommen: {0}</value></data>
+  <data name="RaidexOpenPage" xml:space="preserve"><value>Seite erneut öffnen</value></data>
+  <data name="RaidexDenied" xml:space="preserve"><value>Verbindung auf Raidex abgebrochen.</value></data>
+  <data name="RaidexCodeExpired" xml:space="preserve"><value>Code abgelaufen. Neu verbinden.</value></data>
+  <data name="RaidexBrowserFailed" xml:space="preserve"><value>Browser nicht geöffnet. Öffne {0} und bestätige den Code.</value></data>
+  <data name="RaidexVisit" xml:space="preserve"><value>Raidex ansehen</value></data>
+  <data name="PlannerTitle" xml:space="preserve"><value>Gruppenplaner</value></data>
+  <data name="PlannerIntro" xml:space="preserve"><value>Wähle, wer heute spielt.</value></data>
+  <data name="PlannerBySpec" xml:space="preserve"><value>Spezialisierung beachten</value></data>
+  <data name="PlannerBySpecHint" xml:space="preserve"><value>1 Tank, 1 Heiler, 3 DD</value></data>
+  <data name="PlannerByItemLevel" xml:space="preserve"><value>Gegenstandsstufe beachten</value></data>
+  <data name="PlannerByItemLevelHint" xml:space="preserve"><value>Hinweis ab {0} Stufen unter der Schatzkammer-Stufe des Keys.</value></data>
+  <data name="PlannerNoRewards" xml:space="preserve"><value>Belohnungsstufen fehlen. Addon ab 0.1.10, dann ausloggen.</value></data>
+  <data name="PlannerPlan" xml:space="preserve"><value>Gruppe planen</value></data>
+  <data name="PlannerPicked" xml:space="preserve"><value>{0} VON {1} GEWÄHLT</value></data>
+  <data name="PlannerNeedFive" xml:space="preserve"><value>Wähle fünf Leute oder mehr.</value></data>
+  <data name="PlannerLoading" xml:space="preserve"><value>Läufe der Gewählten werden geladen …</value></data>
+  <data name="PlannerNeedsLogin" xml:space="preserve"><value>Braucht ein Raidex-Konto.</value></data>
+  <data name="PlannerNoSeason" xml:space="preserve"><value>Raidex kennt die Läufe von {0} nicht.</value></data>
+  <data name="PlannerWithout" xml:space="preserve"><value>Ohne {0}: Raidex kennt ihre Läufe nicht.</value></data>
+  <data name="PlannerNoKey" xml:space="preserve"><value>Niemand von den Gewählten trägt einen Key.</value></data>
+  <data name="PlannerNoRoles" xml:space="preserve"><value>Keine Gruppe aus Tank, Heiler und 3 DD möglich.</value></data>
+  <data name="PlannerNoFit" xml:space="preserve"><value>Zu keinem ihrer Keys passen fünf von ihnen.</value></data>
+  <data name="PlannerBest" xml:space="preserve"><value>BESTE GRUPPE</value></data>
+  <data name="PlannerMore" xml:space="preserve"><value>WEITERE KEYS</value></data>
+  <data name="PlannerGain" xml:space="preserve"><value>+{0}</value></data>
+  <data name="RoleTank" xml:space="preserve"><value>Tank</value></data>
+  <data name="RoleHealer" xml:space="preserve"><value>Heiler</value></data>
+  <data name="RoleDamage" xml:space="preserve"><value>Schaden</value></data>
+  <data name="RoleUnknown" xml:space="preserve"><value>Rolle unbekannt</value></data>
+  <data name="SettingsGroupAllowance" xml:space="preserve"><value>GRUPPENPLANER: GEGENSTANDSSTUFE</value></data>
+  <data name="SettingsGroupAllowanceHint" xml:space="preserve"><value>Stufen unter der Schatzkammer-Stufe, ab denen der Planer warnt.</value></data>
+  <data name="AllowanceExact" xml:space="preserve"><value>genau die Belohnungsstufe</value></data>
+  <data name="AllowanceBelow" xml:space="preserve"><value>bis {0} darunter</value></data>
+  <data name="RaidexOutdated" xml:space="preserve"><value>Der Raidex-Server kennt diese Funktion noch nicht.</value></data>
+  <data name="NavPlanner" xml:space="preserve"><value>Gruppenplaner</value></data>
+  <data name="PlannerCandidates" xml:space="preserve"><value>KANDIDATEN</value></data>
+  <data name="PlannerSeasonRating" xml:space="preserve"><value>Wertung dieser Saison</value></data>
+  <data name="PlannerRatingSpec" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PlannerTotalLabel" xml:space="preserve"><value>WERTUNG ZUSAMMEN</value></data>
+  <data name="PlannerSeatGain" xml:space="preserve"><value>GEWINN</value></data>
+  <data name="PlannerGainNone" xml:space="preserve"><value>±0</value></data>
+  <data name="PlannerGainsNothing" xml:space="preserve"><value>{0} gewinnt nichts (bessere Bestzeit).</value></data>
+  <data name="PlannerGainNothing" xml:space="preserve"><value>{0} gewinnen nichts (bessere Bestzeiten).</value></data>
+  <data name="PlannerNeedsAddon" xml:space="preserve"><value>AB 0.1.10</value></data>
+  <data name="EmptyPlannerTitle" xml:space="preserve"><value>Noch niemand zum Wählen</value></data>
+  <data name="EmptyPlannerBody" xml:space="preserve"><value>Noch keine Gilden-Keys.</value></data>
+  <data name="PlannerGainTip" xml:space="preserve"><value>Auf der Zeit {0} Punkte, mit guter Zeit bis {1}.</value></data>
+  <data name="PlannerGainsNothingBut" xml:space="preserve"><value>{0}: genau in der Zeit kein Gewinn, mit guter Zeit bis {1} Punkte.</value></data>
+  <data name="PlannerLight" xml:space="preserve"><value>{0}</value></data>
+  <data name="PlannerLightTip" xml:space="preserve"><value>+{0} braucht Gegenstandsstufe {1}.</value></data>
+  <data name="NavAbout" xml:space="preserve"><value>Über</value></data>
+  <data name="UpdateChecking" xml:space="preserve"><value>Version wird geprüft …</value></data>
+  <data name="UpdateCurrent" xml:space="preserve"><value>App und Addon sind aktuell.</value></data>
+  <data name="UpdateAddonCurrent" xml:space="preserve"><value>Das Addon ist aktuell.</value></data>
+  <data name="UpdateNoAddon" xml:space="preserve"><value>Kein Addon gefunden.</value></data>
+  <data name="UpdateApp" xml:space="preserve"><value>Raidex Keys {0} ist erschienen.</value></data>
+  <data name="UpdateAppHow" xml:space="preserve"><value>Update optional.</value></data>
+  <data name="UpdateAlsoAddon" xml:space="preserve"><value>Addon {0} ebenfalls verfügbar.</value></data>
+  <data name="UpdateAddon" xml:space="preserve"><value>Für das Addon gibt es {0}.</value></data>
+  <data name="UpdateAddonHow" xml:space="preserve"><value>Installiert: {0}</value></data>
+  <data name="UpdateGet" xml:space="preserve"><value>Herunterladen</value></data>
+  <data name="UpdateDismiss" xml:space="preserve"><value>Später</value></data>
+  <data name="AboutVersionHeading" xml:space="preserve"><value>VERSION</value></data>
+  <data name="StoredCopy" xml:space="preserve"><value>MDT-String kopieren</value></data>
+  <data name="StoredCopied" xml:space="preserve"><value>Kopiert – in MDT einfügen</value></data>
+  <data name="OwnRoutesTitle" xml:space="preserve"><value>AUS DEINEM MYTHIC DUNGEON TOOLS</value></data>
+  <data name="OwnRoutesHint" xml:space="preserve"><value>Nur lesbar.</value></data>
+  <data name="OwnRouteCopyOnly" xml:space="preserve"><value>Aus deinem MDT.</value></data>
+  <data name="NavCalendar" xml:space="preserve"><value>Raidkalender</value></data>
+  <data name="CalendarTitle" xml:space="preserve"><value>Raidkalender</value></data>
+  <data name="CalendarIntro" xml:space="preserve"><value>Raids deiner Gilde aus Raidex.</value></data>
+  <data name="CalendarNeedsRaidex" xml:space="preserve"><value>Braucht ein Raidex-Konto: Einstellungen → Raidex.</value></data>
+  <data name="CalendarNotConnectedTitle" xml:space="preserve"><value>Nicht mit Raidex verbunden</value></data>
+  <data name="CalendarTabDates" xml:space="preserve"><value>Termine</value></data>
+  <data name="CalendarTabGuides" xml:space="preserve"><value>Guides</value></data>
+  <data name="CalendarRefresh" xml:space="preserve"><value>Aktualisieren</value></data>
+  <data name="CalendarNewRaid" xml:space="preserve"><value>Neuer Raid</value></data>
+  <data name="CalendarEditRaid" xml:space="preserve"><value>Raid bearbeiten</value></data>
+  <data name="CalendarDatesLabel" xml:space="preserve"><value>TERMINE</value></data>
+  <data name="CalendarUpcoming" xml:space="preserve"><value>Kommend</value></data>
+  <data name="CalendarPast" xml:space="preserve"><value>Vergangen</value></data>
+  <data name="CalendarLoading" xml:space="preserve"><value>Lädt …</value></data>
+  <data name="CalendarNoUpcoming" xml:space="preserve"><value>Keine Raids geplant.</value></data>
+  <data name="CalendarNoPast" xml:space="preserve"><value>Noch keine vergangenen Raids.</value></data>
+  <data name="CalendarPickRaid" xml:space="preserve"><value>Wähle links einen Raid.</value></data>
+  <data name="CalendarTimeRange" xml:space="preserve"><value>{0} – {1}</value></data>
+  <data name="CalendarWhen" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="CalendarDateFormat" xml:space="preserve"><value>dddd, d. MMMM yyyy</value></data>
+  <data name="CalendarRunning" xml:space="preserve"><value>läuft</value></data>
+  <data name="CalendarInDays" xml:space="preserve"><value>in {0} Tagen, {1} Std</value></data>
+  <data name="CalendarInOneDay" xml:space="preserve"><value>in 1 Tag, {0} Std</value></data>
+  <data name="CalendarInHours" xml:space="preserve"><value>in {0} Std {1} Min</value></data>
+  <data name="CalendarInMinutes" xml:space="preserve"><value>in {0} Min</value></data>
+  <data name="CalendarAgoDays" xml:space="preserve"><value>vor {0} Tagen</value></data>
+  <data name="CalendarAgoOneDay" xml:space="preserve"><value>vor 1 Tag</value></data>
+  <data name="CalendarAgoHours" xml:space="preserve"><value>vor {0} Std</value></data>
+  <data name="CalendarAgoMinutes" xml:space="preserve"><value>vor {0} Min</value></data>
+  <data name="CalendarDifficultyLfr" xml:space="preserve"><value>LFR</value></data>
+  <data name="CalendarDifficultyNormal" xml:space="preserve"><value>Normal</value></data>
+  <data name="CalendarDifficultyHeroic" xml:space="preserve"><value>Heroisch</value></data>
+  <data name="CalendarDifficultyMythic" xml:space="preserve"><value>Mythisch</value></data>
+  <data name="CalendarDifficultyMplus" xml:space="preserve"><value>Mythic+</value></data>
+  <data name="CalendarStatusConfirmed" xml:space="preserve"><value>Zugesagt</value></data>
+  <data name="CalendarStatusTentative" xml:space="preserve"><value>Vielleicht</value></data>
+  <data name="CalendarStatusAbsent" xml:space="preserve"><value>Abwesend</value></data>
+  <data name="CalendarRankGuildMaster" xml:space="preserve"><value>Gildenmeister</value></data>
+  <data name="CalendarRankRaidLead" xml:space="preserve"><value>Raidlead</value></data>
+  <data name="CalendarRankQuartermaster" xml:space="preserve"><value>Quartiermeister</value></data>
+  <data name="CalendarRankMember" xml:space="preserve"><value>Mitglied</value></data>
+  <data name="CalendarInvitedBy" xml:space="preserve"><value>Eingeladen von {0}</value></data>
+  <data name="CalendarSizeTip" xml:space="preserve"><value>{0} angemeldet · mindestens {1}</value></data>
+  <data name="CalendarSizeTipMax" xml:space="preserve"><value>{0} angemeldet · mindestens {1}, höchstens {2}</value></data>
+  <data name="CalendarTanks" xml:space="preserve"><value>TANKS</value></data>
+  <data name="CalendarHealers" xml:space="preserve"><value>HEILER</value></data>
+  <data name="CalendarDamage" xml:space="preserve"><value>DD</value></data>
+  <data name="CalendarGroupTanks" xml:space="preserve"><value>TANKS · {0}</value></data>
+  <data name="CalendarGroupHealers" xml:space="preserve"><value>HEILER · {0}</value></data>
+  <data name="CalendarGroupDamage" xml:space="preserve"><value>DD · {0}</value></data>
+  <data name="CalendarGroupAbsent" xml:space="preserve"><value>ABWESEND · {0}</value></data>
+  <data name="CalendarRoster" xml:space="preserve"><value>AUFSTELLUNG · {0}</value></data>
+  <data name="CalendarBench" xml:space="preserve"><value>ERSATZBANK</value></data>
+  <data name="CalendarNobody" xml:space="preserve"><value>Noch niemand angemeldet.</value></data>
+  <data name="CalendarYouAre" xml:space="preserve"><value>Du bist dabei:</value></data>
+  <data name="CalendarSignup" xml:space="preserve"><value>Anmelden</value></data>
+  <data name="CalendarChangeSignup" xml:space="preserve"><value>Anmeldung ändern</value></data>
+  <data name="CalendarUpdateSignup" xml:space="preserve"><value>Aktualisieren</value></data>
+  <data name="CalendarAddAlt" xml:space="preserve"><value>Twink hinzufügen</value></data>
+  <data name="CalendarWithdraw" xml:space="preserve"><value>Abmelden</value></data>
+  <data name="CalendarClose" xml:space="preserve"><value>Schließen</value></data>
+  <data name="CalendarShare" xml:space="preserve"><value>Link kopieren</value></data>
+  <data name="CalendarShareTip" xml:space="preserve"><value>Link zum Raid kopieren</value></data>
+  <data name="CalendarLinkCopied" xml:space="preserve"><value>Link kopiert: {0}</value></data>
+  <data name="CalendarGuidesButton" xml:space="preserve"><value>Guides</value></data>
+  <data name="CalendarEdit" xml:space="preserve"><value>Bearbeiten</value></data>
+  <data name="CalendarDelete" xml:space="preserve"><value>Löschen</value></data>
+  <data name="CalendarDeleteAsk" xml:space="preserve"><value>Raid löschen? Alle Anmeldungen gehen verloren, Angemeldete werden benachrichtigt.</value></data>
+  <data name="CalendarSignupHeading" xml:space="preserve"><value>Anmeldung · {0}</value></data>
+  <data name="CalendarKindMain" xml:space="preserve"><value>Main (Aufstellung)</value></data>
+  <data name="CalendarKindAlt" xml:space="preserve"><value>Twink (Ersatzbank)</value></data>
+  <data name="CalendarKindMainHint" xml:space="preserve"><value>Für die Aufstellung.</value></data>
+  <data name="CalendarKindAltHint" xml:space="preserve"><value>Auf die Ersatzbank, beliebig viele.</value></data>
+  <data name="CalendarFieldCharacter" xml:space="preserve"><value>CHARAKTER</value></data>
+  <data name="CalendarFieldRole" xml:space="preserve"><value>ROLLE</value></data>
+  <data name="CalendarRoleRequired" xml:space="preserve"><value>Rolle wählen.</value></data>
+  <data name="CalendarFieldStatus" xml:space="preserve"><value>STATUS</value></data>
+  <data name="CalendarFieldNote" xml:space="preserve"><value>NOTIZ</value></data>
+  <data name="CalendarNotePlaceholder" xml:space="preserve"><value>z. B. komme evtl. 10 Min. später</value></data>
+  <data name="CalendarCharacterOption" xml:space="preserve"><value>{0} — {1} · Stufe {2}</value></data>
+  <data name="CalendarNoCharacters" xml:space="preserve"><value>Kein Charakter gefunden.</value></data>
+  <data name="CalendarYourAlts" xml:space="preserve"><value>DEINE TWINKS AUF DER ERSATZBANK</value></data>
+  <data name="CalendarRemoveAlt" xml:space="preserve"><value>Twink entfernen</value></data>
+  <data name="CalendarRemoveSignup" xml:space="preserve"><value>Anmeldung entfernen</value></data>
+  <data name="CalendarCreate" xml:space="preserve"><value>Raid erstellen</value></data>
+  <data name="CalendarSave" xml:space="preserve"><value>Speichern</value></data>
+  <data name="CalendarFieldTitle" xml:space="preserve"><value>TITEL</value></data>
+  <data name="CalendarTitlePlaceholder" xml:space="preserve"><value>z. B. Leerenspitze – Heroisch</value></data>
+  <data name="CalendarFieldType" xml:space="preserve"><value>TYP</value></data>
+  <data name="CalendarTypeRaid" xml:space="preserve"><value>Raid</value></data>
+  <data name="CalendarTypeDungeon" xml:space="preserve"><value>Dungeon</value></data>
+  <data name="CalendarFieldRaid" xml:space="preserve"><value>RAID</value></data>
+  <data name="CalendarFieldDungeon" xml:space="preserve"><value>DUNGEON</value></data>
+  <data name="CalendarRaidPlaceholder" xml:space="preserve"><value>Raid suchen oder tippen …</value></data>
+  <data name="CalendarDungeonPlaceholder" xml:space="preserve"><value>Dungeon suchen oder tippen …</value></data>
+  <data name="CalendarFieldDifficulty" xml:space="preserve"><value>SCHWIERIGKEIT</value></data>
+  <data name="CalendarFieldDate" xml:space="preserve"><value>DATUM</value></data>
+  <data name="CalendarFieldStart" xml:space="preserve"><value>BEGINN</value></data>
+  <data name="CalendarFieldEnd" xml:space="preserve"><value>ENDE</value></data>
+  <data name="CalendarFieldMin" xml:space="preserve"><value>MIN. GRÖSSE</value></data>
+  <data name="CalendarFieldMax" xml:space="preserve"><value>MAX. GRÖSSE</value></data>
+  <data name="CalendarMaxHint" xml:space="preserve"><value>0 = kein Limit</value></data>
+  <data name="CalendarFieldDescription" xml:space="preserve"><value>BESCHREIBUNG</value></data>
+  <data name="CalendarGuideInstances" xml:space="preserve"><value>INSTANZEN IM KALENDER</value></data>
+  <data name="CalendarNoGuideInstances" xml:space="preserve"><value>Kein kommender Raid nennt eine Instanz.</value></data>
+  <data name="CalendarGuideOther" xml:space="preserve"><value>ANDERE INSTANZ</value></data>
+  <data name="CalendarGuideSearchPlaceholder" xml:space="preserve"><value>Raid oder Dungeon …</value></data>
+  <data name="CalendarGuideShow" xml:space="preserve"><value>Anzeigen</value></data>
+  <data name="CalendarPickInstance" xml:space="preserve"><value>Wähle links eine Instanz.</value></data>
+  <data name="CalendarGuidesIntro" xml:space="preserve"><value>Taktiken und Videos von deiner Gilde und Raidex.</value></data>
+  <data name="CalendarGuidesBy" xml:space="preserve"><value>VON {0}</value></data>
+  <data name="CalendarGuidesByMember" xml:space="preserve"><value>EINEM MITGLIED</value></data>
+  <data name="CalendarGuidesByRaidex" xml:space="preserve"><value>VON RAIDEX</value></data>
+  <data name="CalendarGuideRemove" xml:space="preserve"><value>Guide entfernen</value></data>
+  <data name="CalendarGuideAdd" xml:space="preserve"><value>GUIDE HINZUFÜGEN</value></data>
+  <data name="CalendarGuideTitlePlaceholder" xml:space="preserve"><value>Titel, z. B. Discord-Guide</value></data>
+  <data name="CalendarGuideAddButton" xml:space="preserve"><value>Hinzufügen</value></data>
+  <data name="CalendarGuideBadUrl" xml:space="preserve"><value>Der Link muss mit http:// oder https:// beginnen.</value></data>
+  <data name="CalendarGuideWhoAdds" xml:space="preserve"><value>Hinzufügen: Gildenmeister, Raidleads, Quartiermeister.</value></data>
+  <data name="RaidexNotAllowed" xml:space="preserve"><value>Nur für die Raidleitung und wer den Raid angelegt hat.</value></data>
+  <data name="RaidexNoCharacter" xml:space="preserve"><value>Charakter in Raidex unbekannt.</value></data>
+  <data name="RaidexBnetReauth" xml:space="preserve"><value>Battle.net-Verbindung abgelaufen. Auf Raidex neu anmelden.</value></data>
+  <data name="SettingsTabGeneral" xml:space="preserve"><value>Allgemein</value></data>
+  <data name="SettingsTabRaidex" xml:space="preserve"><value>Raidex</value></data>
+  <data name="SettingsTabPlanning" xml:space="preserve"><value>Planung</value></data>
+  <data name="SettingsTabFolder" xml:space="preserve"><value>AddOns-Ordner</value></data>
+  <data name="RaidexServerFromEnvironment" xml:space="preserve"><value>Server: {0} · gesetzt über {1}</value></data>
+  <data name="ServerBadgeTip" xml:space="preserve"><value>Raidex Keys spricht mit {0}, nicht mit raidex.app.</value></data>
+  <data name="CalendarSourceRaidex" xml:space="preserve"><value>Raidex</value></data>
+  <data name="CalendarSourceGame" xml:space="preserve"><value>WoW</value></data>
+  <data name="CalendarIntroGame" xml:space="preserve"><value>Raids deiner Gilde aus dem Spielkalender.</value></data>
+  <data name="GameStand" xml:space="preserve"><value>Stand: letzter Logout oder /reload</value></data>
+  <data name="GameNoDataTitle" xml:space="preserve"><value>Noch keine Raids aus dem Spiel</value></data>
+  <data name="GameNoData" xml:space="preserve"><value>Addon ab 0.5.0, dann einmal einloggen.</value></data>
+  <data name="GameProgress" xml:space="preserve"><value>{0}/{1} Bosse</value></data>
+  <data name="GameRoster" xml:space="preserve"><value>ANMELDUNGEN · {0}</value></data>
+  <data name="GameItemLevelTip" xml:space="preserve"><value>Gegenstandsstufe</value></data>
+  <data name="GameAssignedTip" xml:space="preserve"><value>Rolle vom Raidleiter gesetzt</value></data>
+  <data name="GameSignupTitle" xml:space="preserve"><value>ANMELDEN ÜBER DAS ADDON</value></data>
+  <data name="GameSignupHint" xml:space="preserve"><value>Wird beim nächsten Einloggen des Charakters mit einem Klick übernommen.</value></data>
+  <data name="GameSignupButton" xml:space="preserve"><value>Anmeldung vormerken</value></data>
+  <data name="GameWithdrawButton" xml:space="preserve"><value>Abmeldung vormerken</value></data>
+  <data name="GamePendingLabel" xml:space="preserve"><value>VORGEMERKT</value></data>
+  <data name="GamePendingSignup" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="GamePendingWithdraw" xml:space="preserve"><value>{0} · Abmelden</value></data>
+  <data name="GamePendingRemove" xml:space="preserve"><value>Zurücknehmen</value></data>
+  <data name="GameNoCharacters" xml:space="preserve"><value>Keiner deiner Charaktere ist in dieser Gilde bekannt. Einmal mit dem aktuellen Addon einloggen.</value></data>
+  <data name="UpdateCurseForge" xml:space="preserve"><value>Auf CurseForge</value></data>
+  <data name="RouteSavedInRaidex" xml:space="preserve"><value>In Raidex gespeichert</value></data>
+  <data name="EmptySample" xml:space="preserve"><value>Beispieldaten ansehen</value></data>
+  <data name="SampleWindowTitle" xml:space="preserve"><value>Raidex Keys – Beispieldaten</value></data>
+</root>

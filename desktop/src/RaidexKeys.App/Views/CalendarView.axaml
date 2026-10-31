@@ -1,0 +1,844 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:web="using:RaidexKeys.App.Web"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.CalendarView"
+             x:DataType="vm:CalendarViewModel">
+  <!--
+    "Raidkalender": Raidex's raid calendar in the group planner's frame - the
+    head with title, intro and the page's tabs on its line, below it the list
+    on the left and what is picked in it on the right. The tab "Termine"
+    lists the raids and shows one; "Guides" lists the instances and shows
+    their guides.
+  -->
+  <UserControl.Styles>
+    <!-- A row of chips: one choice of a few -->
+    <Style Selector="ListBox.segments">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource SegmentTheme}" />
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" Spacing="2" />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <!-- A list of cards inside a page that scrolls on its own -->
+    <Style Selector="ListBox.cards">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource CardItemTheme}" />
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+    <!-- The date block of a raid row -->
+    <Style Selector="Border.date">
+      <Setter Property="Width" Value="46" />
+      <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="0,5" />
+      <Setter Property="Background" Value="{DynamicResource ScrimBrush}" />
+    </Style>
+    <Style Selector="Border.date.running">
+      <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+    </Style>
+    <Style Selector="Border.date TextBlock">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <!-- Where the caller stands in a raid: Arkan for "dabei", its ring for "vielleicht", faint for "abwesend" -->
+    <Style Selector="Ellipse.mine">
+      <Setter Property="Width" Value="8" />
+      <Setter Property="Height" Value="8" />
+    </Style>
+    <!-- A small × that removes one thing -->
+    <Style Selector="Button.step Path.cross">
+      <Setter Property="Width" Value="8" />
+      <Setter Property="Height" Value="8" />
+    </Style>
+    <!-- A role's count in a raid's detail -->
+    <Style Selector="Border.tile">
+      <Setter Property="Background" Value="{DynamicResource ScrimBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SeatEdgeBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="14,10" />
+    </Style>
+    <!-- The difficulty: a pill in its item quality colour -->
+    <Style Selector="Border.pill.difficulty">
+      <Setter Property="Padding" Value="10,3" />
+      <Setter Property="Background" Value="{DynamicResource OverlayBrush}" />
+    </Style>
+    <Style Selector="TextBox.multi">
+      <Setter Property="AcceptsReturn" Value="True" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="MinHeight" Value="72" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid RowDefinitions="Auto,*">
+
+    <!-- Title, intro and the buttons; the tabs on the head's line -->
+    <Border Classes="pagehead" Padding="28,26,28,0">
+      <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+        <StackPanel MaxWidth="620" HorizontalAlignment="Left">
+          <TextBlock Classes="h1" Text="{x:Static l:Strings.CalendarTitle}" />
+          <TextBlock Classes="sub" TextWrapping="Wrap" Text="{Binding Intro}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <ListBox Classes="segments" ItemsSource="{Binding Sources}" SelectedIndex="{Binding SourceIndex}" />
+          <Button Classes="ghost" Content="{x:Static l:Strings.CalendarRefresh}" Command="{Binding RefreshCommand}"
+                  IsVisible="{Binding ShowsRaidex}" />
+          <Button Classes="primary" Content="{x:Static l:Strings.CalendarNewRaid}" Command="{Binding NewRaidCommand}">
+            <Button.IsVisible>
+              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="ShowsRaidex" />
+                <Binding Path="ShowsDates" />
+              </MultiBinding>
+            </Button.IsVisible>
+          </Button>
+        </StackPanel>
+
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0" ItemsSource="{Binding Tabs}"
+                 SelectedIndex="{Binding TabIndex}" ItemContainerTheme="{StaticResource PageTabTheme}"
+                 Background="Transparent" BorderThickness="0" Padding="0" IsVisible="{Binding ShowsRaidex}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+        </ListBox>
+      </Grid>
+    </Border>
+
+    <!-- Not connected: only while the window stands on the page as the connection goes -->
+    <views:EmptyState Grid.Row="1" Margin="28" VerticalAlignment="Top" IsVisible="{Binding ShowsRaidexHint}"
+                      Title="{x:Static l:Strings.CalendarNotConnectedTitle}"
+                      Body="{x:Static l:Strings.CalendarNeedsRaidex}" />
+
+    <!-- ===== The game's calendar ===== -->
+    <Grid Grid.Row="1" IsVisible="{Binding IsGame}">
+      <views:EmptyState Margin="28" VerticalAlignment="Top" IsVisible="{Binding !Game.HasAny}"
+                        Title="{x:Static l:Strings.GameNoDataTitle}" Body="{x:Static l:Strings.GameNoData}" />
+
+      <Grid ColumnDefinitions="400,Auto,*" DataContext="{Binding Game}" x:DataType="vm:GameCalendarViewModel"
+            IsVisible="{Binding HasAny}">
+        <!-- The raids -->
+        <ScrollViewer>
+          <StackPanel Margin="26,22,26,30" Spacing="12">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="label" VerticalAlignment="Center" Text="{x:Static l:Strings.CalendarDatesLabel}" />
+              <ListBox Grid.Column="1" Classes="segments" ItemsSource="{Binding Scopes}" SelectedIndex="{Binding ScopeIndex}" />
+            </Grid>
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.GameStand}" />
+            <TextBlock Classes="hint" Text="{Binding NoRaidsText}" IsVisible="{Binding ShowsNoRaids}" />
+
+            <ListBox Classes="cards" ItemsSource="{Binding Raids}" SelectedItem="{Binding SelectedRaid}">
+              <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:GameRaidRowViewModel">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Classes="date" VerticalAlignment="Center">
+                      <StackPanel>
+                        <TextBlock Classes="label" FontSize="9" Text="{Binding DayName}" />
+                        <TextBlock Classes="mono" FontSize="17" Foreground="{DynamicResource TextBrush}" Text="{Binding DayNumber}" />
+                        <TextBlock Classes="label" FontSize="9" Text="{Binding MonthName}" />
+                      </StackPanel>
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0,8,0" VerticalAlignment="Center" Spacing="2">
+                      <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"
+                                 Text="{Binding Title}" />
+                      <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextBodyBrush}"
+                                 Text="{Binding SubLine}" />
+                      <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextFaintBrush}" TextTrimming="CharacterEllipsis">
+                        <Run Text="{Binding Time}" /><Run Text=" · " /><Run Text="{Binding Countdown}" />
+                      </TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="4">
+                      <TextBlock Classes="mono" FontSize="13" HorizontalAlignment="Right" Text="{Binding Signed}" />
+                      <TextBlock Classes="mono" FontSize="11" HorizontalAlignment="Right" Foreground="{DynamicResource TextFaintBrush}"
+                                 Text="{Binding Progress}" IsVisible="{Binding Progress, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    </StackPanel>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Column="1" Width="1" Background="{DynamicResource LineBrush}" />
+
+        <ScrollViewer Grid.Column="2">
+          <StackPanel Margin="28,22,28,30" Spacing="16">
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarPickRaid}" IsVisible="{Binding ShowsNothingSelected}" />
+
+            <StackPanel Spacing="16" DataContext="{Binding SelectedRaid}" x:DataType="vm:GameRaidRowViewModel"
+                        IsVisible="{Binding $parent[Grid].((vm:GameCalendarViewModel)DataContext).ShowsDetail}">
+              <Border Classes="card group" ClipToBounds="True">
+                <StackPanel Margin="22,20" Spacing="8">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Border Classes="pill difficulty" BorderBrush="{Binding DifficultyColor}" IsVisible="{Binding HasDifficulty}">
+                      <TextBlock Foreground="{Binding DifficultyColor}" Text="{Binding DifficultyLabel}" />
+                    </Border>
+                    <TextBlock Classes="mono" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource GlowBrush}"
+                               Text="{Binding Countdown}" />
+                  </StackPanel>
+                  <TextBlock Classes="h1" TextWrapping="Wrap" Text="{Binding Title}" />
+                  <TextBlock Foreground="{DynamicResource TextBodyBrush}" TextWrapping="Wrap" Text="{Binding Instance}"
+                             IsVisible="{Binding Instance, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <TextBlock Classes="mono" FontSize="12" Foreground="{DynamicResource TextSoftBrush}" TextWrapping="Wrap"
+                             Text="{Binding WhenLong}" />
+                  <TextBlock Classes="mono" FontSize="12" Foreground="{DynamicResource TimerBrush}" Text="{Binding Progress}"
+                             IsVisible="{Binding Progress, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <TextBlock Classes="hint" Text="{Binding CreatedLine}"
+                             IsVisible="{Binding CreatedLine, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <TextBlock Classes="hint" Text="{Binding Guild}"
+                             IsVisible="{Binding Guild, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+              </Border>
+
+              <UniformGrid Columns="3" ColumnSpacing="10">
+                <Border Classes="tile">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <views:RoleIcon Role="Tank" VerticalAlignment="Center" />
+                    <StackPanel>
+                      <TextBlock Classes="stat" FontSize="18" Text="{Binding Tanks}" />
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarTanks}" />
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+                <Border Classes="tile">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <views:RoleIcon Role="Healer" VerticalAlignment="Center" />
+                    <StackPanel>
+                      <TextBlock Classes="stat" FontSize="18" Text="{Binding Healers}" />
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarHealers}" />
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+                <Border Classes="tile">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <views:RoleIcon Role="Damage" VerticalAlignment="Center" />
+                    <StackPanel>
+                      <TextBlock Classes="stat" FontSize="18" Text="{Binding Damage}" />
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarDamage}" />
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+              </UniformGrid>
+
+              <!-- Signing up through the addon -->
+              <Border Classes="card" Padding="20"
+                      DataContext="{Binding $parent[Grid].((vm:GameCalendarViewModel)DataContext).Form}"
+                      x:DataType="vm:GameSignupFormViewModel"
+                      IsVisible="{Binding $parent[Grid].((vm:GameCalendarViewModel)DataContext).HasForm}">
+                <StackPanel Spacing="14">
+                  <StackPanel Spacing="4">
+                    <TextBlock Classes="label" Text="{x:Static l:Strings.GameSignupTitle}" />
+                    <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.GameSignupHint}" />
+                  </StackPanel>
+                  <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.GameNoCharacters}"
+                             IsVisible="{Binding !HasCharacters}" />
+                  <Grid ColumnDefinitions="*,20,*" RowDefinitions="Auto,Auto" IsVisible="{Binding HasCharacters}">
+                    <StackPanel Spacing="6">
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldCharacter}" />
+                      <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}">
+                        <ComboBox.ItemTemplate>
+                          <DataTemplate x:DataType="vm:GameCharacterOption">
+                            <TextBlock Text="{Binding Label}" Foreground="{Binding ClassColor}" />
+                          </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                      </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="6">
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldRole}" />
+                      <ListBox Classes="segments" ItemsSource="{Binding Roles}" SelectedIndex="{Binding RoleIndex}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Spacing="6" Margin="0,14,0,0">
+                      <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldNote}" />
+                      <TextBox Text="{Binding Note}" PlaceholderText="{x:Static l:Strings.CalendarNotePlaceholder}" />
+                    </StackPanel>
+                  </Grid>
+                  <WrapPanel ItemSpacing="8" LineSpacing="8" IsVisible="{Binding HasCharacters}">
+                    <Button Classes="primary" Content="{x:Static l:Strings.GameSignupButton}" Command="{Binding SignupCommand}" />
+                    <Button Classes="ghost" Content="{x:Static l:Strings.GameWithdrawButton}" Command="{Binding WithdrawCommand}"
+                            IsVisible="{Binding IsSignedUp}" />
+                  </WrapPanel>
+                  <StackPanel Spacing="6" IsVisible="{Binding HasPending}">
+                    <TextBlock Classes="label" Text="{x:Static l:Strings.GamePendingLabel}" />
+                    <ItemsControl ItemsSource="{Binding Pending}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:GamePendingEntry">
+                          <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                            <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource TimerBrush}" Text="{Binding Label}" />
+                            <Button Grid.Column="1" Classes="ghost" Content="{x:Static l:Strings.GamePendingRemove}"
+                                    Command="{Binding RemoveCommand}" />
+                          </Grid>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+
+              <StackPanel Spacing="10">
+                <TextBlock Classes="label" Text="{Binding RosterLabel}" />
+                <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarNobody}" IsVisible="{Binding !HasRoster}" />
+                <Border Classes="table" IsVisible="{Binding HasRoster}">
+                  <ItemsControl ItemsSource="{Binding Roster}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="vm:GameSignupGroup">
+                        <StackPanel>
+                          <Border Classes="thead">
+                            <TextBlock Classes="label" Text="{Binding Label}" />
+                          </Border>
+                          <ItemsControl ItemsSource="{Binding Entries}">
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:GameSignupEntry">
+                                <Border Classes="row" Padding="16,8">
+                                  <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                                    <views:RoleIcon Role="{Binding Role}" VerticalAlignment="Center" ToolTip.Tip="{Binding RoleLabel}" />
+                                    <TextBlock Grid.Column="1" Margin="10,0" VerticalAlignment="Center" FontWeight="SemiBold"
+                                               Foreground="{Binding ClassColor}" Text="{Binding Name}" ToolTip.Tip="{Binding Tip}" />
+                                    <TextBlock Grid.Column="2" Classes="hint" VerticalAlignment="Center" TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis" Text="{Binding Note}" ToolTip.Tip="{Binding Note}" />
+                                    <TextBlock Grid.Column="3" Classes="mono" FontSize="12" VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextMutedBrush}" Text="{Binding ItemLevel}"
+                                               ToolTip.Tip="{x:Static l:Strings.GameItemLevelTip}" />
+                                  </Grid>
+                                </Border>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                        </StackPanel>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </Border>
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+    </Grid>
+
+    <!-- ===== Termine ===== -->
+    <Grid Grid.Row="1" ColumnDefinitions="400,Auto,*">
+      <Grid.IsVisible>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="ShowsRaidex" />
+          <Binding Path="ShowsDates" />
+        </MultiBinding>
+      </Grid.IsVisible>
+
+      <!-- The raids -->
+      <ScrollViewer>
+        <StackPanel Margin="26,22,26,30" Spacing="12">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Classes="label" VerticalAlignment="Center" Text="{x:Static l:Strings.CalendarDatesLabel}" />
+            <ListBox Grid.Column="1" Classes="segments" ItemsSource="{Binding Scopes}" SelectedIndex="{Binding ScopeIndex}" />
+          </Grid>
+          <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarLoading}" IsVisible="{Binding IsLoading}" />
+          <SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                               Text="{Binding Problem}" IsVisible="{Binding HasProblem}" />
+          <TextBlock Classes="hint" Text="{Binding NoRaidsText}" IsVisible="{Binding ShowsNoRaids}" />
+
+          <ListBox Classes="cards" ItemsSource="{Binding Raids}" SelectedItem="{Binding SelectedRaid}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:RaidRowViewModel">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <Border Classes="date" Classes.running="{Binding IsRunning}" VerticalAlignment="Center">
+                    <StackPanel>
+                      <TextBlock Classes="label" FontSize="9" Text="{Binding DayName}" />
+                      <TextBlock Classes="mono" FontSize="17" Foreground="{DynamicResource TextBrush}" Text="{Binding DayNumber}" />
+                      <TextBlock Classes="label" FontSize="9" Text="{Binding MonthName}" />
+                    </StackPanel>
+                  </Border>
+                  <StackPanel Grid.Column="1" Margin="12,0,8,0" VerticalAlignment="Center" Spacing="2">
+                    <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"
+                               Text="{Binding Title}" />
+                    <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextBodyBrush}"
+                               Text="{Binding SubLine}" />
+                    <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextFaintBrush}" TextTrimming="CharacterEllipsis">
+                      <Run Text="{Binding TimeRange}" /><Run Text=" · " /><Run Text="{Binding Countdown}" />
+                    </TextBlock>
+                  </StackPanel>
+                  <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="6">
+                    <TextBlock Classes="mono" FontSize="13" HorizontalAlignment="Right" Text="{Binding SizeLabel}"
+                               ToolTip.Tip="{Binding SizeTip}" />
+                    <Panel HorizontalAlignment="Right" ToolTip.Tip="{Binding MyLine}">
+                      <Ellipse Classes="mine" Fill="{DynamicResource ArkanBrush}" IsVisible="{Binding IsComing}" />
+                      <Ellipse Classes="mine" Stroke="{DynamicResource GlowBrush}" StrokeThickness="1.5" IsVisible="{Binding IsMaybe}" />
+                      <Ellipse Classes="mine" Fill="{DynamicResource TextFaintBrush}" IsVisible="{Binding IsAway}" />
+                    </Panel>
+                  </StackPanel>
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+      </ScrollViewer>
+
+      <Border Grid.Column="1" Width="1" Background="{DynamicResource LineBrush}" />
+
+      <ScrollViewer Grid.Column="2">
+        <StackPanel Margin="28,22,28,30" Spacing="16">
+          <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarPickRaid}" IsVisible="{Binding ShowsNothingSelected}" />
+          <Border Classes="strip" CornerRadius="8" BorderThickness="1" IsVisible="{Binding HasNotice}">
+            <SelectableTextBlock FontSize="13" Foreground="{DynamicResource TimerBrush}" TextWrapping="Wrap" Text="{Binding Notice}" />
+          </Border>
+
+          <!-- ===== One raid ===== -->
+          <StackPanel Spacing="16" DataContext="{Binding SelectedRaid}" x:DataType="vm:RaidRowViewModel"
+                      IsVisible="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).ShowsDetail}">
+
+            <!-- The cover: the instance's picture where Raidex has one, the card's glow where not -->
+            <Border Classes="card group" ClipToBounds="True">
+              <Panel>
+                <Border CornerRadius="12" web:RemoteImage.Background="{Binding ImageUrl}" />
+                <Border CornerRadius="12" Background="{DynamicResource CardFade}"
+                        IsVisible="{Binding ImageUrl, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <StackPanel Margin="22,20" Spacing="8">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Border Classes="pill difficulty" BorderBrush="{Binding DifficultyColor}" IsVisible="{Binding HasDifficulty}">
+                      <TextBlock Foreground="{Binding DifficultyColor}" Text="{Binding DifficultyLabel}" />
+                    </Border>
+                    <TextBlock Classes="mono" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource GlowBrush}"
+                               Text="{Binding Countdown}" />
+                  </StackPanel>
+                  <TextBlock Classes="h1" TextWrapping="Wrap" Text="{Binding Title}" />
+                  <TextBlock Foreground="{DynamicResource TextBodyBrush}" TextWrapping="Wrap" Text="{Binding Instance}"
+                             IsVisible="{Binding Instance, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <TextBlock Classes="mono" FontSize="12" Foreground="{DynamicResource TextSoftBrush}" TextWrapping="Wrap"
+                             Text="{Binding WhenLong}" />
+                  <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0"
+                              IsVisible="{Binding CreatedLine, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock Classes="hint" VerticalAlignment="Center" Text="{Binding CreatedLine}" />
+                    <Border Classes="pill" Padding="8,2" VerticalAlignment="Center">
+                      <TextBlock FontSize="10" Text="{Binding RankLabel}" />
+                    </Border>
+                  </StackPanel>
+                </StackPanel>
+              </Panel>
+            </Border>
+
+            <TextBlock Foreground="{DynamicResource TextBodyBrush}" TextWrapping="Wrap" Text="{Binding Description}"
+                       IsVisible="{Binding HasDescription}" />
+
+            <!-- Who comes, per role - the three counts Raidex shows, nothing more -->
+            <UniformGrid Columns="3" ColumnSpacing="10">
+              <Border Classes="tile">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <views:RoleIcon Role="Tank" VerticalAlignment="Center" />
+                  <StackPanel>
+                    <TextBlock Classes="stat" FontSize="18" Text="{Binding Tanks}" />
+                    <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarTanks}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+              <Border Classes="tile">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <views:RoleIcon Role="Healer" VerticalAlignment="Center" />
+                  <StackPanel>
+                    <TextBlock Classes="stat" FontSize="18" Text="{Binding Healers}" />
+                    <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarHealers}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+              <Border Classes="tile">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                  <views:RoleIcon Role="Damage" VerticalAlignment="Center" />
+                  <StackPanel>
+                    <TextBlock Classes="stat" FontSize="18" Text="{Binding Damage}" />
+                    <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarDamage}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </UniformGrid>
+
+            <!-- Where the caller stands, and what they may do -->
+            <StackPanel Spacing="10">
+              <TextBlock Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                         IsVisible="{Binding IsSignedUp}">
+                <Run Foreground="{DynamicResource TextMutedBrush}" Text="{x:Static l:Strings.CalendarYouAre}" /><Run Text=" " /><Run Text="{Binding MyLine}" />
+              </TextBlock>
+              <WrapPanel ItemSpacing="8" LineSpacing="8">
+                <Button Classes="primary" Content="{Binding SignupLabel}"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).OpenSignupCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarShare}"
+                        ToolTip.Tip="{x:Static l:Strings.CalendarShareTip}"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).ShareCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarGuidesButton}"
+                        IsVisible="{Binding Instance, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).ShowGuidesCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarEdit}" IsVisible="{Binding CanManage}"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).EditRaidCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarDelete}" IsVisible="{Binding CanManage}"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).DeleteRaidCommand}" />
+              </WrapPanel>
+            </StackPanel>
+          </StackPanel>
+
+          <!-- Deleting asks once -->
+          <Border Classes="card" BorderBrush="{DynamicResource TimerBrush}" IsVisible="{Binding ConfirmsDelete}">
+            <StackPanel Spacing="12">
+              <TextBlock Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{x:Static l:Strings.CalendarDeleteAsk}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Classes="primary" Content="{x:Static l:Strings.CalendarDelete}" Command="{Binding ConfirmDeleteCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.RaidexCancel}" Command="{Binding CancelDeleteCommand}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <!-- ===== Signing up ===== -->
+          <Border Classes="card" Padding="20" IsVisible="{Binding HasSignup}">
+            <StackPanel Spacing="14" DataContext="{Binding Signup}" x:DataType="vm:SignupFormViewModel">
+              <TextBlock Classes="h2" TextWrapping="Wrap" Text="{Binding Heading}" />
+
+              <StackPanel Spacing="6">
+                <ListBox Classes="segments" ItemsSource="{Binding Kinds}" SelectedIndex="{Binding KindIndex}" />
+                <TextBlock Classes="hint" Text="{Binding KindHint}" />
+              </StackPanel>
+
+              <Grid ColumnDefinitions="*,20,*" RowDefinitions="Auto,Auto">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldCharacter}" />
+                  <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}"
+                            IsVisible="{Binding !IsLoadingCharacters}">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate x:DataType="vm:CharacterOption">
+                        <TextBlock Text="{Binding Label}" Foreground="{Binding ClassColor}" />
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+                  <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarLoading}" IsVisible="{Binding IsLoadingCharacters}" />
+                  <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarNoCharacters}" IsVisible="{Binding HasNoCharacters}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldStatus}" />
+                  <ListBox Classes="segments" ItemsSource="{Binding Statuses}" SelectedIndex="{Binding StatusIndex}"
+                           IsEnabled="{Binding !IsAlt}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Spacing="6" Margin="0,14,0,0">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldRole}" />
+                  <ListBox Classes="segments" ItemsSource="{Binding Roles}" SelectedIndex="{Binding RoleIndex}" />
+                  <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.CalendarRoleRequired}"
+                             IsVisible="{Binding !HasRole}" />
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="2" Spacing="6" Margin="0,14,0,0" IsVisible="{Binding !IsAlt}">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldNote}" />
+                  <TextBox Text="{Binding Note}" PlaceholderText="{x:Static l:Strings.CalendarNotePlaceholder}" />
+                </StackPanel>
+              </Grid>
+
+              <SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{Binding Problem}"
+                                   IsVisible="{Binding Problem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Classes="primary" Content="{Binding SaveLabel}" Command="{Binding SaveCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarWithdraw}" Command="{Binding WithdrawCommand}"
+                        IsVisible="{Binding CanWithdraw}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.CalendarClose}" Command="{Binding CloseCommand}" />
+              </StackPanel>
+
+              <!-- The caller's alts on the bench, each to take off again -->
+              <StackPanel Spacing="6" IsVisible="{Binding HasAlts}">
+                <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarYourAlts}" />
+                <ItemsControl ItemsSource="{Binding MyAlts}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:RosterEntry">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <views:RoleIcon Role="{Binding Role}" VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" Foreground="{Binding ClassColor}" Text="{Binding Name}" />
+                        <Button Classes="step" ToolTip.Tip="{x:Static l:Strings.CalendarRemoveAlt}" Command="{Binding RemoveCommand}">
+                          <Path Classes="cross" Data="M0,0 L8,8 M8,0 L0,8" />
+                        </Button>
+                      </StackPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <!-- ===== The roster and the bench ===== -->
+          <StackPanel Spacing="16" DataContext="{Binding SelectedRaid}" x:DataType="vm:RaidRowViewModel"
+                      IsVisible="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).ShowsDetail}">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="label" Text="{Binding RosterLabel}" />
+              <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarNobody}" IsVisible="{Binding !HasRoster}" />
+              <Border Classes="table" IsVisible="{Binding HasRoster}">
+                <ItemsControl ItemsSource="{Binding Roster}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:RosterGroup">
+                      <StackPanel>
+                        <Border Classes="thead">
+                          <TextBlock Classes="label" Text="{Binding Label}" />
+                        </Border>
+                        <ItemsControl ItemsSource="{Binding Entries}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RosterEntry">
+                              <Border Classes="row" Padding="16,8,8,8">
+                                <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+                                  <views:RoleIcon Role="{Binding Role}" VerticalAlignment="Center" ToolTip.Tip="{Binding RoleLabel}" />
+                                  <TextBlock Grid.Column="1" Margin="10,0" VerticalAlignment="Center" FontWeight="SemiBold"
+                                             Foreground="{Binding ClassColor}" Text="{Binding Name}" ToolTip.Tip="{Binding Tip}" />
+                                  <TextBlock Grid.Column="2" Classes="hint" VerticalAlignment="Center" TextWrapping="NoWrap"
+                                             TextTrimming="CharacterEllipsis" Text="{Binding Note}" ToolTip.Tip="{Binding Note}" />
+                                  <Border Grid.Column="3" Classes="pill" Padding="8,2" Margin="8,0" VerticalAlignment="Center"
+                                          IsVisible="{Binding StatusLabel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock FontSize="10" Text="{Binding StatusLabel}" />
+                                  </Border>
+                                  <Button Grid.Column="4" Classes="step" ToolTip.Tip="{x:Static l:Strings.CalendarRemoveSignup}"
+                                          Command="{Binding RemoveCommand}" IsVisible="{Binding CanRemove}">
+                                    <Path Classes="cross" Data="M0,0 L8,8 M8,0 L0,8" />
+                                  </Button>
+                                </Grid>
+                              </Border>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Border>
+            </StackPanel>
+
+            <StackPanel Spacing="10" IsVisible="{Binding HasBench}">
+              <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarBench}" />
+              <Border Classes="table">
+                <ItemsControl ItemsSource="{Binding Bench}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:RosterGroup">
+                      <StackPanel>
+                        <Border Classes="thead">
+                          <TextBlock Classes="label" Text="{Binding Label}" />
+                        </Border>
+                        <ItemsControl ItemsSource="{Binding Entries}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RosterEntry">
+                              <Border Classes="row" Padding="16,8,8,8">
+                                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                                  <views:RoleIcon Role="{Binding Role}" VerticalAlignment="Center" ToolTip.Tip="{Binding RoleLabel}" />
+                                  <TextBlock Grid.Column="1" Margin="10,0" VerticalAlignment="Center"
+                                             Foreground="{Binding ClassColor}" Text="{Binding Name}" ToolTip.Tip="{Binding Tip}" />
+                                  <TextBlock Grid.Column="2" Classes="hint" VerticalAlignment="Center" Text="{Binding RoleLabel}" />
+                                  <Button Grid.Column="3" Classes="step" ToolTip.Tip="{x:Static l:Strings.CalendarRemoveAlt}"
+                                          Command="{Binding RemoveCommand}" IsVisible="{Binding CanRemove}">
+                                    <Path Classes="cross" Data="M0,0 L8,8 M8,0 L0,8" />
+                                  </Button>
+                                </Grid>
+                              </Border>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+
+          <!-- ===== Planning or changing a raid ===== -->
+          <Border Classes="card" Padding="22" IsVisible="{Binding HasForm}">
+            <StackPanel Spacing="14" DataContext="{Binding Form}" x:DataType="vm:RaidFormViewModel">
+              <TextBlock Classes="h2" Text="{Binding Heading}" />
+
+              <StackPanel Spacing="6">
+                <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldTitle}" />
+                <TextBox Text="{Binding Title}" PlaceholderText="{x:Static l:Strings.CalendarTitlePlaceholder}" />
+              </StackPanel>
+
+              <Grid ColumnDefinitions="Auto,20,*,20,Auto">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldType}" />
+                  <ListBox Classes="segments" ItemsSource="{Binding Types}" SelectedIndex="{Binding TypeIndex}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Spacing="6">
+                  <TextBlock Classes="label" Text="{Binding InstanceLabel}" />
+                  <AutoCompleteBox Text="{Binding Instance}" ItemsSource="{Binding InstanceNames}"
+                                   FilterMode="ContainsOrdinal" MinimumPrefixLength="2"
+                                   PlaceholderText="{Binding InstancePlaceholder}" />
+                </StackPanel>
+                <StackPanel Grid.Column="4" Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldDifficulty}" />
+                  <ComboBox MinWidth="150" ItemsSource="{Binding Difficulties}" SelectedIndex="{Binding DifficultyIndex}" />
+                </StackPanel>
+              </Grid>
+
+              <WrapPanel ItemSpacing="20" LineSpacing="14">
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldDate}" />
+                  <CalendarDatePicker SelectedDate="{Binding Date}" MinWidth="150" />
+                </StackPanel>
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldStart}" />
+                  <TimePicker SelectedTime="{Binding StartTime}" ClockIdentifier="24HourClock" MinuteIncrement="15" />
+                </StackPanel>
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldEnd}" />
+                  <TimePicker SelectedTime="{Binding EndTime}" ClockIdentifier="24HourClock" MinuteIncrement="15" />
+                </StackPanel>
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldMin}" />
+                  <NumericUpDown Value="{Binding MinSize}" Minimum="1" Maximum="40" Increment="1" FormatString="0" Width="120" />
+                </StackPanel>
+                <StackPanel Spacing="6">
+                  <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldMax}" />
+                  <NumericUpDown Value="{Binding MaxSize}" Minimum="0" Maximum="40" Increment="1" FormatString="0" Width="120"
+                                 ToolTip.Tip="{x:Static l:Strings.CalendarMaxHint}" />
+                </StackPanel>
+              </WrapPanel>
+
+              <StackPanel Spacing="6">
+                <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarFieldDescription}" />
+                <TextBox Classes="multi" Text="{Binding Description}" />
+              </StackPanel>
+
+              <SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{Binding Problem}"
+                                   IsVisible="{Binding Problem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Classes="primary" Content="{Binding SaveLabel}" Command="{Binding SaveCommand}" />
+                <Button Classes="ghost" Content="{x:Static l:Strings.RaidexCancel}" Command="{Binding CancelCommand}" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+
+    <!-- ===== Guides ===== -->
+    <Grid Grid.Row="1" ColumnDefinitions="400,Auto,*">
+      <Grid.IsVisible>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+          <Binding Path="ShowsRaidex" />
+          <Binding Path="ShowsGuides" />
+        </MultiBinding>
+      </Grid.IsVisible>
+
+      <!-- The instances: those the guild is about to play, then any of the journal -->
+      <ScrollViewer>
+        <StackPanel Margin="26,22,26,30" Spacing="12">
+          <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarGuideInstances}" />
+          <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarNoGuideInstances}" IsVisible="{Binding !HasGuideInstances}" />
+          <ListBox Classes="cards" ItemsSource="{Binding GuideInstances}" SelectedItem="{Binding SelectedGuideInstance}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Text="{Binding}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <TextBlock Classes="label" Margin="0,10,0,0" Text="{x:Static l:Strings.CalendarGuideOther}" />
+          <Grid ColumnDefinitions="*,8,Auto">
+            <AutoCompleteBox Text="{Binding GuideSearch}" ItemsSource="{Binding JournalNames}"
+                             FilterMode="ContainsOrdinal" MinimumPrefixLength="2"
+                             PlaceholderText="{x:Static l:Strings.CalendarGuideSearchPlaceholder}" />
+            <Button Grid.Column="2" Classes="ghost" Content="{x:Static l:Strings.CalendarGuideShow}"
+                    Command="{Binding SearchGuidesCommand}" />
+          </Grid>
+        </StackPanel>
+      </ScrollViewer>
+
+      <Border Grid.Column="1" Width="1" Background="{DynamicResource LineBrush}" />
+
+      <ScrollViewer Grid.Column="2">
+        <StackPanel Margin="28,22,28,30" Spacing="16">
+          <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarPickInstance}" IsVisible="{Binding !HasGuideInstance}" />
+
+          <StackPanel Spacing="16" IsVisible="{Binding HasGuideInstance}">
+            <StackPanel Spacing="4">
+              <TextBlock Classes="h1" TextWrapping="Wrap" Text="{Binding GuideInstance}" />
+              <TextBlock Classes="sub" Text="{x:Static l:Strings.CalendarGuidesIntro}" />
+            </StackPanel>
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarLoading}" IsVisible="{Binding IsLoadingGuides}" />
+            <SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                                 Text="{Binding GuideProblem}" IsVisible="{Binding HasGuideProblem}" />
+
+            <ItemsControl ItemsSource="{Binding GuideGroups}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <StackPanel Spacing="18" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:GuideGroupViewModel">
+                  <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Classes="label" VerticalAlignment="Center" Text="{Binding Heading}" />
+                      <Border Classes="pill" Padding="8,2" IsVisible="{Binding HasRank}">
+                        <TextBlock FontSize="10" Text="{Binding RankLabel}" />
+                      </Border>
+                    </StackPanel>
+                    <Border Classes="table">
+                      <ItemsControl ItemsSource="{Binding Guides}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate x:DataType="vm:GuideItemViewModel">
+                            <Border Classes="row" Padding="0">
+                              <Grid ColumnDefinitions="*,Auto">
+                                <Button Classes="reveal" Padding="16,11" Command="{Binding OpenCommand}" ToolTip.Tip="{Binding Url}">
+                                  <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Panel Width="16" Height="16" VerticalAlignment="Center">
+                                      <Image Width="16" Height="16" web:RemoteImage.Url="{Binding IconUrl}" IsVisible="{Binding HasIcon}" />
+                                      <!-- A link's sign where the site brings no icon -->
+                                      <Path IsVisible="{Binding !HasIcon}" Stroke="{DynamicResource GlowBrush}" StrokeThickness="1.5"
+                                            StrokeLineCap="Round" Width="14" Height="14" Stretch="Uniform"
+                                            Data="M6,8 L8,6 M5,4 L7,2 A2.8,2.8 0 0 1 11,6 L9,8 M8,10 L6,12 A2.8,2.8 0 0 1 2,8 L4,6" />
+                                    </Panel>
+                                    <StackPanel Grid.Column="1" Margin="12,0" Spacing="1">
+                                      <TextBlock Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis" Text="{Binding Title}" />
+                                      <TextBlock Classes="mono hint" FontSize="11" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                                 Text="{Binding Host}" />
+                                    </StackPanel>
+                                    <Border Grid.Column="2" Classes="pill" Padding="8,2" VerticalAlignment="Center" IsVisible="{Binding HasLang}">
+                                      <TextBlock FontSize="10" Text="{Binding LangLabel}" />
+                                    </Border>
+                                  </Grid>
+                                </Button>
+                                <Button Grid.Column="1" Classes="step" Margin="0,0,10,0" ToolTip.Tip="{x:Static l:Strings.CalendarGuideRemove}"
+                                        Command="{Binding DeleteCommand}" IsVisible="{Binding CanDelete}">
+                                  <Path Classes="cross" Data="M0,0 L8,8 M8,0 L0,8" />
+                                </Button>
+                              </Grid>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Border>
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Adding one: for the guild master, raid leads and quartermasters -->
+            <Border Classes="card" Padding="20" IsVisible="{Binding CanManageGuides}">
+              <StackPanel Spacing="12">
+                <TextBlock Classes="label" Text="{x:Static l:Strings.CalendarGuideAdd}" />
+                <Grid ColumnDefinitions="*,10,1.4*,10,Auto">
+                  <TextBox Text="{Binding NewGuideTitle}" PlaceholderText="{x:Static l:Strings.CalendarGuideTitlePlaceholder}" />
+                  <TextBox Grid.Column="2" Classes="path" Text="{Binding NewGuideUrl}" PlaceholderText="https://…" />
+                  <Button Grid.Column="4" Classes="primary" Content="{x:Static l:Strings.CalendarGuideAddButton}"
+                          Command="{Binding AddGuideCommand}" />
+                </Grid>
+              </StackPanel>
+            </Border>
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CalendarGuideWhoAdds}" IsVisible="{Binding !CanManageGuides}" />
+          </StackPanel>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </Grid>
+</UserControl>

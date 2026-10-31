@@ -1,0 +1,642 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<!--
+  Raidex Keys - control styles after section 05 "Desktop" of the brand guide.
+
+  Sizes are the guide's CSS pixels. Avalonia counts LetterSpacing in pixels,
+  not em, so "0.14em at 10 px" is written as 1.4.
+-->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    <Setter Property="FontFamily" Value="{StaticResource BodyFont}" />
+    <Setter Property="FontSize" Value="13" />
+  </Style>
+
+  <!-- ===== Text ===== -->
+
+  <!-- Page title: "Diese Woche", Chakra Petch 700 / 24 -->
+  <Style Selector="TextBlock.h1">
+    <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+  <Style Selector="TextBlock.sub">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <!-- Card title: Chakra Petch 600 / 17 -->
+  <Style Selector="TextBlock.h2">
+    <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+  <!-- Small caps label: IBM Plex Mono 10, spaced, faint -->
+  <Style Selector="TextBlock.label">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="LetterSpacing" Value="1.4" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFaintBrush}" />
+  </Style>
+  <!-- Headline figures: IBM Plex Mono 22 -->
+  <Style Selector="TextBlock.stat">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="22" />
+  </Style>
+  <Style Selector="TextBlock.mono">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+  </Style>
+  <Style Selector="TextBlock.hint">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <!-- A keystone level: in Blizzard's colour for keystones (epic) -->
+  <Style Selector="TextBlock.key">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{StaticResource KeystoneBrush}" />
+  </Style>
+  <Style Selector="Run.key">
+    <Setter Property="Foreground" Value="{StaticResource KeystoneBrush}" />
+  </Style>
+
+  <!-- ===== Surfaces ===== -->
+
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="16" />
+  </Style>
+  <!-- A table: card without padding, rows clipped to the rounded corners -->
+  <Style Selector="Border.table">
+    <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+  <!-- On the right as Border.rowhead: head and rows lay out their columns on the same width -->
+  <Style Selector="Border.thead">
+    <Setter Property="Background" Value="{DynamicResource TableHeadBrush}" />
+    <Setter Property="Padding" Value="16,10,6,10" />
+  </Style>
+  <Style Selector="Border.row">
+    <Setter Property="BorderBrush" Value="{DynamicResource RowLineBrush}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="Padding" Value="16,12" />
+  </Style>
+  <!-- A row's always visible line: all of it slides the details out (Views/RowToggle) -->
+  <Style Selector="Border.rowhead">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="16,8,6,8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <!-- Pill, as the store banner's tags -->
+  <Style Selector="Border.pill">
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="99" />
+    <Setter Property="Padding" Value="12,6" />
+  </Style>
+  <Style Selector="Border.pill > TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="LetterSpacing" Value="1.1" />
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+
+  <!-- Another Raidex server than raidex.app: the Arkan edge, so it stands out from the sample-data pill without the Timer's gold -->
+  <Style Selector="Border.pill.server">
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+  </Style>
+  <Style Selector="Border.pill.server > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- A Great Vault slot: gold once unlocked, as the game's vault; "2/4" in faint until then -->
+  <Style Selector="Border.pip">
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Padding" Value="0,3" />
+  </Style>
+  <Style Selector="Border.pip > TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFaintBrush}" />
+  </Style>
+  <Style Selector="Border.pip.unlocked">
+    <Setter Property="BorderBrush" Value="{DynamicResource TimerBrush}" />
+    <Setter Property="Background" Value="{DynamicResource TimerTintBrush}" />
+  </Style>
+  <Style Selector="Border.pip.unlocked > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+  </Style>
+  <!-- Last week's vault reward, not claimed yet -->
+  <Style Selector="Border.pill.claim">
+    <Setter Property="BorderBrush" Value="{DynamicResource TimerBrush}" />
+    <Setter Property="Background" Value="{DynamicResource TimerTintBrush}" />
+    <Setter Property="Padding" Value="10,3" />
+  </Style>
+  <Style Selector="Border.pill.claim > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+  </Style>
+
+  <!-- Gear light for the key this group runs: a warning, not a verdict -->
+  <Style Selector="Border.pill.light">
+    <Setter Property="BorderBrush" Value="{DynamicResource TimerBrush}" />
+    <Setter Property="Background" Value="{DynamicResource TimerTintBrush}" />
+    <Setter Property="Padding" Value="8,2" />
+  </Style>
+  <Style Selector="Border.pill.light > TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+    <Setter Property="FontSize" Value="10" />
+  </Style>
+
+  <!-- The strip over a page: something worth saying once, in gold, with a way
+       out. Never in the way of what the page is for. -->
+  <Style Selector="Border.strip">
+    <Setter Property="Background" Value="{DynamicResource StripBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource StripEdgeBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="Padding" Value="20,12" />
+  </Style>
+  <Style Selector="Border.strip TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+    <Setter Property="FontSize" Value="13" />
+  </Style>
+  <!-- On the About page the same news, in the same gold -->
+  <Style Selector="TextBlock.hint.news">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+  </Style>
+
+  <!-- 4 px bar: Arkan for progress, Timer gold for "in time" -->
+  <Style Selector="ProgressBar.bar">
+    <Setter Property="Height" Value="4" />
+    <Setter Property="MinHeight" Value="4" />
+    <Setter Property="CornerRadius" Value="2" />
+    <Setter Property="Background" Value="{DynamicResource LineBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource ArkanBrush}" />
+  </Style>
+  <Style Selector="ProgressBar.bar.timer">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+  </Style>
+
+  <!-- A path: data, so Plex Mono (section 03) -->
+  <Style Selector="TextBox.path">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Padding" Value="10,8" />
+  </Style>
+
+  <!-- ===== Buttons ===== -->
+
+  <!-- ===== Links in rows ===== -->
+
+  <!-- Text or icon that opens a page: no button look, a hand, a line on hover -->
+  <Style Selector="Button.plain">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.plain:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.plain:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.plain:pointerover TextBlock">
+    <Setter Property="TextDecorations" Value="Underline" />
+  </Style>
+  <Style Selector="Button.plain Image">
+    <Setter Property="Width" Value="14" />
+    <Setter Property="Height" Value="14" />
+  </Style>
+  <Style Selector="Button.plain:pointerover Image">
+    <Setter Property="Opacity" Value="0.8" />
+  </Style>
+  <!-- A link inside a sentence (Views/EmptyState): a run in Glow like every link, underlined under the pointer -->
+  <Style Selector="Run.link">
+    <Setter Property="Foreground" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- The same in the details: label size, muted until hovered -->
+  <Style Selector="Button.plain.detail TextBlock">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+  <Style Selector="Button.plain.detail:pointerover TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+
+  <!-- A table's column header that sorts (Views/SortHeader): the faint label,
+       muted under the pointer, in the text colour with its arrow while sorted by -->
+  <Style Selector="Button.sort">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.sort:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.sort:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.sort:pointerover TextBlock.label">
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+  <Style Selector="Button.sort TextBlock.label.sorted">
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+  <Style Selector="Button.sort Path">
+    <Setter Property="Fill" Value="{DynamicResource TextBrush}" />
+  </Style>
+
+  <!-- The chevron that slides a row's details out: it turns as they come -->
+  <Style Selector="ToggleButton.chevron">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="6" />
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="HorizontalAlignment" Value="Right" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ToggleButton.chevron /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ToggleButton.chevron:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.chevron:checked /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ToggleButton.chevron:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.chevron Path">
+    <Setter Property="Stroke" Value="{DynamicResource TextMutedBrush}" />
+    <Setter Property="StrokeThickness" Value="1.6" />
+    <Setter Property="RenderTransform" Value="rotate(0deg)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.26" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ToggleButton.chevron:checked Path">
+    <Setter Property="RenderTransform" Value="rotate(180deg)" />
+    <Setter Property="Stroke" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- − and + beside a value that moves in steps: round like the chevron -->
+  <Style Selector="Button.step">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="7" />
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.step /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.step:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+  </Style>
+  <Style Selector="Button.step Path">
+    <Setter Property="Stroke" Value="{DynamicResource TextMutedBrush}" />
+    <Setter Property="StrokeThickness" Value="1.6" />
+    <Setter Property="StrokeLineCap" Value="Round" />
+  </Style>
+  <Style Selector="Button.step:pointerover Path">
+    <Setter Property="Stroke" Value="{DynamicResource GlowBrush}" />
+  </Style>
+  <Style Selector="Button.step:disabled">
+    <Setter Property="Opacity" Value="0.3" />
+  </Style>
+
+  <!-- A block of a card that opens more of itself: no button look, its hint lights up -->
+  <Style Selector="Button.reveal">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  </Style>
+  <Style Selector="Button.reveal /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.reveal:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.reveal:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.reveal:pointerover TextBlock.hint">
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+
+  <!-- A popup in the card's dress -->
+  <Style Selector="FlyoutPresenter.card">
+    <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="18,14" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+  </Style>
+
+  <!-- A button on the map: dark and translucent over the parchment -->
+  <Style Selector="Button.overlay">
+    <Setter Property="Background" Value="{DynamicResource OverlayBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Padding" Value="12,7" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.overlay:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+
+  <!-- The overlay chip that stays down: the toggle that folds a row's map
+       away (Lars, 2026-09-12). Same chip as Button.overlay, and its chevron
+       turns like the one that opens a row - down while the map is folded. -->
+  <Style Selector="ToggleButton.overlay">
+    <Setter Property="Background" Value="{DynamicResource OverlayBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Padding" Value="10,9" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ToggleButton.overlay /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource OverlayBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.overlay:checked /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource OverlayBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.overlay:pointerover /template/ ContentPresenter#PART_ContentPresenter,
+                   ToggleButton.overlay:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.overlay Path">
+    <Setter Property="Stroke" Value="{DynamicResource TextBrush}" />
+    <Setter Property="StrokeThickness" Value="1.6" />
+  </Style>
+  <!-- .turn folds something away and shows it again: its chevron turns over.
+       .lit switches something on: its sign lights up while it is on. -->
+  <Style Selector="ToggleButton.overlay.turn Path">
+    <Setter Property="RenderTransform" Value="rotate(0deg)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.26" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ToggleButton.overlay.turn:checked Path">
+    <Setter Property="RenderTransform" Value="rotate(180deg)" />
+  </Style>
+  <Style Selector="ToggleButton.overlay.lit Path">
+    <Setter Property="Stroke" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.overlay.lit:checked Path">
+    <Setter Property="Stroke" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- The same fold as a label, over the route in text form: no chip, just
+       the turning chevron before the heading. -->
+  <Style Selector="ToggleButton.fold">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0,2" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ToggleButton.fold /template/ ContentPresenter#PART_ContentPresenter,
+                   ToggleButton.fold:checked /template/ ContentPresenter#PART_ContentPresenter,
+                   ToggleButton.fold:pointerover /template/ ContentPresenter#PART_ContentPresenter,
+                   ToggleButton.fold:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ToggleButton.fold TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="LetterSpacing" Value="1.1" />
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.fold:pointerover TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.fold Path">
+    <Setter Property="Stroke" Value="{DynamicResource TextMutedBrush}" />
+    <Setter Property="StrokeThickness" Value="1.6" />
+    <Setter Property="RenderTransform" Value="rotate(0deg)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.26" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ToggleButton.fold:checked Path">
+    <Setter Property="RenderTransform" Value="rotate(180deg)" />
+    <Setter Property="Stroke" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- A path offered to take over: text only, Glow like other links -->
+  <Style Selector="Button.link">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0,2" />
+    <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource GlowBrush}" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{DynamicResource ArkanBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnArkanBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Padding" Value="16,9" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ArkanHoverBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnArkanBrush}" />
+  </Style>
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource GlowBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource OnArkanBrush}" />
+  </Style>
+
+  <!-- The head of a page whose body has columns of its own: the title band
+       above the line, as on the group planner. -->
+  <Style Selector="Border.pagehead">
+    <Setter Property="Padding" Value="28,26,28,22" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+  </Style>
+
+  <!-- The group planner's candidates: one row per guild member, picked or not.
+       Picked, the row carries the arkan edge; the name keeps its class colour. -->
+  <Style Selector="ToggleButton.candidate">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="12,9" />
+    <Setter Property="CornerRadius" Value="9" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+  </Style>
+  <Style Selector="ToggleButton.candidate /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LineBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SelectedEdgeBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+  </Style>
+  <!-- The tick: an empty box until the member is in -->
+  <Style Selector="Border.tick">
+    <Setter Property="Width" Value="17" />
+    <Setter Property="Height" Value="17" />
+    <Setter Property="CornerRadius" Value="5" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Border.tick > Path">
+    <Setter Property="Stroke" Value="Transparent" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked Border.tick">
+    <Setter Property="Background" Value="{DynamicResource ArkanBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked Border.tick > Path">
+    <Setter Property="Stroke" Value="{DynamicResource OnArkanBrush}" />
+  </Style>
+
+  <!-- Blizzard's specialisation icon: small, rounded, dimmed until picked -->
+  <Style Selector="Image.spec">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+  </Style>
+  <!-- In the planner's list a candidate not picked stays quiet -->
+  <Style Selector="ToggleButton.candidate Image.spec">
+    <Setter Property="Opacity" Value="0.55" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked Image.spec">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <!-- The role glyphs: quiet beside the class colour, arkan once picked -->
+  <Style Selector="Path.role">
+    <Setter Property="Fill" Value="{DynamicResource TextFaintBrush}" />
+  </Style>
+  <Style Selector="Ellipse.role">
+    <Setter Property="Stroke" Value="{DynamicResource TextFaintBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked Path.role">
+    <Setter Property="Fill" Value="{DynamicResource GlowBrush}" />
+  </Style>
+  <Style Selector="ToggleButton.candidate:checked Ellipse.role">
+    <Setter Property="Stroke" Value="{DynamicResource GlowBrush}" />
+  </Style>
+
+  <!-- The best group: the arkan glow of the brand's cards, no dungeon picture -->
+  <Style Selector="Border.card.group">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource GroupEdgeBrush}" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Background" Value="{DynamicResource GroupGlow}" />
+  </Style>
+
+  <!-- One of the five in a planned group -->
+  <Style Selector="Border.seat">
+    <Setter Property="Background" Value="{DynamicResource ScrimBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SeatEdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="14,12" />
+  </Style>
+
+  <Style Selector="Border.seat.holder">
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+  </Style>
+
+  <!-- What a run pays somebody: gold, and grey for the one it pays nothing -->
+  <Style Selector="TextBlock.gain">
+    <Setter Property="Foreground" Value="{DynamicResource TimerBrush}" />
+  </Style>
+  <Style Selector="TextBlock.gain.nothing">
+    <Setter Property="Foreground" Value="{DynamicResource TextFaintBrush}" />
+  </Style>
+
+  <Style Selector="Button.ghost">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource EdgeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBodyBrush}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Padding" Value="16,9" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+  <Style Selector="Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource NavSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ArkanBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+  </Style>
+</Styles>

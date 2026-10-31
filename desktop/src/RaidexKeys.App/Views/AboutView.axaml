@@ -1,0 +1,102 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.AboutView"
+             x:DataType="vm:AboutViewModel">
+  <!--
+    "Über", the last tab (Lars, 2026-09-12; it was a dialog behind
+    a button in Einstellungen): the lockup, the version, the copyright and the
+    licence line, contact and tracker, the credits, and the "Made with ♥ in
+    Europe" chip. Above them, whether this version and the addon are current.
+  -->
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="22" MaxWidth="620" HorizontalAlignment="Left">
+      <TextBlock Classes="h1" Text="{x:Static l:Strings.NavAbout}" />
+      <Border Classes="card" Padding="32,28">
+        <StackPanel Spacing="0">
+          <Viewbox Height="52" HorizontalAlignment="Center">
+            <views:Brandmark />
+          </Viewbox>
+
+          <Border Classes="pill" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <TextBlock Text="{Binding VersionLabel}" />
+          </Border>
+
+          <!-- Whether this and the addon are current; a line, never a demand -->
+          <StackPanel Spacing="4" Margin="0,14,0,0" HorizontalAlignment="Center"
+                      DataContext="{Binding Updates}" x:DataType="vm:UpdateStatus">
+            <TextBlock Classes="hint" HorizontalAlignment="Center" TextAlignment="Center"
+                       Classes.news="{Binding HasNews}" Text="{Binding Line}" />
+            <TextBlock Classes="hint" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+                       MaxWidth="420" Text="{Binding Detail}"
+                       IsVisible="{Binding Detail, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <Button Classes="link" HorizontalAlignment="Center" Content="{Binding GetLabel}"
+                    Command="{Binding OpenPageCommand}" IsVisible="{Binding HasNews}" />
+          </StackPanel>
+
+          <TextBlock Classes="sub" HorizontalAlignment="Center" TextAlignment="Center"
+                     Margin="0,18,0,0" Foreground="{DynamicResource TextSoftBrush}"
+                     Text="{x:Static l:Strings.Tagline}" />
+
+          <TextBlock Classes="hint" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,14,0,0">
+            <Run Text="© 2026 lasse tech, Lars Gossard" />
+            <Run Text=" · " />
+            <Run Foreground="{DynamicResource GlowBrush}" Text="lars@lasse-tech.de" />
+          </TextBlock>
+          <TextBlock Classes="hint" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+                     Margin="0,2,0,0" Text="{x:Static l:Strings.LicenseLine}" />
+
+          <!-- The issue tracker lives on GitHub, next to the releases. -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0" Spacing="6">
+            <StackPanel.Styles>
+              <Style Selector="HyperlinkButton">
+                <Setter Property="Padding" Value="4,2" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Foreground" Value="{DynamicResource GlowBrush}" />
+              </Style>
+            </StackPanel.Styles>
+            <HyperlinkButton NavigateUri="https://raidex.app/keys/" Content="raidex.app/keys" />
+            <HyperlinkButton NavigateUri="https://github.com/lasse-tech/raidex-keys/issues/new/choose"
+                             Content="{x:Static l:Strings.AboutReportBug}" />
+          </StackPanel>
+
+          <Border Height="1" Background="{DynamicResource LineBrush}" Margin="0,22,0,18" />
+
+          <TextBlock Classes="label" Text="{x:Static l:Strings.CreditsTitle}" Margin="0,0,0,10" />
+          <StackPanel Spacing="6">
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CreditLibKeystone}" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CreditLibraries}" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CreditFonts}" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CreditMdt}" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.CreditThirdParty}" />
+          </StackPanel>
+          <TextBlock Classes="hint" FontSize="11" Foreground="{DynamicResource TextFaintBrush}"
+                     Margin="0,14,0,0" Text="{x:Static l:Strings.Trademark}" />
+
+          <!-- The chip every about page carries, centred under the credits -->
+          <Border Classes="pill" HorizontalAlignment="Center" Margin="0,22,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+              <StackPanel.Styles>
+                <Style Selector="TextBlock">
+                  <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+                  <Setter Property="FontSize" Value="11" />
+                  <Setter Property="LetterSpacing" Value="1.1" />
+                  <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+                </Style>
+              </StackPanel.Styles>
+              <TextBlock Text="Made with" />
+              <!-- The heart drawn, not a glyph the brand fonts may lack -->
+              <Path Width="10" Height="9" VerticalAlignment="Center" Fill="#E5484D"
+                    Data="M5,9 C5,9 0,5.5 0,2.75 C0,1.2 1.2,0 2.6,0 C3.6,0 4.5,0.6 5,1.4 C5.5,0.6 6.4,0 7.4,0 C8.8,0 10,1.2 10,2.75 C10,5.5 5,9 5,9 Z" />
+              <TextBlock Text="in Europe" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

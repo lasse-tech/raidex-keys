@@ -1,0 +1,24 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.GuildView"
+             x:DataType="vm:GuildViewModel">
+  <!-- The guild's keys this week, as the addon heard them and as Raidex has
+       them. The group planner is its own page (Views/PlannerView). -->
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="22">
+      <StackPanel>
+        <TextBlock Classes="h1" Text="{x:Static l:Strings.GuildTitle}" />
+        <TextBlock Classes="sub" Text="{Binding Subtitle}" IsVisible="{Binding HasData}" />
+      </StackPanel>
+      <views:EmptyState IsVisible="{Binding !HasData}"
+                        Title="{Binding EmptyTitle}"
+                        Body="{Binding EmptyBody}" />
+      <views:KeyTable Table="{Binding Table}" IsVisible="{Binding HasData}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

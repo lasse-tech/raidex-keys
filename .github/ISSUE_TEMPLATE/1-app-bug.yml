@@ -1,0 +1,82 @@
+name: Fehler in der App · Bug in the app
+description: Die Desktop-App (Windows, Linux) verhält sich falsch · The desktop app misbehaves
+labels:
+  - bug
+  - app
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Deutsch oder Englisch – beides ist willkommen. · German or English, both are welcome.
+
+        Du weißt nicht, ob es an der App oder am Addon liegt? Dann bist du hier richtig.
+        Not sure whether the app or the addon is at fault? This form is the right one.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Was ist passiert? · What happened?
+      description: Das beobachtete Verhalten in ein, zwei Sätzen. · What you saw, in a sentence or two.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Was hättest du erwartet? · What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Nachstellen · Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+
+  - type: input
+    id: version
+    attributes:
+      label: App-Version · App version
+      description: Steht im Reiter „Über“. · See the About tab.
+      placeholder: "0.10.0 (Build 42)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Betriebssystem · Operating system
+      options:
+        - Windows 11
+        - Windows 10
+        - Linux
+        - Anderes · Other
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Unter Linux – Distribution und wie WoW läuft · On Linux – distribution and how WoW runs
+      placeholder: "Linux Mint 22, Lutris · Fedora 42, Steam/Proton · Bottles"
+
+  - type: textarea
+    id: diagnose
+    attributes:
+      label: Diagnose · Diagnosis
+      description: |
+        Starte die App einmal mit `--diagnose` (Linux: `raidex-keys --diagnose`, Windows: `RaidexKeys.exe --diagnose`).
+        Sie schreibt `diagnose.txt` nach `~/.config/raidex-keys` bzw. `%APPDATA%\RaidexKeys` – zieh die Datei hier hinein.
+        Sie enthält deinen Benutzernamen und Ordnerpfade; schau sie dir vorher an.
+
+        Start the app once with `--diagnose`; it writes `diagnose.txt` to the folder above – drag the file in here.
+        It contains your user name and folder paths; have a look before you post it.
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots, weiterer Kontext · Screenshots, more context
+      description: Bilder kannst du einfach hineinziehen. · Drag images in here.

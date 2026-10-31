@@ -38,6 +38,26 @@ function Addon:On(event, handler)
     list[#list + 1] = handler
 end
 
+local held = {}
+
+Addon:On("MODIFIER_STATE_CHANGED", function(_, key, down)
+    if type(key) ~= "string" then return end
+    held[key] = down == 1
+end)
+
+local function anyHeld(left, right, api)
+    if api and api() then return true end
+    return held[left] == true or held[right] == true
+end
+
+function Addon:ShiftDown()
+    return anyHeld("LSHIFT", "RSHIFT", IsShiftKeyDown)
+end
+
+function Addon:ControlDown()
+    return anyHeld("LCTRL", "RCTRL", IsControlKeyDown)
+end
+
 local pending = {}
 local pendingFn = {}
 function Addon:Debounce(key, delay, fn)
@@ -279,6 +299,7 @@ loader:SetScript("OnEvent", function(self, event, name)
         T.Exchange:Start()
         T.Board:Start()
         T.Raids:Start()
+        T.Inbox:Start()
         T.MinimapButton:Start()
         T.Timer:Start()
         T.Window:Start()

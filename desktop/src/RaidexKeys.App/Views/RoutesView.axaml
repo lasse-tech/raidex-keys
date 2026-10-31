@@ -1,0 +1,218 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:web="using:RaidexKeys.App.Web"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             xmlns:mdt="using:RaidexKeys.Core.Mdt"
+             x:Class="RaidexKeys.App.Views.RoutesView"
+             x:DataType="vm:RoutesViewModel">
+  <!--
+    The player's routes from Mythic Dungeon Tools, read from their own MDT
+    (read only, nothing of MDT shipped). Rows as in the other tables: the dungeon's picture,
+    a click anywhere slides out the pulls with their forces and enemies.
+  -->
+  <UserControl.Resources>
+    <!-- The head of both route tables, the player's and those stored in Raidex; a click sorts (Views/SortHeader) -->
+    <DataTemplate x:Key="RouteHead" x:DataType="vm:ITableSort">
+      <Border Classes="thead">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*" />
+            <ColumnDefinition Width="1.6*" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Pulls" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Forces" />
+            <ColumnDefinition Width="36" />
+          </Grid.ColumnDefinitions>
+          <views:SortHeader Text="{x:Static l:Strings.ColDungeon}" Column="dungeon" Table="{Binding}" />
+          <views:SortHeader Grid.Column="1" Text="{x:Static l:Strings.ColRoute}" Column="route" Table="{Binding}" />
+          <views:SortHeader Grid.Column="2" Margin="0,0,24,0" Text="{x:Static l:Strings.ColPulls}" Column="pulls" Table="{Binding}" />
+          <views:SortHeader Grid.Column="3" Text="{x:Static l:Strings.ColForces}" Column="forces" Table="{Binding}" />
+        </Grid>
+      </Border>
+    </DataTemplate>
+    <DataTemplate x:Key="RouteRow" x:DataType="vm:RouteRowViewModel">
+      <Border Classes="row" Padding="0" ClipToBounds="True">
+        <Panel>
+          <Border web:RemoteImage.Background="{Binding ImageUrl}" />
+          <Border Background="{DynamicResource RowFade}" />
+          <StackPanel>
+            <Border Classes="rowhead" views:RowToggle.IsEnabled="True">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="1.2*" />
+                  <ColumnDefinition Width="1.6*" />
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="Pulls" />
+                  <ColumnDefinition Width="Auto" SharedSizeGroup="Forces" />
+                  <ColumnDefinition Width="36" />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Dungeon}" />
+                <!-- The route chosen in MDT: a glow dot before its name; long names end in "…" -->
+                <Grid Grid.Column="1" ColumnDefinitions="14,*" Margin="-14,0,16,0" VerticalAlignment="Center">
+                  <Ellipse Width="6" Height="6" Fill="{DynamicResource GlowBrush}" HorizontalAlignment="Left"
+                           IsVisible="{Binding Selected}" ToolTip.Tip="{x:Static l:Strings.RouteSelectedTip}" />
+                  <TextBlock Grid.Column="1" Foreground="{DynamicResource TextBodyBrush}" Text="{Binding Name}"
+                             TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                </Grid>
+                <TextBlock Grid.Column="2" Classes="mono" Margin="0,0,24,0" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextMutedBrush}" Text="{Binding PullsLabel}" />
+                <TextBlock Grid.Column="3" Classes="mono" VerticalAlignment="Center"
+                           Foreground="{DynamicResource GlowBrush}" Text="{Binding ForcesLabel}" />
+                <ToggleButton Grid.Column="4" Classes="chevron" IsChecked="{Binding IsExpanded}"
+                              ToolTip.Tip="{x:Static l:Strings.ShowDetails}">
+                  <Path Data="M0,0 L6,6 L12,0" Width="12" Height="6" StrokeLineCap="Round" StrokeJoin="Round" />
+                </ToggleButton>
+              </Grid>
+            </Border>
+            <views:Collapsible IsExpanded="{Binding IsExpanded}">
+              <StackPanel Margin="16,2,16,16" Spacing="14">
+                <!-- The route on the map, one per floor it uses; top right, the way into a window of its own -->
+                <Panel IsVisible="{Binding HasMap}">
+                  <views:Collapsible IsExpanded="{Binding MapOpen}">
+                    <ItemsControl ItemsSource="{Binding Floors}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="mdt:FloorMap">
+                          <views:RouteMapView Floor="{Binding}" Margin="0,0,0,8"
+                                              Arrows="{Binding $parent[ItemsControl].((vm:RouteRowViewModel)DataContext).Arrows}" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </views:Collapsible>
+                  <!-- Over the map's top right corner: fold it away, or take
+                       it into a window. Folded, the line stays where it was,
+                       so the way back is where the map went. -->
+                  <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right"
+                              VerticalAlignment="Top" Margin="10">
+                    <ToggleButton Classes="overlay lit" IsChecked="{Binding Arrows}" IsVisible="{Binding MapOpen}"
+                                  ToolTip.Tip="{x:Static l:Strings.MapArrowsTip}">
+                      <!-- A curve with a head on it: the way from pull to pull -->
+                      <Path Data="M1,10 C2,4 7,2 12,3 M12,3 L8.4,1.6 M12,3 L9.6,6" Width="13" Height="11"
+                            StrokeLineCap="Round" StrokeJoin="Round" VerticalAlignment="Center" />
+                    </ToggleButton>
+                    <ToggleButton Classes="overlay turn" IsChecked="{Binding MapOpen}"
+                                  ToolTip.Tip="{x:Static l:Strings.MapFoldTip}">
+                      <Path Data="M0,0 L6,6 L12,0" Width="12" Height="6"
+                            StrokeLineCap="Round" StrokeJoin="Round" VerticalAlignment="Center" />
+                    </ToggleButton>
+                    <Button Classes="overlay"
+                            Command="{Binding OpenMapWindowCommand}" ToolTip.Tip="{x:Static l:Strings.MapOwnWindowTip}">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <!-- A window with an arrow out of it -->
+                        <Path Data="M6,1 L11,1 L11,6 M11,1 L5,7 M9,8 L9,11 L1,11 L1,3 L4,3" Width="12" Height="12"
+                              Stroke="{DynamicResource TextBrush}" StrokeThickness="1.4" StrokeLineCap="Round" StrokeJoin="Round"
+                              VerticalAlignment="Center" />
+                        <TextBlock Text="{x:Static l:Strings.MapOwnWindow}" />
+                      </StackPanel>
+                    </Button>
+                  </StackPanel>
+                </Panel>
+                <!-- The route as text, with the same fold as the map -->
+                <StackPanel Spacing="8">
+                  <ToggleButton Classes="fold" IsChecked="{Binding TextOpen}" HorizontalAlignment="Left"
+                                ToolTip.Tip="{x:Static l:Strings.RouteTextFoldTip}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <Path Data="M0,0 L6,6 L12,0" Width="12" Height="6"
+                            StrokeLineCap="Round" StrokeJoin="Round" VerticalAlignment="Center" />
+                      <TextBlock Text="{x:Static l:Strings.RouteTextTitle}" />
+                    </StackPanel>
+                  </ToggleButton>
+                  <views:Collapsible IsExpanded="{Binding TextOpen}">
+                    <views:RowDetails />
+                  </views:Collapsible>
+                </StackPanel>
+                <!-- Any route stored in Raidex hands its MDT string back out;
+                     the owner's can also be shared with the guild, or deleted. -->
+                <!-- A route out of the player's own MDT: copied, or saved in Raidex. -->
+                <TextBlock Classes="hint" TextWrapping="Wrap" IsVisible="{Binding IsFromMdt}"
+                           Text="{x:Static l:Strings.OwnRouteCopyOnly}" />
+                <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding CanCopy}">
+                  <Button Classes="ghost" Content="{Binding CopyLabel}" Command="{Binding CopyCommand}" />
+                  <Button Classes="ghost" Content="{x:Static l:Strings.PasteSave}" Command="{Binding SaveCommand}"
+                          IsVisible="{Binding CanSave}" />
+                  <TextBlock Classes="hint" VerticalAlignment="Center" Text="{x:Static l:Strings.RouteSavedInRaidex}"
+                             IsVisible="{Binding IsSaved}" />
+                  <Button Classes="ghost" Content="{Binding ShareLabel}" Command="{Binding ShareCommand}"
+                          IsVisible="{Binding IsStoredMine}" />
+                  <Button Classes="ghost" Content="{Binding DeleteLabel}" Command="{Binding DeleteCommand}"
+                          IsVisible="{Binding IsStoredMine}" />
+                </StackPanel>
+              </StackPanel>
+            </views:Collapsible>
+          </StackPanel>
+        </Panel>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="22">
+      <StackPanel>
+        <TextBlock Classes="h1" Text="{x:Static l:Strings.RoutesTitle}" />
+        <TextBlock Classes="sub" Text="{Binding Subtitle}" IsVisible="{Binding HasData}" />
+      </StackPanel>
+      <!-- A shared route, looked at before importing it in game -->
+      <Border Classes="card" Padding="20" IsVisible="{Binding CanPaste}">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="label" Text="{x:Static l:Strings.PasteTitle}" />
+          <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+            <TextBox Classes="path" Text="{Binding PasteText}" PlaceholderText="{x:Static l:Strings.PastePlaceholder}"
+                     TextWrapping="NoWrap" AcceptsReturn="False" />
+            <Button Grid.Column="1" Classes="ghost" Content="{x:Static l:Strings.PasteButton}"
+                    Command="{Binding PasteFromClipboardCommand}" />
+            <Button Grid.Column="2" Classes="ghost" Content="{x:Static l:Strings.PasteClear}"
+                    Command="{Binding ClearPasteCommand}" IsVisible="{Binding HasPasted}" />
+          </Grid>
+          <TextBlock Classes="hint" Text="{x:Static l:Strings.PasteHint}" IsVisible="{Binding !HasPasted}" />
+          <!-- Only with something pasted: a Pasted of null would leave these bindings unresolved - and visible -->
+          <StackPanel Spacing="12" IsVisible="{Binding HasPasted}">
+            <TextBlock Classes="hint" Foreground="{DynamicResource TextBrush}" Text="{Binding Pasted.Message, FallbackValue={x:Null}}"
+                       ToolTip.Tip="{Binding Pasted.Detail, FallbackValue={x:Null}}" />
+            <Border Classes="table" Grid.IsSharedSizeScope="True"
+                    IsVisible="{Binding Pasted.Row, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}">
+              <ContentControl Content="{Binding Pasted.Row, FallbackValue={x:Null}}" ContentTemplate="{StaticResource RouteRow}" />
+            </Border>
+            <!-- Into Raidex, for oneself or the guild - or the way to log in first -->
+            <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding CanSave}">
+              <ComboBox ItemsSource="{Binding ShareOptions}" SelectedIndex="{Binding ShareIndex}" MinWidth="180" VerticalAlignment="Center" />
+              <Button Classes="primary" Content="{x:Static l:Strings.PasteSave}" Command="{Binding SaveToRaidexCommand}" />
+            </StackPanel>
+            <Button Classes="ghost" Content="{x:Static l:Strings.PasteLoginToSave}" Command="{Binding LoginCommand}"
+                    IsVisible="{Binding NeedsLogin}" HorizontalAlignment="Left" />
+            <TextBlock Classes="hint" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{Binding SaveMessage}"
+                       IsVisible="{Binding SaveMessage, Converter={x:Static ObjectConverters.IsNotNull}}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <views:EmptyState IsVisible="{Binding !HasData}"
+                        Title="{Binding EmptyTitle}"
+                        Body="{Binding EmptyBody}" />
+
+      <StackPanel Spacing="10" IsVisible="{Binding HasData}">
+        <TextBlock Classes="label" Text="{x:Static l:Strings.OwnRoutesTitle}" />
+        <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.OwnRoutesHint}" />
+        <Border Classes="table" Grid.IsSharedSizeScope="True">
+          <StackPanel>
+            <ContentControl Content="{Binding RoutesTable}" ContentTemplate="{StaticResource RouteHead}" />
+            <ItemsControl ItemsSource="{Binding RoutesTable.Rows}" ItemTemplate="{StaticResource RouteRow}" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- Routes stored in Raidex: one's own and those shared with the guild -->
+      <StackPanel Spacing="10" IsVisible="{Binding ShowsRaidex}">
+        <TextBlock Classes="label" Text="{x:Static l:Strings.StoredTitle}" />
+        <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding StoredHint}"
+                   IsVisible="{Binding StoredHint, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        <Border Classes="table" IsVisible="{Binding HasStored}" Grid.IsSharedSizeScope="True">
+          <StackPanel>
+            <ContentControl Content="{Binding StoredTable}" ContentTemplate="{StaticResource RouteHead}" />
+            <ItemsControl ItemsSource="{Binding StoredTable.Rows}" ItemTemplate="{StaticResource RouteRow}" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

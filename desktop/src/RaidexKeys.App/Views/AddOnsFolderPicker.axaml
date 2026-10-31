@@ -1,0 +1,45 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.AddOnsFolderPicker"
+             x:DataType="vm:AddOnsFolderViewModel">
+  <!--
+    The AddOns folder field: path, browse, and a line saying what the folder
+    holds. Checked as it is typed. Used by the first-start dialog and the
+    settings page alike.
+  -->
+  <StackPanel Spacing="10">
+    <TextBlock Classes="label" Text="{x:Static l:Strings.FolderLabel}" />
+    <Grid ColumnDefinitions="*,8,Auto">
+      <!-- Wraps: the telling part of a path is its end, …/_retail_/Interface/AddOns. -->
+      <TextBox Classes="path" Text="{Binding Path}" PlaceholderText="…/_retail_/Interface/AddOns"
+               TextWrapping="Wrap" AcceptsReturn="False" VerticalAlignment="Top" />
+      <Button Grid.Column="2" Classes="ghost" VerticalAlignment="Top" Content="{x:Static l:Strings.FolderBrowse}"
+              Command="{Binding BrowseCommand}" />
+    </Grid>
+
+    <!-- Glow when all is there; plain text when something is missing. -->
+    <TextBlock Classes="hint" Text="{Binding StatusText}" TextWrapping="Wrap"
+               Foreground="{DynamicResource TextBodyBrush}" IsVisible="{Binding !IsOk}" />
+    <TextBlock Classes="hint" Text="{Binding StatusText}" TextWrapping="Wrap"
+               Foreground="{DynamicResource GlowBrush}" IsVisible="{Binding IsOk}" />
+
+    <StackPanel Spacing="4" IsVisible="{Binding HasOtherSuggestions}">
+      <TextBlock Classes="label" Margin="0,6,0,0" Text="{x:Static l:Strings.FolderAlsoFound}" />
+      <ItemsControl ItemsSource="{Binding OtherSuggestions}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="x:String">
+            <Button Classes="link" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                    Command="{Binding $parent[ItemsControl].((vm:AddOnsFolderViewModel)DataContext).UseSuggestionCommand}"
+                    CommandParameter="{Binding}">
+              <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

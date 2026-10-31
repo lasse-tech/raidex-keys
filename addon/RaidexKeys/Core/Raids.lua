@@ -414,6 +414,7 @@ function Raids:Read()
     end
     changed()
     openNext()
+    if T.Inbox then T.Inbox:Check() end
 end
 
 local invites = {}
@@ -668,6 +669,8 @@ local PROGRESS_RETRY = 60
 local PROGRESS_WAIT = 2
 local PROGRESS_APART = 30
 local JOURNAL_RETRY = 60
+local SLICE_MS = 4
+local COMBAT_RETRY = 5
 
 local journal
 local journalAt
@@ -759,8 +762,7 @@ local function criteriaOf(id)
     return list
 end
 
-function Raids.ReadProgress()
-    scanning, scannedAt = nil, GetTime()
+local function walkProgress(pause)
     if not (GetGuildCategoryList and GetCategoryNumAchievements and GetAchievementInfo) then return end
 
     local asked = {}
@@ -808,6 +810,7 @@ function Raids.ReadProgress()
                     end
                 end
             end
+            if pause then pause() end
         end
     end
 
@@ -833,11 +836,42 @@ function Raids.ReadProgress()
     if T.Window then T.Window:Refresh() end
 end
 
+function Raids.ReadProgress()
+    scannedAt = GetTime()
+    walkProgress(nil)
+end
+
+local function walkInSlices()
+    local deadline
+    local walk = coroutine.create(function()
+        walkProgress(function()
+            if debugprofilestop() > deadline then coroutine.yield() end
+        end)
+    end)
+    local function step()
+        if InCombatLockdown() then
+            C_Timer.After(COMBAT_RETRY, step)
+            return
+        end
+        deadline = debugprofilestop() + SLICE_MS
+        local ok, err = coroutine.resume(walk)
+        if not ok then
+            scanning, scannedAt = nil, GetTime()
+            geterrorhandler()(err)
+        elseif coroutine.status(walk) == "dead" then
+            scanning, scannedAt = nil, GetTime()
+        else
+            C_Timer.After(0, step)
+        end
+    end
+    step()
+end
+
 function Raids.ScanProgress()
     if scanning then return end
     scanning = true
     local since = scannedAt and GetTime() - scannedAt or PROGRESS_APART
-    C_Timer.After(math.max(PROGRESS_WAIT, PROGRESS_APART - since), Raids.ReadProgress)
+    C_Timer.After(math.max(PROGRESS_WAIT, PROGRESS_APART - since), walkInSlices)
 end
 
 function Raids.Progress(raidName, difficultyName, mapId, difficultyId)

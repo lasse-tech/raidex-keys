@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><linearGradient id="bg" x1="0.289" y1="0.047" x2="0.711" y2="0.953"><stop offset="0" stop-color="#1C1640"/><stop offset="1" stop-color="#0B0D1C"/></linearGradient></defs><rect x="0.595" y="0.595" width="98.810" height="98.810" rx="24" fill="url(#bg)" stroke="#2E2656" stroke-width="1.190"/><svg x="16.667" y="16.667" width="66.667" height="66.667" viewBox="0 0 100 100"><defs>
+    <linearGradient id="glyph-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#A78BFF"/>
+      <stop offset="55%" stop-color="#7C5CFF"/>
+      <stop offset="100%" stop-color="#4B2FC9"/>
+    </linearGradient>
+  </defs>
+  <polygon points="50,4 90,27 90,73 50,96 10,73 10,27" fill="url(#glyph-grad)"/>
+  <polygon points="50,4 90,27 50,50 10,27" fill="#FFFFFF" fill-opacity="0.14"/>
+  <polygon points="10,73 50,50 50,96" fill="#0A0C18" fill-opacity="0.18"/>
+  <polygon points="50,14 82,32 82,68 50,86 18,68 18,32" fill="none" stroke="#0A0C18" stroke-opacity="0.35" stroke-width="2"/>
+  <circle cx="50" cy="39" r="11" fill="#0A0C18"/>
+  <polygon points="43,47 57,47 60,71 40,71" fill="#0A0C18"/>
+  <circle cx="50" cy="39" r="4.5" fill="#A78BFF"/></svg></svg>

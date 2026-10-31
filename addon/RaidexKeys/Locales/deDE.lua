@@ -80,7 +80,7 @@ L["Window font: Marcellus by Astigmatic, SIL Open Font License"] =
     "Schrift des Fensters: Marcellus von Astigmatic, SIL Open Font License"
 L["More: %s"] = "Mehr: %s"
 L["Version: %s (build %s)"] = "Version: %s (Build %s)"
-L["GNU GPL 3 or later, without any warranty"] = "GNU GPL 3 oder später, ohne Gewährleistung"
+L["%s, without any warranty"] = "%s, ohne Gewährleistung"
 L["Show Mythic+ timer"] = "Mythic+-Timer anzeigen"
 L["While a keystone runs: time left, the +2 and +3 limits, bosses, enemy forces and deaths. It stands there for as long as these options are open, to drag into place."] =
     "Während ein Keystone läuft: verbleibende Zeit, die Grenzen für +2 und +3, Bosse, gegnerische Kräfte und Tode. Solange diese Einstellungen offen sind, steht er da – zum Zurechtziehen."
@@ -296,3 +296,8 @@ L["You can edit %s in the game's calendar: take your sign-up back there."] =
 L["%s is locked in the game's calendar: you are signed up in Raidex Keys only."] =
     "%s ist im Kalender des Spiels gesperrt: Du bist nur in Raidex Keys angemeldet."
 L["Example raid"] = "Beispielraid"
+L["Raidex Keys on your computer asks:"] = "Raidex Keys auf deinem Rechner fragt:"
+L["%s: sign up as %s"] = "%s: anmelden als %s"
+L["%s: withdraw"] = "%s: abmelden"
+L["Apply"] = "Übernehmen"
+L["Discard"] = "Verwerfen"

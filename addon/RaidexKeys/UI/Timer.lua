@@ -690,7 +690,7 @@ local function create()
     frame:EnableMouse(true)
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnMouseDown", function(_, button)
-        if button == "LeftButton" and IsShiftKeyDown() then Timer:SetShown(false) end
+        if button == "LeftButton" and T.Addon:ShiftDown() then Timer:SetShown(false) end
     end)
     frame:SetScript("OnDragStart", T.BeginDrag)
     frame:SetScript("OnDragStop", function(self)

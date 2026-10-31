@@ -1,0 +1,33 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.EmptyState"
+             x:DataType="views:EmptyState">
+  <!-- A page with nothing to show yet: the glyph, a title, one sentence on why. -->
+  <Border Classes="card" Padding="28" HorizontalAlignment="Stretch">
+    <StackPanel Orientation="Horizontal" Spacing="22">
+      <Image Source="{StaticResource GlyphImage}" Width="44" Height="44" VerticalAlignment="Top" Opacity="0.9" />
+      <StackPanel Spacing="8" MaxWidth="520">
+        <TextBlock Classes="h2" Text="{Binding Title, RelativeSource={RelativeSource AncestorType=views:EmptyState}}" />
+        <!-- The sentence may open with a link - "Installiere das Addon Raidex
+             Keys" to the addon's page. Link and the rest are runs of one text,
+             so they share the baseline and wrap as one sentence; no space may
+             stand between the two runs. -->
+        <TextBlock Name="BodyText" Classes="sub"
+                   PointerMoved="OnBodyPointerMoved" PointerExited="OnBodyPointerExited"
+                   PointerPressed="OnBodyPointerPressed"><Run Name="LinkRun" Classes="link" Text="{Binding BodyLink, RelativeSource={RelativeSource AncestorType=views:EmptyState}}" /><Run Text="{Binding Body, RelativeSource={RelativeSource AncestorType=views:EmptyState}}" /></TextBlock>
+        <!-- Where the app looked and what went wrong - so "nothing shows" explains itself. -->
+        <TextBlock Classes="mono" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap"
+                   Foreground="{DynamicResource TextMutedBrush}"
+                   Text="{Binding Detail, RelativeSource={RelativeSource AncestorType=views:EmptyState}}"
+                   IsVisible="{Binding Detail, RelativeSource={RelativeSource AncestorType=views:EmptyState}, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        <Button Classes="ghost" HorizontalAlignment="Left" Margin="0,8,0,0" Content="{x:Static l:Strings.EmptySample}"
+                Click="OnSampleClick"
+                IsVisible="{Binding OffersSample, RelativeSource={RelativeSource AncestorType=views:EmptyState}}" />
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</UserControl>

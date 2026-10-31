@@ -1,0 +1,20 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RaidexKeys.App.Views.Brandmark">
+  <!--
+    The primary lockup, "Horizontal — primär" (section 01): glyph 58 px, then
+    RAIDEX (Chakra Petch 700, +0.03em) over KEYS (600, +0.22em, Arkan), 26 px.
+    Drawn at the guide's size; a Viewbox around it scales it.
+  -->
+  <StackPanel Orientation="Horizontal" Spacing="16">
+    <Image Source="{StaticResource GlyphImage}" Width="58" Height="58" />
+    <StackPanel VerticalAlignment="Center" Spacing="-4">
+      <TextBlock Text="RAIDEX" FontFamily="{StaticResource DisplayFont}" FontWeight="Bold"
+                 FontSize="26" LetterSpacing="0.8" Foreground="{DynamicResource TextBrush}" />
+      <TextBlock Text="KEYS" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold"
+                 FontSize="26" LetterSpacing="5.7" Foreground="{DynamicResource ArkanBrush}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

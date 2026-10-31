@@ -1,0 +1,698 @@
+{
+ "2": {
+  "name": "Temple of the Jade Serpent",
+  "mapId": 960,
+  "zoneId": 5956,
+  "image": "https://render.worldofwarcraft.com/eu/zones/temple-of-the-jade-serpent-small.jpg",
+  "raiderIo": "temple-of-the-jade-serpent",
+  "raiderIoSeason": "season-df-1"
+ },
+ "56": {
+  "name": "Stormstout Brewery",
+  "mapId": 961,
+  "zoneId": 5963,
+  "image": "https://render.worldofwarcraft.com/eu/zones/stormstout-brewery-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "57": {
+  "name": "Gate of the Setting Sun",
+  "mapId": 962,
+  "zoneId": 5976,
+  "image": "https://render.worldofwarcraft.com/eu/zones/gate-of-the-setting-sun-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "58": {
+  "name": "Shado-Pan Monastery",
+  "mapId": 959,
+  "zoneId": 5918,
+  "image": "https://render.worldofwarcraft.com/eu/zones/shado-pan-monastery-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "59": {
+  "name": "Siege of Niuzao Temple",
+  "mapId": 1011,
+  "zoneId": 6214,
+  "image": "https://render.worldofwarcraft.com/eu/zones/siege-of-niuzao-temple-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "60": {
+  "name": "Mogu'shan Palace",
+  "mapId": 994,
+  "zoneId": 6182,
+  "image": "https://render.worldofwarcraft.com/eu/zones/mogushan-palace-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "76": {
+  "name": "Scholomance",
+  "mapId": 1007,
+  "zoneId": 6066,
+  "image": "https://render.worldofwarcraft.com/eu/zones/scholomance-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "77": {
+  "name": "Scarlet Halls",
+  "mapId": 1001,
+  "zoneId": 6052,
+  "image": "https://render.worldofwarcraft.com/eu/zones/scarlet-halls-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "78": {
+  "name": "Scarlet Monastery",
+  "mapId": 1004,
+  "zoneId": 6109,
+  "image": "https://render.worldofwarcraft.com/eu/zones/scarlet-monastery-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "161": {
+  "name": "Skyreach",
+  "mapId": 1209,
+  "zoneId": 6988,
+  "image": "https://render.worldofwarcraft.com/eu/zones/skyreach-small.jpg",
+  "raiderIo": "skyreach",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "163": {
+  "name": "Bloodmaul Slag Mines",
+  "mapId": 1175,
+  "zoneId": 6874,
+  "image": "https://render.worldofwarcraft.com/eu/zones/bloodmaul-slag-mines-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "164": {
+  "name": "Auchindoun",
+  "mapId": 1182,
+  "zoneId": 6912,
+  "image": "https://render.worldofwarcraft.com/eu/zones/auchindoun-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "165": {
+  "name": "Shadowmoon Burial Grounds",
+  "mapId": 1176,
+  "zoneId": 6932,
+  "image": "https://render.worldofwarcraft.com/eu/zones/shadowmoon-burial-grounds-small.jpg",
+  "raiderIo": "shadowmoon-burial-grounds",
+  "raiderIoSeason": "season-df-1"
+ },
+ "166": {
+  "name": "Grimrail Depot",
+  "mapId": 1208,
+  "zoneId": 6984,
+  "image": "https://render.worldofwarcraft.com/eu/zones/grimrail-depot-small.jpg",
+  "raiderIo": "grimrail-depot",
+  "raiderIoSeason": "season-sl-4"
+ },
+ "167": {
+  "name": "Upper Blackrock Spire",
+  "mapId": 1358,
+  "zoneId": 7307,
+  "image": "https://render.worldofwarcraft.com/eu/zones/upper-blackrock-spire-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "168": {
+  "name": "The Everbloom",
+  "mapId": 1279,
+  "zoneId": 7109,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-everbloom-small.jpg",
+  "raiderIo": "everbloom",
+  "raiderIoSeason": "season-df-3"
+ },
+ "169": {
+  "name": "Iron Docks",
+  "mapId": 1195,
+  "zoneId": 6951,
+  "image": "https://render.worldofwarcraft.com/eu/zones/iron-docks-small.jpg",
+  "raiderIo": "iron-docks",
+  "raiderIoSeason": "season-sl-4"
+ },
+ "197": {
+  "name": "Eye of Azshara",
+  "mapId": 1456,
+  "zoneId": 8040,
+  "image": "https://render.worldofwarcraft.com/eu/zones/eye-of-azshara-small.jpg",
+  "raiderIo": "eye-of-azshara",
+  "raiderIoSeason": "season-7.3.2"
+ },
+ "198": {
+  "name": "Darkheart Thicket",
+  "mapId": 1466,
+  "zoneId": 7673,
+  "image": "https://render.worldofwarcraft.com/eu/zones/darkheart-thicket-small.jpg",
+  "raiderIo": "darkheart-thicket",
+  "raiderIoSeason": "season-df-3"
+ },
+ "199": {
+  "name": "Black Rook Hold",
+  "mapId": 1501,
+  "zoneId": 7805,
+  "image": "https://render.worldofwarcraft.com/eu/zones/black-rook-hold-small.jpg",
+  "raiderIo": "black-rook-hold",
+  "raiderIoSeason": "season-df-3"
+ },
+ "200": {
+  "name": "Halls of Valor",
+  "mapId": 1477,
+  "zoneId": 7672,
+  "image": "https://render.worldofwarcraft.com/eu/zones/halls-of-valor-small.jpg",
+  "raiderIo": "halls-of-valor",
+  "raiderIoSeason": "season-df-1"
+ },
+ "206": {
+  "name": "Neltharion's Lair",
+  "mapId": 1458,
+  "zoneId": 7546,
+  "image": "https://render.worldofwarcraft.com/eu/zones/neltharions-lair-small.jpg",
+  "raiderIo": "neltharions-lair",
+  "raiderIoSeason": "season-df-2"
+ },
+ "207": {
+  "name": "Vault of the Wardens",
+  "mapId": 1493,
+  "zoneId": 7787,
+  "image": "https://render.worldofwarcraft.com/eu/zones/vault-of-the-wardens-small.jpg",
+  "raiderIo": "vault-of-the-wardens",
+  "raiderIoSeason": "season-7.3.2"
+ },
+ "208": {
+  "name": "Maw of Souls",
+  "mapId": 1492,
+  "zoneId": 7812,
+  "image": "https://render.worldofwarcraft.com/eu/zones/maw-of-souls-small.jpg",
+  "raiderIo": "maw-of-souls",
+  "raiderIoSeason": "season-7.3.2"
+ },
+ "209": {
+  "name": "The Arcway",
+  "mapId": 1516,
+  "zoneId": 7855,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-arcway-small.jpg",
+  "raiderIo": "the-arcway",
+  "raiderIoSeason": "season-7.3.2"
+ },
+ "210": {
+  "name": "Court of Stars",
+  "mapId": 1571,
+  "zoneId": 8079,
+  "image": "https://render.worldofwarcraft.com/eu/zones/court-of-stars-small.jpg",
+  "raiderIo": "court-of-stars",
+  "raiderIoSeason": "season-df-1"
+ },
+ "227": {
+  "name": "Return to Karazhan: Lower",
+  "mapId": 1651,
+  "zoneId": 8443,
+  "image": "https://render.worldofwarcraft.com/eu/zones/return-to-karazhan-lower-small.jpg",
+  "raiderIo": "return-to-karazhan-lower",
+  "raiderIoSeason": "season-sl-4"
+ },
+ "233": {
+  "name": "Cathedral of Eternal Night",
+  "mapId": 1677,
+  "zoneId": 8527,
+  "image": "https://render.worldofwarcraft.com/eu/zones/cathedral-of-eternal-night-small.jpg",
+  "raiderIo": "cathedral-of-eternal-night",
+  "raiderIoSeason": "season-7.3.2"
+ },
+ "234": {
+  "name": "Return to Karazhan: Upper",
+  "mapId": 1651,
+  "zoneId": 8443,
+  "image": "https://render.worldofwarcraft.com/eu/zones/return-to-karazhan-upper-small.jpg",
+  "raiderIo": "return-to-karazhan-upper",
+  "raiderIoSeason": "season-sl-4"
+ },
+ "239": {
+  "name": "Seat of the Triumvirate",
+  "mapId": 1753,
+  "zoneId": 8910,
+  "image": "https://render.worldofwarcraft.com/eu/zones/seat-of-the-triumvirate-small.jpg",
+  "raiderIo": "seat-of-the-triumvirate",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "244": {
+  "name": "Atal'Dazar",
+  "mapId": 1763,
+  "zoneId": 9028,
+  "image": "https://render.worldofwarcraft.com/eu/zones/ataldazar-small.jpg",
+  "raiderIo": "ataldazar",
+  "raiderIoSeason": "season-df-3"
+ },
+ "245": {
+  "name": "Freehold",
+  "mapId": 1754,
+  "zoneId": 9164,
+  "image": "https://render.worldofwarcraft.com/eu/zones/freehold-small.jpg",
+  "raiderIo": "freehold",
+  "raiderIoSeason": "season-df-2"
+ },
+ "246": {
+  "name": "Tol Dagor",
+  "mapId": 1771,
+  "zoneId": 9327,
+  "image": "https://render.worldofwarcraft.com/eu/zones/tol-dagor-small.jpg",
+  "raiderIo": "tol-dagor",
+  "raiderIoSeason": "season-bfa-4"
+ },
+ "247": {
+  "name": "The MOTHERLODE!!",
+  "mapId": 1594,
+  "zoneId": 8064,
+  "image": null,
+  "raiderIo": "the-motherlode",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "248": {
+  "name": "Waycrest Manor",
+  "mapId": 1862,
+  "zoneId": 9424,
+  "image": "https://render.worldofwarcraft.com/eu/zones/waycrest-manor-small.jpg",
+  "raiderIo": "waycrest-manor",
+  "raiderIoSeason": "season-df-3"
+ },
+ "249": {
+  "name": "Kings' Rest",
+  "mapId": 1762,
+  "zoneId": 9526,
+  "image": "https://render.worldofwarcraft.com/eu/zones/kings-rest-small.jpg",
+  "raiderIo": "kings-rest",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "250": {
+  "name": "Temple of Sethraliss",
+  "mapId": 1877,
+  "zoneId": 9527,
+  "image": "https://render.worldofwarcraft.com/eu/zones/temple-of-sethraliss-small.jpg",
+  "raiderIo": "temple-of-sethraliss",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "251": {
+  "name": "The Underrot",
+  "mapId": 1841,
+  "zoneId": 9391,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-underrot-small.jpg",
+  "raiderIo": "the-underrot",
+  "raiderIoSeason": "season-df-2"
+ },
+ "252": {
+  "name": "Shrine of the Storm",
+  "mapId": 1864,
+  "zoneId": 9525,
+  "image": "https://render.worldofwarcraft.com/eu/zones/shrine-of-the-storm-small.jpg",
+  "raiderIo": "shrine-of-the-storm",
+  "raiderIoSeason": "season-bfa-4"
+ },
+ "353": {
+  "name": "Siege of Boralus",
+  "mapId": 1822,
+  "zoneId": 9354,
+  "image": "https://render.worldofwarcraft.com/eu/zones/siege-of-boralus-small.jpg",
+  "raiderIo": "siege-of-boralus",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "369": {
+  "name": "Operation: Mechagon - Junkyard",
+  "mapId": 2097,
+  "zoneId": 10225,
+  "image": null,
+  "raiderIo": "operation-mechagon-junkyard",
+  "raiderIoSeason": "season-sl-4"
+ },
+ "370": {
+  "name": "Operation: Mechagon - Workshop",
+  "mapId": 2097,
+  "zoneId": 10225,
+  "image": null,
+  "raiderIo": "operation-mechagon-workshop",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "375": {
+  "name": "Mists of Tirna Scithe",
+  "mapId": 2290,
+  "zoneId": 13334,
+  "image": "https://render.worldofwarcraft.com/eu/zones/mists-of-tirna-scithe-small.jpg",
+  "raiderIo": "mists-of-tirna-scithe",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "376": {
+  "name": "The Necrotic Wake",
+  "mapId": 2286,
+  "zoneId": 12916,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-necrotic-wake-small.jpg",
+  "raiderIo": "the-necrotic-wake",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "377": {
+  "name": "De Other Side",
+  "mapId": 2291,
+  "zoneId": 13309,
+  "image": "https://render.worldofwarcraft.com/eu/zones/de-other-side-small.jpg",
+  "raiderIo": "de-other-side",
+  "raiderIoSeason": "season-sl-3"
+ },
+ "378": {
+  "name": "Halls of Atonement",
+  "mapId": 2287,
+  "zoneId": 12831,
+  "image": "https://render.worldofwarcraft.com/eu/zones/halls-of-atonement-small.jpg",
+  "raiderIo": "halls-of-atonement",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "379": {
+  "name": "Plaguefall",
+  "mapId": 2289,
+  "zoneId": 13228,
+  "image": "https://render.worldofwarcraft.com/eu/zones/plaguefall-small.jpg",
+  "raiderIo": "plaguefall",
+  "raiderIoSeason": "season-sl-3"
+ },
+ "380": {
+  "name": "Sanguine Depths",
+  "mapId": 2284,
+  "zoneId": 12842,
+  "image": "https://render.worldofwarcraft.com/eu/zones/sanguine-depths-small.jpg",
+  "raiderIo": "sanguine-depths",
+  "raiderIoSeason": "season-sl-3"
+ },
+ "381": {
+  "name": "Spires of Ascension",
+  "mapId": 2285,
+  "zoneId": 12837,
+  "image": "https://render.worldofwarcraft.com/eu/zones/spires-of-ascension-small.jpg",
+  "raiderIo": "spires-of-ascension",
+  "raiderIoSeason": "season-sl-3"
+ },
+ "382": {
+  "name": "Theater of Pain",
+  "mapId": 2293,
+  "zoneId": 12841,
+  "image": "https://render.worldofwarcraft.com/eu/zones/theater-of-pain-small.jpg",
+  "raiderIo": "theater-of-pain",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "391": {
+  "name": "Tazavesh: Streets of Wonder",
+  "mapId": 2441,
+  "zoneId": 13577,
+  "image": null,
+  "raiderIo": "tazavesh-streets-of-wonder",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "392": {
+  "name": "Tazavesh: So'leah's Gambit",
+  "mapId": 2441,
+  "zoneId": 13577,
+  "image": null,
+  "raiderIo": "tazavesh-soleahs-gambit",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "399": {
+  "name": "Ruby Life Pools",
+  "mapId": 2521,
+  "zoneId": 14063,
+  "image": "https://render.worldofwarcraft.com/eu/zones/ruby-life-pools-small.jpg",
+  "raiderIo": "ruby-life-pools",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "400": {
+  "name": "The Nokhud Offensive",
+  "mapId": 2516,
+  "zoneId": 13982,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-nokhud-offensive-small.jpg",
+  "raiderIo": "the-nokhud-offensive",
+  "raiderIoSeason": "season-df-4"
+ },
+ "401": {
+  "name": "The Azure Vault",
+  "mapId": 2515,
+  "zoneId": 13954,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-azure-vault-small.jpg",
+  "raiderIo": "the-azure-vault",
+  "raiderIoSeason": "season-df-4"
+ },
+ "402": {
+  "name": "Algeth'ar Academy",
+  "mapId": 2526,
+  "zoneId": 14032,
+  "image": "https://render.worldofwarcraft.com/eu/zones/algethar-academy-small.jpg",
+  "raiderIo": "algethar-academy",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "403": {
+  "name": "Uldaman: Legacy of Tyr",
+  "mapId": 2451,
+  "zoneId": 13968,
+  "image": "https://render.worldofwarcraft.com/eu/zones/uldaman-legacy-of-tyr-small.jpg",
+  "raiderIo": "uldaman-legacy-of-tyr",
+  "raiderIoSeason": "season-df-4"
+ },
+ "404": {
+  "name": "Neltharus",
+  "mapId": 2519,
+  "zoneId": 14011,
+  "image": "https://render.worldofwarcraft.com/eu/zones/neltharus-small.jpg",
+  "raiderIo": "neltharus",
+  "raiderIoSeason": "season-df-4"
+ },
+ "405": {
+  "name": "Brackenhide Hollow",
+  "mapId": 2520,
+  "zoneId": 13991,
+  "image": "https://render.worldofwarcraft.com/eu/zones/brackenhide-hollow-small.jpg",
+  "raiderIo": "brackenhide-hollow",
+  "raiderIoSeason": "season-df-4"
+ },
+ "406": {
+  "name": "Halls of Infusion",
+  "mapId": 2527,
+  "zoneId": 14082,
+  "image": "https://render.worldofwarcraft.com/eu/zones/halls-of-infusion-small.jpg",
+  "raiderIo": "halls-of-infusion",
+  "raiderIoSeason": "season-df-4"
+ },
+ "438": {
+  "name": "The Vortex Pinnacle",
+  "mapId": 657,
+  "zoneId": 5035,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-vortex-pinnacle-small.jpg",
+  "raiderIo": "the-vortex-pinnacle",
+  "raiderIoSeason": "season-df-2"
+ },
+ "456": {
+  "name": "Throne of the Tides",
+  "mapId": 643,
+  "zoneId": 4738,
+  "image": "https://render.worldofwarcraft.com/eu/zones/throne-of-the-tides-small.jpg",
+  "raiderIo": "throne-of-the-tides",
+  "raiderIoSeason": "season-df-3"
+ },
+ "463": {
+  "name": "Dawn of the Infinite: Galakrond's Fall",
+  "mapId": 2579,
+  "zoneId": 14514,
+  "image": null,
+  "raiderIo": "doti-galakronds-fall",
+  "raiderIoSeason": "season-df-3"
+ },
+ "464": {
+  "name": "Dawn of the Infinite: Murozond's Rise",
+  "mapId": 2579,
+  "zoneId": 14514,
+  "image": null,
+  "raiderIo": "doti-murozonds-rise",
+  "raiderIoSeason": "season-df-3"
+ },
+ "499": {
+  "name": "Priory of the Sacred Flame",
+  "mapId": 2649,
+  "zoneId": 14954,
+  "image": "https://render.worldofwarcraft.com/eu/zones/priory-of-the-sacred-flame-small.jpg",
+  "raiderIo": "priory-of-the-sacred-flame",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "500": {
+  "name": "The Rookery",
+  "mapId": 2648,
+  "zoneId": 14938,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-rookery-small.jpg",
+  "raiderIo": "the-rookery",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "501": {
+  "name": "The Stonevault",
+  "mapId": 2652,
+  "zoneId": 14883,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-stonevault-small.jpg",
+  "raiderIo": "the-stonevault",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "502": {
+  "name": "City of Threads",
+  "mapId": 2669,
+  "zoneId": 14979,
+  "image": "https://render.worldofwarcraft.com/eu/zones/city-of-threads-small.jpg",
+  "raiderIo": "city-of-threads",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "503": {
+  "name": "Ara-Kara, City of Echoes",
+  "mapId": 2660,
+  "zoneId": 15093,
+  "image": "https://render.worldofwarcraft.com/eu/zones/ara-kara-city-of-echoes-small.jpg",
+  "raiderIo": "arakara-city-of-echoes",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "504": {
+  "name": "Darkflame Cleft",
+  "mapId": 2651,
+  "zoneId": 14882,
+  "image": "https://render.worldofwarcraft.com/eu/zones/darkflame-cleft-small.jpg",
+  "raiderIo": "darkflame-cleft",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "505": {
+  "name": "The Dawnbreaker",
+  "mapId": 2662,
+  "zoneId": 14971,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-dawnbreaker-small.jpg",
+  "raiderIo": "the-dawnbreaker",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "506": {
+  "name": "Cinderbrew Meadery",
+  "mapId": 2661,
+  "zoneId": 15103,
+  "image": "https://render.worldofwarcraft.com/eu/zones/cinderbrew-meadery-small.jpg",
+  "raiderIo": "cinderbrew-meadery",
+  "raiderIoSeason": "season-tww-2"
+ },
+ "507": {
+  "name": "Grim Batol",
+  "mapId": 670,
+  "zoneId": 4950,
+  "image": "https://render.worldofwarcraft.com/eu/zones/grim-batol-small.jpg",
+  "raiderIo": "grim-batol",
+  "raiderIoSeason": "season-tww-1"
+ },
+ "525": {
+  "name": "Operation: Floodgate",
+  "mapId": 2773,
+  "zoneId": 15452,
+  "image": "https://render.worldofwarcraft.com/eu/zones/operation-floodgate-small.jpg",
+  "raiderIo": "operation-floodgate",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "541": {
+  "name": "The Stonecore",
+  "mapId": 725,
+  "zoneId": 5088,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-stonecore-small.jpg",
+  "raiderIo": null,
+  "raiderIoSeason": null
+ },
+ "542": {
+  "name": "Eco-Dome Al'dani",
+  "mapId": 2830,
+  "zoneId": 16104,
+  "image": "https://render.worldofwarcraft.com/eu/zones/eco-dome-aldani-small.jpg",
+  "raiderIo": "ecodome-aldani",
+  "raiderIoSeason": "season-tww-3"
+ },
+ "556": {
+  "name": "Pit of Saron",
+  "mapId": 658,
+  "zoneId": 4813,
+  "image": "https://render.worldofwarcraft.com/eu/zones/pit-of-saron-small.jpg",
+  "raiderIo": "pit-of-saron",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "557": {
+  "name": "Windrunner Spire",
+  "mapId": 2805,
+  "zoneId": 15808,
+  "image": "https://render.worldofwarcraft.com/eu/zones/windrunner-spire-small.jpg",
+  "raiderIo": "windrunner-spire",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "558": {
+  "name": "Magisters' Terrace",
+  "mapId": 2811,
+  "zoneId": 15829,
+  "image": "https://render.worldofwarcraft.com/eu/zones/magisters-terrace-small.jpg",
+  "raiderIo": "magisters-terrace",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "559": {
+  "name": "Nexus-Point Xenas",
+  "mapId": 2915,
+  "zoneId": 16573,
+  "image": "https://render.worldofwarcraft.com/eu/zones/nexus-point-xenas-small.jpg",
+  "raiderIo": "nexuspoint-xenas",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "560": {
+  "name": "Maisara Caverns",
+  "mapId": 2874,
+  "zoneId": 16395,
+  "image": "https://render.worldofwarcraft.com/eu/zones/maisara-caverns-small.jpg",
+  "raiderIo": "maisara-caverns",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "583": {
+  "name": "Seat of the Triumvirate",
+  "mapId": 1753,
+  "zoneId": 8910,
+  "image": "https://render.worldofwarcraft.com/eu/zones/seat-of-the-triumvirate-small.jpg",
+  "raiderIo": "seat-of-the-triumvirate",
+  "raiderIoSeason": "season-mn-1"
+ },
+ "584": {
+  "name": "The Blinding Vale",
+  "mapId": 2859,
+  "zoneId": 16359,
+  "image": "https://render.worldofwarcraft.com/eu/zones/the-blinding-vale-small.jpg",
+  "raiderIo": "the-blinding-vale",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "585": {
+  "name": "Voidscar Arena",
+  "mapId": 2923,
+  "zoneId": 16425,
+  "image": "https://render.worldofwarcraft.com/eu/zones/voidscar-arena-small.jpg",
+  "raiderIo": "voidscar-arena",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "586": {
+  "name": "Den of Nalorakk",
+  "mapId": 2825,
+  "zoneId": 16368,
+  "image": "https://render.worldofwarcraft.com/eu/zones/den-of-nalorakk-small.jpg",
+  "raiderIo": "den-of-nalorakk",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "587": {
+  "name": "Murder Row",
+  "mapId": 2813,
+  "zoneId": 16091,
+  "image": "https://render.worldofwarcraft.com/eu/zones/murder-row-small.jpg",
+  "raiderIo": "murder-row",
+  "raiderIoSeason": "season-mn-2"
+ },
+ "588": {
+  "name": "Altar of Fangs",
+  "mapId": 2993,
+  "zoneId": 16865,
+  "image": "https://render.worldofwarcraft.com/eu/zones/altar-of-fangs-small.jpg",
+  "raiderIo": "altar-of-fangs",
+  "raiderIoSeason": "season-mn-2"
+ }
+}

@@ -1,0 +1,40 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RaidexKeys.App.ViewModels"
+        xmlns:views="using:RaidexKeys.App.Views"
+        xmlns:l="using:RaidexKeys.App.Localization"
+        x:Class="RaidexKeys.App.Views.SetupWindow"
+        x:DataType="vm:AddOnsFolderViewModel"
+        Title="{x:Static l:Strings.SetupTitle}"
+        Width="620" SizeToContent="Height" CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource SurfaceBrush}">
+  <!--
+    First start: where are the AddOns? Prefilled with the first folder the
+    search found; the check below the field says what the folder holds. Not
+    in the brand guide - built from its parts (lockup, card, label, buttons).
+  -->
+  <StackPanel Margin="32,28,32,24" Spacing="0">
+    <Viewbox Height="36" HorizontalAlignment="Left">
+      <views:Brandmark />
+    </Viewbox>
+
+    <TextBlock Classes="h1" FontSize="22" Margin="0,24,0,0" Text="{x:Static l:Strings.SetupTitle}" />
+    <TextBlock Classes="sub" Margin="0,8,0,0" Text="{x:Static l:Strings.SetupBody}" />
+
+    <Border Classes="card" Padding="20" Margin="0,22,0,0">
+      <views:AddOnsFolderPicker />
+    </Border>
+
+    <TextBlock Classes="hint" Margin="0,14,0,0" Text="{x:Static l:Strings.SetupLaterHint}" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right" Margin="0,20,0,0">
+      <Button Classes="ghost" Content="{x:Static l:Strings.SetupLater}" Click="LaterClicked" IsCancel="True" />
+      <Button Classes="primary" Content="{x:Static l:Strings.FolderApply}" Click="ApplyClicked" IsDefault="True"
+              IsEnabled="{Binding CanApply}" />
+    </StackPanel>
+  </StackPanel>
+</Window>

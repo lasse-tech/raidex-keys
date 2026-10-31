@@ -11,6 +11,7 @@ local defaults = {
     roster = {},
     board = {},
     raids = {},
+    inbox = {},
     settings = {
         shareWithGuild = true,
         theme = "slate",

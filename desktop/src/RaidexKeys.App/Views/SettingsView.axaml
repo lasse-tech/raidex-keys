@@ -1,0 +1,156 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:themes="using:RaidexKeys.App.Themes"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+  <!--
+    "Einstellungen" on tabs (Lars, 2026-09-13), in the raid calendar's frame:
+    the title with the tabs on the head's line, below it the cards of the tab
+    chosen - Allgemein, Raidex, Planung, AddOns-Ordner.
+  -->
+  <Grid RowDefinitions="Auto,*">
+    <Border Classes="pagehead" Padding="28,26,28,0">
+      <StackPanel>
+        <TextBlock Classes="h1" Text="{x:Static l:Strings.SettingsTitle}" />
+        <ListBox Margin="0,20,0,0" ItemsSource="{Binding Tabs}" SelectedIndex="{Binding TabIndex}"
+                 ItemContainerTheme="{StaticResource PageTabTheme}"
+                 Background="Transparent" BorderThickness="0" Padding="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+        </ListBox>
+      </StackPanel>
+    </Border>
+
+    <ScrollViewer Grid.Row="1">
+      <StackPanel Margin="28,22,28,30" Spacing="22" MaxWidth="760" HorizontalAlignment="Left">
+
+        <!-- ===== Allgemein ===== -->
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsGeneral}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsLanguage}" />
+            <ComboBox ItemsSource="{Binding Languages}" SelectedIndex="{Binding LanguageIndex}" MinWidth="240" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.SettingsLanguageHint}" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsGeneral}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsMonoFont}" />
+            <ComboBox ItemsSource="{Binding MonoFontOptions}" SelectedItem="{Binding MonoFont}" MinWidth="320">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:MonoFontOption">
+                  <StackPanel Spacing="2">
+                    <TextBlock FontFamily="{Binding Family}" Text="{Binding Label}" />
+                    <TextBlock FontFamily="{Binding Family}" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Text="{Binding Sample}" />
+                  </StackPanel>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.SettingsMonoFontHint}" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsGeneral}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsTheme}" />
+            <ComboBox ItemsSource="{Binding ThemeOptions}" SelectedItem="{Binding Theme}" MinWidth="320">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="themes:AppTheme">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <ItemsControl ItemsSource="{Binding Swatches}" VerticalAlignment="Center">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <StackPanel Orientation="Horizontal" Spacing="3" />
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="IBrush">
+                          <Border Width="14" Height="14" CornerRadius="3" Background="{Binding}"
+                                  BorderBrush="{DynamicResource EdgeBrush}" BorderThickness="1" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                  </StackPanel>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.SettingsThemeHint}" />
+          </StackPanel>
+        </Border>
+
+        <!-- ===== Raidex: log in to store routes, share them and see the raid calendar ===== -->
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsRaidexTab}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsRaidex}" />
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.RaidexIntro}" IsVisible="{Binding !IsLoggedIn}" />
+            <TextBlock Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{Binding RaidexStatus}"
+                       IsVisible="{Binding RaidexStatus, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <!-- While connecting: the code, as the Raidex page shows it -->
+            <TextBlock Classes="mono" FontSize="28" LetterSpacing="4" Foreground="{DynamicResource GlowBrush}" Text="{Binding ConnectCode}"
+                       IsVisible="{Binding ConnectCode, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <Button Classes="primary" Content="{x:Static l:Strings.RaidexLogin}" Command="{Binding LoginCommand}" IsVisible="{Binding CanLogIn}" />
+              <!-- Logged out and logged in alike (Lars, 2026-09-11); while connecting the page's own button is there -->
+              <Button Classes="ghost" Content="{x:Static l:Strings.RaidexVisit}" Command="{Binding VisitRaidexCommand}" IsVisible="{Binding !IsLoggingIn}" />
+              <Button Classes="ghost" Content="{x:Static l:Strings.RaidexOpenPage}" Command="{Binding OpenConnectPageCommand}" IsVisible="{Binding IsLoggingIn}" />
+              <Button Classes="ghost" Content="{x:Static l:Strings.RaidexCancel}" Command="{Binding CancelLoginCommand}" IsVisible="{Binding IsLoggingIn}" />
+              <Button Classes="ghost" Content="{x:Static l:Strings.RaidexLogout}" Command="{Binding LogoutCommand}" IsVisible="{Binding IsLoggedIn}" />
+            </StackPanel>
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding RaidexReport}"
+                       IsVisible="{Binding RaidexReport, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <!-- Selectable: when no browser opens, it names the address to copy -->
+            <SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{Binding RaidexProblem}"
+                                 IsVisible="{Binding RaidexProblem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextFaintBrush}" TextWrapping="Wrap" Text="{Binding RaidexServer}" />
+          </StackPanel>
+        </Border>
+
+        <!-- ===== Planung ===== -->
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsPlanning}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsPlanning}" />
+            <ComboBox ItemsSource="{Binding PlanLevels}" SelectedIndex="{Binding PlanLevelsIndex}" MinWidth="240" />
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.SettingsPlanningHint}" />
+          </StackPanel>
+        </Border>
+
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsPlanning}">
+          <StackPanel Spacing="12">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.SettingsGroupAllowance}" />
+            <ComboBox ItemsSource="{Binding AllowanceOptions}" SelectedIndex="{Binding AllowanceIndex}" MinWidth="240" />
+            <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.SettingsGroupAllowanceHint}" />
+          </StackPanel>
+        </Border>
+
+        <!-- ===== AddOns-Ordner ===== -->
+        <Border Classes="card" Padding="20" IsVisible="{Binding ShowsFolder}">
+          <StackPanel Spacing="12">
+            <views:AddOnsFolderPicker DataContext="{Binding Folder}" />
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <Button Classes="primary" Content="{x:Static l:Strings.FolderApply}"
+                      Command="{Binding ApplyFolderCommand}" IsEnabled="{Binding Folder.CanApply}" />
+              <TextBlock Classes="hint" VerticalAlignment="Center" Text="{Binding SavedText}" />
+            </StackPanel>
+            <TextBlock Classes="label" Margin="0,8,0,0" Text="{x:Static l:Strings.FilesLabel}" />
+            <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+                       TextWrapping="Wrap" Text="{Binding FilesText}" />
+            <TextBlock Classes="hint" Foreground="{DynamicResource TextBrush}" Text="{Binding ErrorText}"
+                       IsVisible="{Binding ErrorText, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Classes="hint" Text="{x:Static l:Strings.SettingsFolderHint}" />
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

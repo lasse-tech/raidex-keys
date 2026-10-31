@@ -10,6 +10,24 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Frames>
+            <Frame parentKey="Chip">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="Bg" setAllPoints="true">
+                            <Color r="0.655" g="0.545" b="1" a="0.18"/>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="Label" inherits="GameFontNormalSmall" justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
     </Frame>
     <Frame name="RaidexKeysColorTemplate" mixin="RaidexKeysColorMixin" virtual="true">
         <Size y="26"/>

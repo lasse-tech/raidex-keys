@@ -1,0 +1,75 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RaidexKeys.App.ViewModels"
+        xmlns:views="using:RaidexKeys.App.Views"
+        xmlns:l="using:RaidexKeys.App.Localization"
+        x:Class="RaidexKeys.App.Views.MapWindow"
+        x:DataType="vm:RouteRowViewModel"
+        Width="1100" Height="780" MinWidth="480" MinHeight="360"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource WindowBrush}">
+  <!--
+    A route's map in a window of its own, moved and sized freely. The header
+    stays put; the map fills the rest in its proportions. "Route einblenden"
+    adds the route as text on the right: pull by pull, the number in the
+    pull's colour on the map, forces and enemies.
+  -->
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Classes="thead" Padding="20,12">
+      <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="20">
+        <StackPanel VerticalAlignment="Center">
+          <TextBlock Classes="h2" Text="{Binding Dungeon}" />
+          <TextBlock Classes="hint" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis">
+            <Run Text="{Binding Name}" />
+            <Run Text=" · " />
+            <Run Text="{Binding PullsLabel}" />
+            <Run Text=" · " />
+            <Run Foreground="{DynamicResource GlowBrush}" Text="{Binding ForcesLabel}" />
+          </TextBlock>
+        </StackPanel>
+        <ComboBox x:Name="FloorPicker" Grid.Column="1" VerticalAlignment="Center" MinWidth="120" />
+        <ToggleSwitch Grid.Column="2" VerticalAlignment="Center" IsChecked="{Binding Arrows}"
+                      ToolTip.Tip="{x:Static l:Strings.MapArrowsTip}"
+                      OnContent="{x:Static l:Strings.MapArrows}" OffContent="{x:Static l:Strings.MapArrows}" />
+        <ToggleSwitch x:Name="RouteToggle" Grid.Column="3" VerticalAlignment="Center"
+                      OnContent="{x:Static l:Strings.MapShowRoute}" OffContent="{x:Static l:Strings.MapShowRoute}" />
+      </Grid>
+    </Border>
+
+    <!-- The route as text; it scrolls on its own, the map keeps its place -->
+    <Border DockPanel.Dock="Right" Width="380" Background="{DynamicResource SidebarBrush}"
+            BorderBrush="{DynamicResource LineBrush}" BorderThickness="1,0,0,0"
+            IsVisible="{Binding #RouteToggle.IsChecked, FallbackValue=False}">
+      <ScrollViewer>
+        <StackPanel Margin="18,16" Spacing="12">
+          <TextBlock Classes="label" Text="{x:Static l:Strings.MapRouteTitle}" />
+          <ItemsControl ItemsSource="{Binding PullLines}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:PullLine">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Margin="0,0,0,12">
+                  <Border Width="24" Height="24" CornerRadius="12" VerticalAlignment="Top" Background="{Binding Color}">
+                    <TextBlock Classes="mono" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource OnArkanBrush}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Number}" />
+                  </Border>
+                  <StackPanel Grid.Column="1" Spacing="2">
+                    <TextBlock Classes="mono" FontSize="12" Foreground="{DynamicResource TextBrush}" Text="{Binding Forces}" />
+                    <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding Enemies}" />
+                  </StackPanel>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <TextBlock Classes="hint" IsVisible="{Binding Missing, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Run Text="{x:Static l:Strings.DetailMissing}" />
+            <Run Text="{Binding Missing}" />
+          </TextBlock>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+    <views:RouteMapView x:Name="Map" Margin="16" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Arrows="{Binding Arrows}" />
+  </DockPanel>
+</Window>

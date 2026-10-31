@@ -1,0 +1,28 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:RaidexKeys.App"
+             x:Class="RaidexKeys.App.App"
+             Name="Raidex Keys"
+             RequestedThemeVariant="Dark">
+  <!-- Dark only: the brand guide has no light variant. -->
+
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://RaidexKeys/Themes/Brand.axaml" />
+        <ResourceInclude Source="avares://RaidexKeys/Themes/Navigation.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://RaidexKeys/Themes/Controls.axaml" />
+  </Application.Styles>
+</Application>

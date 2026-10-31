@@ -1,0 +1,149 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:web="using:RaidexKeys.App.Web"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.PlannerView"
+             x:DataType="vm:GroupPlannerViewModel">
+  <!--
+    "Gruppenplaner" (brand guide, section 05; plan 7.2b): the head carries the
+    switches and the button, below it the candidates on the left and the group
+    that comes out of them on the right.
+  -->
+  <Grid RowDefinitions="Auto,*">
+
+    <!-- Title and intro left, the two switches and the button right -->
+    <Border Classes="pagehead">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel MaxWidth="620" HorizontalAlignment="Left">
+          <TextBlock Classes="h1" Text="{x:Static l:Strings.PlannerTitle}" />
+          <TextBlock Classes="sub" TextWrapping="Wrap" Text="{x:Static l:Strings.PlannerIntro}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" VerticalAlignment="Center"
+                    IsVisible="{Binding HasData}">
+          <StackPanel Spacing="9" VerticalAlignment="Center">
+            <CheckBox IsChecked="{Binding BySpec}" Content="{x:Static l:Strings.PlannerBySpec}"
+                      ToolTip.Tip="{x:Static l:Strings.PlannerBySpecHint}" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <CheckBox IsChecked="{Binding ByItemLevel}" IsEnabled="{Binding KnowsRewards}"
+                        Content="{x:Static l:Strings.PlannerByItemLevel}" ToolTip.Tip="{Binding ItemLevelHint}" />
+              <!-- Why the switch is grey: the addon has to bring the levels -->
+              <Border Classes="pill" VerticalAlignment="Center" IsVisible="{Binding !KnowsRewards}"
+                      ToolTip.Tip="{Binding ItemLevelHint}">
+                <TextBlock Text="{x:Static l:Strings.PlannerNeedsAddon}" />
+              </Border>
+            </StackPanel>
+          </StackPanel>
+          <Border Width="1" Background="{DynamicResource LineBrush}" />
+          <StackPanel Spacing="8" VerticalAlignment="Center">
+            <Button Classes="primary" Content="{x:Static l:Strings.PlannerPlan}" Command="{Binding PlanCommand}" />
+            <TextBlock Classes="label" Text="{Binding PickedLabel}" />
+          </StackPanel>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <views:EmptyState Grid.Row="1" Margin="28" VerticalAlignment="Top" IsVisible="{Binding !HasData}"
+                      Title="{x:Static l:Strings.EmptyPlannerTitle}"
+                      Body="{x:Static l:Strings.EmptyPlannerBody}" />
+
+    <Grid Grid.Row="1" ColumnDefinitions="420,Auto,*" IsVisible="{Binding HasData}">
+
+      <!-- Who plays tonight -->
+      <ScrollViewer>
+        <StackPanel Margin="26,22,26,30" Spacing="12">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.PlannerCandidates}" />
+            <TextBlock Grid.Column="1" Classes="hint" Text="{x:Static l:Strings.PlannerSeasonRating}" />
+          </Grid>
+          <ItemsControl ItemsSource="{Binding People}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel Spacing="6" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:PlannerPick">
+                <ToggleButton Classes="candidate" IsChecked="{Binding IsPicked}" ToolTip.Tip="{Binding Tip}">
+                  <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                    <Border Classes="tick" VerticalAlignment="Center">
+                      <Path Data="M0,3.2 L2.6,6 L7.4,0.6" Width="8" Height="7" StrokeThickness="1.8"
+                            StrokeLineCap="Round" StrokeJoin="Round" />
+                    </Border>
+                    <!-- Blizzard's own icon for the spec where Raidex has one,
+                         the drawn role glyph where it has not -->
+                    <Panel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center"
+                           ToolTip.Tip="{Binding RoleTip}">
+                      <Image Classes="spec" web:RemoteImage.Url="{Binding SpecIcon}"
+                             IsVisible="{Binding HasSpecIcon}" />
+                      <views:RoleIcon Role="{Binding Role}" IsVisible="{Binding !HasSpecIcon}" />
+                    </Panel>
+                    <StackPanel Grid.Column="2" Margin="10,0" VerticalAlignment="Center">
+                      <TextBlock FontWeight="SemiBold" Foreground="{Binding ClassColor}" Text="{Binding Name}" />
+                      <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextFaintBrush}"
+                                 Text="{Binding Line}" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="3" Classes="key" FontSize="13" VerticalAlignment="Center"
+                               Text="{Binding KeyLabel}"
+                               IsVisible="{Binding KeyLabel, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  </Grid>
+                </ToggleButton>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
+
+      <Border Grid.Column="1" Width="1" Background="{DynamicResource LineBrush}" />
+
+      <!-- What comes out of them -->
+      <ScrollViewer Grid.Column="2">
+        <StackPanel Margin="28,22,28,30" Spacing="14">
+          <TextBlock Classes="hint" TextWrapping="Wrap" Foreground="{DynamicResource TextBodyBrush}"
+                     Text="{x:Static l:Strings.PlannerNeedsLogin}" IsVisible="{Binding NeedsLogin}" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding Message}"
+                     IsVisible="{Binding Message, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+          <StackPanel Spacing="14" IsVisible="{Binding HasPlan}">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.PlannerBest}" />
+            <ContentControl Content="{Binding Best}">
+              <ContentControl.ContentTemplate>
+                <DataTemplate x:DataType="vm:PlannedGroup">
+                  <views:PlannedGroupCard />
+                </DataTemplate>
+              </ContentControl.ContentTemplate>
+            </ContentControl>
+          </StackPanel>
+
+          <StackPanel Spacing="10" IsVisible="{Binding HasMore}">
+            <TextBlock Classes="label" Text="{x:Static l:Strings.PlannerMore}" />
+            <Border Classes="table">
+              <ItemsControl ItemsSource="{Binding More}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:PlannedGroup">
+                    <Border Classes="row" Padding="16,13">
+                      <Grid ColumnDefinitions="*,1.1*,Auto">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <TextBlock Foreground="{DynamicResource TextBrush}" Text="{Binding Dungeon}" />
+                          <TextBlock Classes="key" FontSize="13" Text="{Binding LevelLabel}" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Classes="hint" TextWrapping="NoWrap"
+                                   TextTrimming="CharacterEllipsis" Text="{Binding HolderName}" />
+                        <TextBlock Grid.Column="2" Classes="mono" FontSize="14"
+                                   Foreground="{DynamicResource TimerBrush}" Text="{Binding Total}" />
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Border>
+          </StackPanel>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </Grid>
+</UserControl>

@@ -1,0 +1,44 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.RowDetails"
+             x:DataType="vm:IRowDetails">
+  <!-- The slid-out part of a row: label and value per line, then the links. -->
+  <StackPanel Spacing="4" Grid.IsSharedSizeScope="True">
+    <ItemsControl ItemsSource="{Binding Details}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="vm:DetailLine">
+          <Grid Margin="0,3">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" SharedSizeGroup="DetailLabel" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Classes="label" Margin="0,0,20,0" VerticalAlignment="Center" Text="{Binding Label}" />
+            <TextBlock Grid.Column="1" Classes="mono" FontSize="12" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextBodyBrush}" Text="{Binding Value}" />
+          </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <StackPanel Orientation="Horizontal" Spacing="18" Margin="0,8,0,0">
+      <Button Classes="plain detail" Command="{Binding OpenCommand}" CommandParameter="{Binding WowheadUrl}"
+              IsVisible="{Binding WowheadUrl, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <Image Source="avares://RaidexKeys/Assets/Icons/wowhead.png" />
+          <TextBlock Text="{x:Static l:Strings.LinkWowhead}" />
+        </StackPanel>
+      </Button>
+      <Button Classes="plain detail" Command="{Binding OpenCommand}" CommandParameter="{Binding RaiderIoUrl}"
+              IsVisible="{Binding RaiderIoUrl, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <Image Classes="raiderio" Source="avares://RaidexKeys/Assets/Icons/raiderio.png" />
+          <TextBlock Text="{x:Static l:Strings.LinkRaiderIo}" />
+        </StackPanel>
+      </Button>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

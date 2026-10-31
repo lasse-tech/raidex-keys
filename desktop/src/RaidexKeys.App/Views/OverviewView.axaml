@@ -1,0 +1,196 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+                          xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:web="using:RaidexKeys.App.Web"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.OverviewView"
+             x:DataType="vm:OverviewViewModel">
+  <!-- "Übersicht", section 05 of the brand guide, element by element. -->
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="22">
+
+      <!-- Title left, headline figures right, both on the baseline -->
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel VerticalAlignment="Bottom">
+          <TextBlock Classes="h1" Text="{x:Static l:Strings.OverviewTitle}" />
+          <!-- "Reset in 3 Tagen, 10 Std · Zarok", the character opening Raider.IO -->
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Classes="sub" VerticalAlignment="Center" Text="{Binding Subtitle}"
+                       IsVisible="{Binding Subtitle, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <Button Classes="plain" Command="{Binding OpenCommand}" CommandParameter="{Binding RaiderIoUrl}"
+                    ToolTip.Tip="{x:Static l:Strings.LinkRaiderIo}"
+                    IsVisible="{Binding RaiderIoUrl, Converter={x:Static ObjectConverters.IsNotNull}}">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Classes="sub" Text="{Binding Character}" />
+                <Image Classes="raiderio" Source="avares://RaidexKeys/Assets/Icons/raiderio.png" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20"
+                    VerticalAlignment="Bottom" IsVisible="{Binding HasData}">
+          <StackPanel>
+            <TextBlock Classes="stat" Foreground="{DynamicResource GlowBrush}" Text="{Binding Score}" />
+            <TextBlock Classes="label" LetterSpacing="1.2" Text="{x:Static l:Strings.StatScore}" />
+          </StackPanel>
+          <StackPanel>
+            <TextBlock Classes="stat" Foreground="{DynamicResource TimerBrush}" Text="{Binding InTimeLabel}" />
+            <TextBlock Classes="label" LetterSpacing="1.2" Text="{x:Static l:Strings.StatInTime}" />
+          </StackPanel>
+        </StackPanel>
+      </Grid>
+
+      <views:EmptyState IsVisible="{Binding !HasData}"
+                        Title="{x:Static l:Strings.EmptyNoDataTitle}"
+                        BodyLink="{x:Static web:AddonLink.Text}"
+                        BodyLinkUrl="{x:Static web:AddonLink.Url}"
+                        Body="{x:Static l:Strings.EmptyNoDataBody}"
+                        Detail="{Binding EmptyDetail}" OffersSample="True" />
+
+      <!-- Next run and rating goal, side by side -->
+      <Grid ColumnDefinitions="*,12,*" IsVisible="{Binding HasData}">
+        <!-- The key's dungeon behind the card, as in the rows below -->
+        <Border Classes="card" Padding="0" ClipToBounds="True"
+                IsVisible="{Binding NextRun, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <Panel>
+            <Border web:RemoteImage.Background="{Binding NextRun.ImageUrl}" CornerRadius="10" />
+            <Border Background="{DynamicResource CardFade}" CornerRadius="10" />
+            <StackPanel Spacing="10" Margin="16">
+              <TextBlock Classes="label" Text="{x:Static l:Strings.CardNextRun}" />
+              <Button Classes="plain" HorizontalAlignment="Left" Command="{Binding OpenCommand}"
+                      CommandParameter="{Binding NextRun.WowheadUrl}"
+                      IsEnabled="{Binding NextRun.WowheadUrl, Converter={x:Static ObjectConverters.IsNotNull}}"
+                      ToolTip.Tip="{x:Static l:Strings.LinkWowhead}">
+                <!-- Dungeon and key open Wowhead, without its icon (Lars, 2026-09-11) -->
+                <TextBlock Classes="h2">
+                  <Run Text="{Binding NextRun.Title}" />
+                  <Run Classes="key" Text="{Binding NextRun.LevelLabel}" />
+                </TextBlock>
+              </Button>
+              <TextBlock Classes="hint" Text="{Binding NextRun.RouteLine}"
+                         IsVisible="{Binding NextRun.RouteLine, Converter={x:Static ObjectConverters.IsNotNull}}" />
+              <TextBlock Classes="hint" Text="{Binding NextRun.GainLine}"
+                         IsVisible="{Binding NextRun.GainLine, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </StackPanel>
+          </Panel>
+        </Border>
+        <Border Grid.Column="2" Classes="card" IsVisible="{Binding Goal, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <StackPanel Spacing="10">
+            <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,-4,-6,-4">
+              <TextBlock Classes="label" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"
+                         Text="{Binding Goal.Label}" />
+              <Button Grid.Column="1" Classes="step" Command="{Binding LowerGoalCommand}"
+                      ToolTip.Tip="{x:Static l:Strings.GoalLower}">
+                <Path Data="M0,0 L10,0" Width="10" Height="1" />
+              </Button>
+              <Button Grid.Column="2" Classes="step" Command="{Binding RaiseGoalCommand}"
+                      ToolTip.Tip="{x:Static l:Strings.GoalRaise}">
+                <Path Data="M0,5 L10,5 M5,0 L5,10" Width="10" Height="10" />
+              </Button>
+            </Grid>
+            <!-- The plan; all of it opens the full list -->
+            <Button Classes="reveal" ToolTip.Tip="{x:Static l:Strings.ShowPlan}">
+              <StackPanel Spacing="10">
+                <TextBlock Classes="h2" Text="{Binding Goal.RunsLabel}" />
+                <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding Goal.Suggestion}" />
+              </StackPanel>
+              <Button.Flyout>
+                <Flyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="card">
+                  <StackPanel Spacing="10" MaxWidth="400">
+                    <TextBlock Classes="label" Foreground="{DynamicResource TextBrush}" Text="{Binding Goal.PlanTitle}" />
+                    <ItemsControl ItemsSource="{Binding Goal.Runs}" Grid.IsSharedSizeScope="True">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:GoalRun">
+                          <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="Auto" SharedSizeGroup="PlanDungeon" />
+                              <ColumnDefinition Width="Auto" SharedSizeGroup="PlanLevel" />
+                              <ColumnDefinition Width="Auto" SharedSizeGroup="PlanGain" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Margin="0,0,24,0" Text="{Binding Dungeon}" />
+                            <TextBlock Grid.Column="1" Classes="key" Margin="0,0,24,0" HorizontalAlignment="Right"
+                                       Text="{Binding LevelLabel}" />
+                            <TextBlock Grid.Column="2" Classes="mono" HorizontalAlignment="Right"
+                                       Foreground="{DynamicResource GlowBrush}" Text="{Binding GainLabel}" />
+                          </Grid>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Classes="hint" TextWrapping="Wrap" Text="{x:Static l:Strings.PlanNote}" />
+                  </StackPanel>
+                </Flyout>
+              </Button.Flyout>
+            </Button>
+            <ProgressBar Classes="bar timer" Minimum="0" Maximum="100" Value="{Binding Goal.Progress}" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- Best run per season dungeon; each row carries the dungeon's picture and slides out its details -->
+      <Border Classes="table" IsVisible="{Binding HasData}" Grid.IsSharedSizeScope="True">
+        <StackPanel>
+          <Border Classes="thead">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.4*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Key" />
+                <ColumnDefinition Width="36" />
+              </Grid.ColumnDefinitions>
+              <views:SortHeader Text="{x:Static l:Strings.ColDungeon}" Column="dungeon" Table="{Binding BestsTable}" />
+              <views:SortHeader Grid.Column="1" Text="{x:Static l:Strings.ColBestTime}" Column="time" Table="{Binding BestsTable}" />
+              <views:SortHeader Grid.Column="2" Text="{x:Static l:Strings.ColKey}" Column="key" Table="{Binding BestsTable}" />
+            </Grid>
+          </Border>
+          <ItemsControl ItemsSource="{Binding BestsTable.Rows}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:DungeonRowViewModel">
+                <Border Classes="row" Padding="0" ClipToBounds="True">
+                  <Panel>
+                    <Border web:RemoteImage.Background="{Binding ImageUrl}" />
+                    <Border Background="{DynamicResource RowFade}" />
+                    <StackPanel>
+                      <Border Classes="rowhead" views:RowToggle.IsEnabled="True">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.4*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Key" />
+                            <ColumnDefinition Width="36" />
+                          </Grid.ColumnDefinitions>
+                          <TextBlock VerticalAlignment="Center" Text="{Binding Dungeon}" />
+                          <TextBlock Grid.Column="1" Classes="mono" VerticalAlignment="Center"
+                                     Foreground="{DynamicResource TextMutedBrush}" Text="{Binding BestTimeLabel}" />
+                          <Button Grid.Column="2" Classes="plain" IsVisible="{Binding HasRun}"
+                                  Command="{Binding OpenCommand}" CommandParameter="{Binding WowheadUrl}"
+                                  ToolTip.Tip="{x:Static l:Strings.LinkWowhead}">
+                            <!-- The key opens Wowhead, without its icon (Lars, 2026-09-11) -->
+                            <TextBlock Classes="key" Text="{Binding KeyLabel}" />
+                          </Button>
+                          <TextBlock Grid.Column="2" Classes="mono" VerticalAlignment="Center"
+                                     Foreground="{DynamicResource TextFaintBrush}" Text="—" IsVisible="{Binding !HasRun}" />
+                          <ToggleButton Grid.Column="3" Classes="chevron" IsChecked="{Binding IsExpanded}"
+                                        ToolTip.Tip="{x:Static l:Strings.ShowDetails}">
+                            <Path Data="M0,0 L6,6 L12,0" Width="12" Height="6" StrokeLineCap="Round" StrokeJoin="Round" />
+                          </ToggleButton>
+                        </Grid>
+                      </Border>
+                      <views:Collapsible IsExpanded="{Binding IsExpanded}">
+                        <views:RowDetails Margin="16,2,16,16" />
+                      </views:Collapsible>
+                    </StackPanel>
+                  </Panel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+      <TextBlock Classes="hint" Text="{Binding NoRunsHint}" Margin="4,-8,0,0"
+                 IsVisible="{Binding NoRunsHint, Converter={x:Static ObjectConverters.IsNotNull}}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard
+# SPDX-License-Identifier: MIT
+[Desktop Entry]
+Type=Application
+Name=Raidex Keys
+GenericName=Mythic+ planner
+GenericName[de]=Mythic+-Planer
+Comment=Your Mythic+ week at a glance – even with WoW closed.
+Comment[de]=Deine Mythic+-Woche im Blick – auch wenn WoW zu ist.
+Exec=@BIN@/raidex-keys
+Icon=raidex-keys
+Terminal=false
+Categories=Game;
+Keywords=WoW;Mythic+;Keystone;Raidex;
+StartupWMClass=raidex-keys

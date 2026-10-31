@@ -1,0 +1,26 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             xmlns:web="using:RaidexKeys.App.Web"
+             x:Class="RaidexKeys.App.Views.KeystonesView"
+             x:DataType="vm:KeystonesViewModel">
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="22">
+      <StackPanel>
+        <TextBlock Classes="h1" Text="{x:Static l:Strings.KeystonesTitle}" />
+        <TextBlock Classes="sub" Text="{Binding Subtitle}" IsVisible="{Binding HasData}" />
+      </StackPanel>
+      <views:EmptyState IsVisible="{Binding !HasData}"
+                        Title="{x:Static l:Strings.EmptyNoDataTitle}"
+                        BodyLink="{x:Static web:AddonLink.Text}"
+                        BodyLinkUrl="{x:Static web:AddonLink.Url}"
+                        Body="{x:Static l:Strings.EmptyNoDataBody}"
+                        Detail="{Binding EmptyDetail}" OffersSample="True" />
+      <views:KeyTable Table="{Binding Table}" ShowVault="True" IsVisible="{Binding HasData}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

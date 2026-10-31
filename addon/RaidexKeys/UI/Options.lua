@@ -56,8 +56,18 @@ function RaidexKeysColorMixin:Repaint(data)
     self.Swatch.Fill:SetColorTexture(color[1], color[2], color[3], 1)
 end
 
+local CHIP_TEXT = "Made with <3 in Europe"
+local CHIP_GAP = 6
+local CHIP_HEIGHT = 18
+local CHIP_PAD_X = 8
+
 function RaidexKeysAboutMixin:Init(initializer)
     self.Text:SetText(initializer:GetData().text)
+    local chip = self.Chip
+    chip.Label:SetText(CHIP_TEXT)
+    chip:ClearAllPoints()
+    chip:SetPoint("TOPLEFT", self.Text, "BOTTOMLEFT", 0, -CHIP_GAP)
+    chip:SetSize(math.ceil(chip.Label:GetStringWidth()) + 2 * CHIP_PAD_X, CHIP_HEIGHT)
 end
 
 local function metadata(field)
@@ -70,13 +80,17 @@ local GREY = "|cff808080"
 
 local function aboutText()
     local lines = {}
+    local title = metadata("Title")
+    if title then lines[#lines + 1] = title end
     local version = metadata("Version")
     if version then
         lines[#lines + 1] = L["Version: %s (build %s)"]:format(version, metadata("X-Build") or "dev")
     end
+    local copyright = metadata("X-Copyright")
+    if copyright then lines[#lines + 1] = "\194\169 " .. copyright end
     local website = metadata("X-Website")
     if website then lines[#lines + 1] = L["More: %s"]:format((website:gsub("^%a+://", ""):gsub("/$", ""))) end
-    lines[#lines + 1] = GREY .. L["GNU GPL 3 or later, without any warranty"] .. "|r"
+    lines[#lines + 1] = GREY .. L["%s, without any warranty"]:format(metadata("X-License") or "MIT") .. "|r"
     lines[#lines + 1] = GREY .. L["Window font: Marcellus by Astigmatic, SIL Open Font License"] .. "|r"
     lines[#lines + 1] = GREY .. L["PT Sans Narrow by ParaType, SIL Open Font License"] .. "|r"
     return table.concat(lines, "\n")
@@ -98,7 +112,7 @@ local function addAbout()
     if not Settings.CreateElementInitializer then return end
     local text = aboutText()
     local initializer = Settings.CreateElementInitializer("RaidexKeysAboutTemplate", { text = text })
-    local extent = math.ceil(textHeight(text)) + ABOUT_BOTTOM_PAD
+    local extent = math.ceil(textHeight(text)) + CHIP_GAP + CHIP_HEIGHT + ABOUT_BOTTOM_PAD
     initializer.GetExtent = function() return extent end
     layout:AddInitializer(initializer)
 end

@@ -1,0 +1,140 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:views="using:RaidexKeys.App.Views"
+             xmlns:web="using:RaidexKeys.App.Web"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.KeyTable"
+             x:DataType="views:KeyTable">
+  <!--
+    Character, dungeon, key, score - the table of the in-game window
+    (section 04) in the desktop's table dress (section 05). Each row carries
+    its dungeon's picture, faded in from the right; its name opens Raider.IO
+    (which links on to the armory) without showing its icon (Lars, 2026-09-11),
+    the key Wowhead. The chevron slides out the
+    details: timer and chests, best run, vault, when seen.
+  -->
+  <Border Classes="table" Grid.IsSharedSizeScope="True">
+    <StackPanel>
+      <Border Classes="thead">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*" />
+            <ColumnDefinition Width="1.6*" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Key" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Score" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Vault" />
+            <ColumnDefinition Width="36" />
+          </Grid.ColumnDefinitions>
+          <!-- A click on a header sorts by its column (Views/SortHeader) -->
+          <views:SortHeader Text="{x:Static l:Strings.ColCharacter}" Column="character"
+                            Table="{Binding Table, RelativeSource={RelativeSource AncestorType=views:KeyTable}}" />
+          <views:SortHeader Grid.Column="1" Text="{x:Static l:Strings.ColDungeon}" Column="dungeon"
+                            Table="{Binding Table, RelativeSource={RelativeSource AncestorType=views:KeyTable}}" />
+          <views:SortHeader Grid.Column="2" Margin="0,0,24,0" Text="{x:Static l:Strings.ColKey}" Column="key"
+                            Table="{Binding Table, RelativeSource={RelativeSource AncestorType=views:KeyTable}}" />
+          <views:SortHeader Grid.Column="3" Text="{x:Static l:Strings.ColScore}" Column="score"
+                            Table="{Binding Table, RelativeSource={RelativeSource AncestorType=views:KeyTable}}" />
+          <views:SortHeader Grid.Column="4" Margin="20,0,0,0" Text="{x:Static l:Strings.ColVault}" Column="vault"
+                            Table="{Binding Table, RelativeSource={RelativeSource AncestorType=views:KeyTable}}"
+                            IsVisible="{Binding ShowVault, RelativeSource={RelativeSource AncestorType=views:KeyTable}}" />
+        </Grid>
+      </Border>
+      <ItemsControl ItemsSource="{Binding Table.Rows, RelativeSource={RelativeSource AncestorType=views:KeyTable}}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:KeyRowViewModel">
+            <Border Classes="row" Padding="0" ClipToBounds="True">
+              <Panel>
+                <!-- The dungeon's picture runs through the row (behind it, so it never sizes
+                     the row), faded into the card towards the text -->
+                <Border web:RemoteImage.Background="{Binding ImageUrl}" />
+                <Border Background="{DynamicResource RowFade}" />
+
+                <StackPanel>
+                  <Border Classes="rowhead" views:RowToggle.IsEnabled="True">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*" />
+                        <ColumnDefinition Width="1.6*" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Key" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Score" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Vault" />
+                        <ColumnDefinition Width="36" />
+                      </Grid.ColumnDefinitions>
+
+                      <!-- Blizzard's specialisation icon where Raidex has one, the
+                           drawn role glyph where it has not; the spec under the name -->
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Panel VerticalAlignment="Center" IsVisible="{Binding HasRole}" ToolTip.Tip="{Binding RoleTip}">
+                          <Image Classes="spec" web:RemoteImage.Url="{Binding SpecIcon}" IsVisible="{Binding HasSpecIcon}" />
+                          <views:RoleIcon Role="{Binding Role}" IsVisible="{Binding !HasSpecIcon}" />
+                        </Panel>
+                        <Button Classes="plain" HorizontalAlignment="Left" Command="{Binding OpenCommand}"
+                                CommandParameter="{Binding RaiderIoUrl}" ToolTip.Tip="{x:Static l:Strings.LinkRaiderIo}">
+                          <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Foreground="{Binding ClassColor}" Text="{Binding Name}" />
+                            <TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextFaintBrush}"
+                                       Text="{Binding Spec}"
+                                       IsVisible="{Binding Spec, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                          </StackPanel>
+                        </Button>
+                      </StackPanel>
+
+                      <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource TextBodyBrush}"
+                                 Text="{Binding DungeonLabel}" />
+
+                      <Button Grid.Column="2" Classes="plain" Margin="0,0,24,0" IsVisible="{Binding HasKey}"
+                              Command="{Binding OpenCommand}" CommandParameter="{Binding WowheadUrl}"
+                              ToolTip.Tip="{x:Static l:Strings.LinkWowhead}">
+                        <!-- The key opens Wowhead, without its icon (Lars, 2026-09-11) -->
+                        <TextBlock Classes="key" Text="{Binding LevelLabel}" />
+                      </Button>
+                      <TextBlock Grid.Column="2" Classes="mono" Margin="0,0,24,0" VerticalAlignment="Center"
+                                 Foreground="{DynamicResource TextFaintBrush}" Text="—" IsVisible="{Binding !HasKey}" />
+
+                      <TextBlock Grid.Column="3" Classes="mono" VerticalAlignment="Center"
+                                 Foreground="{DynamicResource TextMutedBrush}" Text="{Binding Rating}" />
+
+                      <!-- The vault: three slots, or a reward still waiting from last week -->
+                      <ItemsControl Grid.Column="4" Margin="20,0,0,0" VerticalAlignment="Center"
+                                    ItemsSource="{Binding Vault}" IsVisible="{Binding ShowPips}">
+                        <ItemsControl.ItemsPanel>
+                          <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="4" />
+                          </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate x:DataType="vm:VaultPip">
+                            <Border Classes="pip" Classes.unlocked="{Binding Unlocked}" ToolTip.Tip="{Binding Tip}">
+                              <TextBlock Text="{Binding Label}" />
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                      <Border Grid.Column="4" Classes="pill claim" Margin="20,0,0,0" HorizontalAlignment="Left"
+                              VerticalAlignment="Center" IsVisible="{Binding RewardWaiting}"
+                              ToolTip.Tip="{x:Static l:Strings.VaultClaimTip}">
+                        <TextBlock Text="{x:Static l:Strings.VaultClaim}" />
+                      </Border>
+
+                      <ToggleButton Grid.Column="5" Classes="chevron" IsChecked="{Binding IsExpanded}"
+                                    ToolTip.Tip="{x:Static l:Strings.ShowDetails}">
+                        <Path Data="M0,0 L6,6 L12,0" Width="12" Height="6" StrokeLineCap="Round" StrokeJoin="Round" />
+                      </ToggleButton>
+                    </Grid>
+                  </Border>
+
+                  <views:Collapsible IsExpanded="{Binding IsExpanded}">
+                    <views:RowDetails Margin="16,2,16,16" />
+                  </views:Collapsible>
+                </StackPanel>
+              </Panel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </Border>
+</UserControl>

@@ -227,6 +227,14 @@ function Snapshot:Take()
     local char = db.chars[guid] or {}
     char.name = name
     char.realm = GetRealmName()
+    char.id = T.Board.Me()
+    if not IsInGuild() then
+        char.guild = nil
+    else
+        local guildName, _, _, guildRealm = GetGuildInfo("player")
+        guildName = Plain(guildName)
+        if guildName then char.guild = guildName .. "-" .. (guildRealm or GetRealmName()) end
+    end
     char.classId = classId
     char.level = UnitLevel("player")
 

@@ -1,0 +1,73 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RaidexKeys.App.ViewModels"
+             xmlns:l="using:RaidexKeys.App.Localization"
+             x:Class="RaidexKeys.App.Views.PlannedGroupCard"
+             x:DataType="vm:PlannedGroup">
+  <!-- One group the planner proposes: the key it runs, who carries it, what
+       the five gain together and each on their own. -->
+  <Border Classes="card group">
+    <StackPanel Margin="24,22" Spacing="18">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="4">
+          <Button Classes="plain" HorizontalAlignment="Left" Command="{Binding OpenCommand}"
+                  CommandParameter="{Binding WowheadUrl}" ToolTip.Tip="{x:Static l:Strings.LinkWowhead}">
+            <TextBlock Classes="h2" FontSize="24">
+              <Run Text="{Binding Dungeon}" />
+              <Run Classes="key" Text="{Binding LevelLabel}" />
+            </TextBlock>
+          </Button>
+          <TextBlock Classes="hint" Text="{Binding HolderName}" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+          <TextBlock Classes="mono" FontSize="22" HorizontalAlignment="Right"
+                     Foreground="{DynamicResource TimerBrush}" Text="{Binding Total}" />
+          <TextBlock Classes="label" HorizontalAlignment="Right" Text="{x:Static l:Strings.PlannerTotalLabel}" />
+        </StackPanel>
+      </Grid>
+
+      <ItemsControl ItemsSource="{Binding Seats}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Orientation="Horizontal" />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:PlannedSeat">
+            <!-- The one who carries the key stands out by its arkan edge -->
+            <Border Classes="seat" Classes.holder="{Binding HoldsKey}" Margin="0,0,10,10" Width="240"
+                    ToolTip.Tip="{Binding Tip}">
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel VerticalAlignment="Center" Spacing="3">
+                  <TextBlock FontWeight="SemiBold" FontSize="15" Foreground="{Binding ClassColor}" Text="{Binding Name}" />
+                  <StackPanel Orientation="Horizontal" Spacing="7">
+                    <TextBlock Classes="mono" FontSize="11" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFaintBrush}" Text="{Binding Line}" />
+                    <!-- Gear light for this key: said, not held against them -->
+                    <Border Classes="pill light" VerticalAlignment="Center" ToolTip.Tip="{Binding LightTip}"
+                            IsVisible="{Binding Light, Converter={x:Static ObjectConverters.IsNotNull}}">
+                      <TextBlock Text="{Binding Light}" />
+                    </Border>
+                  </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                  <TextBlock Classes="mono gain" FontSize="16" HorizontalAlignment="Right"
+                             Classes.nothing="{Binding !Gains}" Text="{Binding Gain}" />
+                  <TextBlock Classes="label" HorizontalAlignment="Right" Text="{x:Static l:Strings.PlannerSeatGain}" />
+                </StackPanel>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <!-- Who the run pays nothing, and why - the group is chosen by them -->
+      <Border BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0" Padding="0,14,0,0"
+              IsVisible="{Binding Note, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <TextBlock Classes="hint" TextWrapping="Wrap" Text="{Binding Note}" />
+      </Border>
+    </StackPanel>
+  </Border>
+</UserControl>

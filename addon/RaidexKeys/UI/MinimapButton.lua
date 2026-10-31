@@ -71,9 +71,9 @@ function MinimapButton.OnClick(_, mouseButton)
     if mouseButton == "RightButton" then
         local link = MinimapButton.KeystoneLink()
         if link then MinimapButton.LinkInChat(link) else T.Addon:Print(L["No keystone in your bags."]) end
-    elseif IsShiftKeyDown and IsShiftKeyDown() then
+    elseif T.Addon:ShiftDown() then
         T.OpenOptions()
-    elseif IsControlKeyDown and IsControlKeyDown() then
+    elseif T.Addon:ControlDown() then
         T.Timer:SetShown(not T.Timer.Wanted(), true)
     else
         T.Window:Toggle()

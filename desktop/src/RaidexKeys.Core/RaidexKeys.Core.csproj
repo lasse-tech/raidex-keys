@@ -1,0 +1,19 @@
+<!-- SPDX-FileCopyrightText: 2026 lasse tech, Lars Gossard -->
+<!-- SPDX-License-Identifier: MIT -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Every Mythic+ dungeon with its Wowhead zone and Blizzard's picture;
+       generated from the game's tables once per season. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Data\dungeons.json" LogicalName="RaidexKeys.dungeons.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Formats.Cbor" Version="10.0.12" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+  </ItemGroup>
+</Project>

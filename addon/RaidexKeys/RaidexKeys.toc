@@ -4,13 +4,15 @@
 ## Notes-deDE: Keystones aller Twinks, deiner Gruppe und deiner Gilde, eine Pinnwand, ein Raidkalender und ein Mythic+-Timer.
 ## Author: Lars Gossard
 ## Version: 0.8.0
-## X-Build: 254
-## X-Email: raidex@incudex.de
+## X-Build: 316
+## X-Email: lars@lasse-tech.de
 ## X-Website: https://raidex.app/keys/
-## X-License: GPL-3.0-or-later
+## X-Donate: https://buymeacoffee.com/gossardla
+## X-Copyright: 2026 lasse tech, Lars Gossard
+## X-License: MIT
 ## IconTexture: Interface\AddOns\RaidexKeys\Media\Icon
 ## OptionalDeps: ElvUI, SharedMedia, SharedMediaAdditionalFonts
-## SavedVariables: RaidexKeysDB
+## SavedVariables: RaidexKeysDB, RaidexKeysInbox
 
 Locales\Locale.lua
 Locales\deDE.lua
@@ -24,6 +26,7 @@ Core\Snapshot.lua
 Core\Exchange.lua
 Core\Board.lua
 Core\Raids.lua
+Core\Inbox.lua
 Core\Sample.lua
 
 UI\Options.xml
