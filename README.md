@@ -126,6 +126,10 @@ arguments in each script's header.
 [Open an issue](https://github.com/lasse-tech/raidex-keys/issues/new/choose), in
 German or English.
 
+## Support
+
+[Buy me a coffee](https://buymeacoffee.com/gossardla)
+
 ## Licence
 
 Copyright © 2026 lasse tech, Lars Gossard · <lars@lasse-tech.de>
