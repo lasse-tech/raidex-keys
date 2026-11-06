@@ -8,6 +8,10 @@ on:
       tag:
         description: Release tag whose addon zip goes to CurseForge and Wago
         required: true
+      force:
+        description: Send the addon even if an earlier release carried the same version
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -21,6 +25,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          FORCE: ${{ inputs.force }}
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
         run: bash .github/scripts/stores.sh

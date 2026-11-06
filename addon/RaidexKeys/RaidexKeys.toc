@@ -4,7 +4,7 @@
 ## Notes-deDE: Keystones aller Twinks, deiner Gruppe und deiner Gilde, eine Pinnwand, ein Raidkalender und ein Mythic+-Timer.
 ## Author: Lars Gossard
 ## Version: 0.9.0
-## X-Build: 325
+## X-Build: 328
 ## X-Email: lars@lasse-tech.de
 ## X-Website: https://raidex.app/keys/
 ## X-Curse-Project-ID: 1691844

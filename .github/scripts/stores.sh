@@ -13,7 +13,9 @@ gh release download "$tag" -R "$repo" -p 'raidex-keys-addon-*.zip' -D "$work"
 zip=$(find "$work" -name 'raidex-keys-addon-*.zip' | head -n 1)
 [ -n "$zip" ] || { echo "release $tag has no raidex-keys-addon-*.zip"; exit 1; }
 gh release view "$tag" -R "$repo" --json body > "$work/release.json"
-jq -r .body "$work/release.json" > "$work/changelog.md"
+# Only the addon's part of the notes: from **Addon** to the next bold heading or rule.
+jq -r .body "$work/release.json" | awk '/^\*\*Addon\*\*/ { on = 1; next } on && (/^\*\*/ || /^---/) { exit } on' > "$work/changelog.md"
+[ -s "$work/changelog.md" ] || jq -r .body "$work/release.json" > "$work/changelog.md"
 
 toc=$(unzip -p "$zip" RaidexKeys/RaidexKeys.toc | tr -d '\r')
 field() { sed -n "s/^## $1: *//p" <<< "$toc" | head -n 1; }
@@ -26,6 +28,16 @@ if [ -z "$cf_id" ] || [ -z "$wago_id" ] || [ -z "$version" ]; then
     echo "TOC lacks X-Curse-Project-ID, X-Wago-ID or Version"; exit 1
 fi
 
+# An app release with an unchanged addon sends nothing: the stores know that version already.
+zip_name=$(basename "$zip")
+older=$(gh api "repos/$repo/releases?per_page=50" | jq -r --arg tag "$tag" --arg zip "$zip_name" \
+    '[.[] | select(.draft | not)] | sort_by(.published_at) | (map(.tag_name) | index($tag)) as $i
+     | .[:$i] | map(select(any(.assets[]; .name == $zip))) | length')
+if [ "$older" != 0 ] && [ "${FORCE:-}" != true ]; then
+    echo "addon $version went out with an earlier release - nothing to send (FORCE=true sends it again)"
+    exit 0
+fi
+
 # 120105 -> 12.1.5
 patches=$(field Interface | tr ',' '\n' | tr -d ' ' | awk 'NF { printf "%d.%d.%d\n", int($1 / 10000), int($1 / 100) % 100, $1 % 100 }')
 [ -n "$patches" ] || { echo "TOC has no ## Interface:"; exit 1; }
@@ -33,8 +45,8 @@ patches_json=$(jq -R . <<< "$patches" | jq -s -c .)
 
 # Pre-release on GitHub concerns the desktop app; the addon always goes out as a release.
 cf_type=release; wago_stability=stable
-# Named after the release, like on GitHub and lasse-tech.de; the addon's own version is in the TOC.
-label="Raidex Keys ${tag#v}"
+# The addon has its own version, independent of the app's release tag.
+label="Raidex Keys $version"
 echo "$label ($(tr '\n' ' ' <<< "$patches")$cf_type) from $tag"
 
 # CurseForge: game version ids of type 517 (retail)
