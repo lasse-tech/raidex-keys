@@ -45,8 +45,10 @@ cf_ids=$(jq -c --argjson want "$patches_json" '[.[] | select(.gameVersionTypeID 
 [ "$cf_ids" != "[]" ] || { echo "CurseForge knows none of $patches_json"; exit 1; }
 cf_payload=$(jq -n -c --arg name "$label" --argjson ids "$cf_ids" --arg type "$cf_type" --rawfile log "$work/changelog.md" \
     '{displayName: $name, gameVersions: $ids, releaseType: $type, changelog: $log, changelogType: "markdown"}')
+# From a file: curl -F cuts an inline value at the first ';'
+printf '%s' "$cf_payload" > "$work/cf-metadata.json"
 code=$(curl -sS --retry 3 --retry-delay 10 -o "$work/cf.json" -w '%{http_code}' \
-    -H "x-api-token: $CF_API_KEY" -F "metadata=$cf_payload" -F "file=@$zip" \
+    -H "x-api-token: $CF_API_KEY" -F "metadata=<$work/cf-metadata.json" -F "file=@$zip" \
     "https://wow.curseforge.com/api/projects/$cf_id/upload-file")
 [ "$code" = 200 ] || { echo "CurseForge: HTTP $code"; cat "$work/cf.json"; exit 1; }
 echo "CurseForge: uploaded to project $cf_id"
@@ -57,8 +59,9 @@ wago_patches=$(jq -c --argjson known "$wago_known" '[.[] | select(. as $p | $kno
 [ "$wago_patches" != "[]" ] || { echo "Wago knows none of $patches_json"; exit 1; }
 wago_payload=$(jq -n -c --arg label "$label" --argjson p "$wago_patches" --arg s "$wago_stability" --rawfile log "$work/changelog.md" \
     '{label: $label, supported_retail_patches: $p, stability: $s, changelog: $log}')
+printf '%s' "$wago_payload" > "$work/wago-metadata.json"
 code=$(curl -sS --retry 3 --retry-delay 10 -o "$work/wago.json" -w '%{http_code}' \
     -H "authorization: Bearer $WAGO_API_TOKEN" -H "accept: application/json" \
-    -F "metadata=$wago_payload" -F "file=@$zip" \
+    -F "metadata=<$work/wago-metadata.json" -F "file=@$zip" \
     "https://addons.wago.io/api/projects/$wago_id/version")
 case $code in 200|201) echo "Wago: uploaded to project $wago_id" ;; *) echo "Wago: HTTP $code"; cat "$work/wago.json"; exit 1 ;; esac
