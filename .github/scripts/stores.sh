@@ -12,7 +12,7 @@ work=$(mktemp -d)
 gh release download "$tag" -R "$repo" -p 'raidex-keys-addon-*.zip' -D "$work"
 zip=$(find "$work" -name 'raidex-keys-addon-*.zip' | head -n 1)
 [ -n "$zip" ] || { echo "release $tag has no raidex-keys-addon-*.zip"; exit 1; }
-gh release view "$tag" -R "$repo" --json body,isPrerelease > "$work/release.json"
+gh release view "$tag" -R "$repo" --json body > "$work/release.json"
 jq -r .body "$work/release.json" > "$work/changelog.md"
 
 toc=$(unzip -p "$zip" RaidexKeys/RaidexKeys.toc | tr -d '\r')
@@ -31,12 +31,10 @@ patches=$(field Interface | tr ',' '\n' | tr -d ' ' | awk 'NF { printf "%d.%d.%d
 [ -n "$patches" ] || { echo "TOC has no ## Interface:"; exit 1; }
 patches_json=$(jq -R . <<< "$patches" | jq -s -c .)
 
-if [ "$(jq -r .isPrerelease "$work/release.json")" = true ]; then
-    cf_type=beta; wago_stability=beta
-else
-    cf_type=release; wago_stability=stable
-fi
-label="Raidex Keys $version"
+# Pre-release on GitHub concerns the desktop app; the addon always goes out as a release.
+cf_type=release; wago_stability=stable
+# Named after the release, like on GitHub and lasse-tech.de; the addon's own version is in the TOC.
+label="Raidex Keys ${tag#v}"
 echo "$label ($(tr '\n' ' ' <<< "$patches")$cf_type) from $tag"
 
 # CurseForge: game version ids of type 517 (retail)
