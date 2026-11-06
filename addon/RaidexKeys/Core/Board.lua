@@ -371,7 +371,7 @@ function Board:Remove(id)
 end
 
 local function playerRole()
-    local spec = GetSpecialization and GetSpecialization()
+    local spec = C_SpecializationInfo.GetSpecialization()
     local role = spec and GetSpecializationRole and GetSpecializationRole(spec)
     for letter, name in pairs(ROLES) do
         if name == role then return letter end

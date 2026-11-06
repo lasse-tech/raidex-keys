@@ -3,6 +3,42 @@
 What changed in each release of Raidex Keys, app and addon. The files are on
 [GitHub releases](https://github.com/lasse-tech/raidex-keys/releases).
 
+## 0.18.0 – 2026-11-06
+
+**App**
+
+- The same five **colour themes** as the addon, under Einstellungen: Raidex,
+  Nord — Polar Night, Ember, Verdant and Slate. Slate is the default.
+- The raid calendar switches between **Raidex** and **WoW**: the guild raids
+  of the game's calendar with the addon's sign-ups, roles, item levels and
+  boss progress, as of the last logout or `/reload`.
+- **Sign up for a raid of the game's calendar in the app**: pick character,
+  role and note; the addon asks at that character's next login and applies it
+  with one click.
+- The app says when a newer addon is out and links to its **CurseForge** page.
+- A route from your own Mythic Dungeon Tools can be **saved in Raidex** straight
+  from its row, not only a pasted string.
+- A route saved in Raidex no longer carries the name of whoever exported it.
+- Without data yet, the overview offers a look at **sample data**.
+- `RAIDEXKEYS_SERVER` takes `prod` or a server's address; the `dev` shortcut
+  is gone.
+
+**Addon**
+
+- The **first Shift- or Ctrl-click after a `/reload` works again**. It was
+  swallowed: the game does not hand the keyboard state to a freshly loaded
+  interface, so the addon read "no key held" while the key was down. It now
+  listens for the key itself — on the minimap button and on the timer card.
+- **No more "script ran too long" in delves.** The guild's raid progress was
+  read from all its achievements in one go, and in a delve the game asks for
+  that every few seconds. The read is now spread over several frames and
+  waits while you are in combat.
+- Interface **120105** (12.1.5). Specialization, whispers, chat links and
+  party messages use the current game API (`C_SpecializationInfo`,
+  `ChatFrameUtil`, `C_ChatInfo`) instead of the deprecated globals.
+- Not for World of Warcraft: Forever: it has no Mythic+ (`Blizzard_ChallengesUI`
+  does not load there).
+
 ## Addon 0.8.0 – 2026-09-20
 
 - Hovering a row shows a **Raidex Keys mark** behind the name of everyone who

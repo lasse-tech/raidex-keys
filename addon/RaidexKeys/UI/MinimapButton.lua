@@ -61,10 +61,8 @@ function MinimapButton.KeystoneLink()
 end
 
 function MinimapButton.LinkInChat(link)
-    local insert = (ChatFrameUtil and ChatFrameUtil.InsertLink) or ChatEdit_InsertLink
-    if insert and insert(link) then return end
-    local open = (ChatFrameUtil and ChatFrameUtil.OpenChat) or ChatFrame_OpenChat
-    if open then open(link) end
+    if ChatFrameUtil.InsertLink(link) then return end
+    ChatFrameUtil.OpenChat(link)
 end
 
 function MinimapButton.OnClick(_, mouseButton)

@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://github.com/lasse-tech/raidex-keys/releases"><img alt="newest release" src="https://img.shields.io/github/v/release/lasse-tech/raidex-keys?include_prereleases&label=download&color=7C5CFF"></a>
-  <a href="https://github.com/lasse-tech/raidex-keys/tree/main/addon/RaidexKeys"><img alt="World of Warcraft 12.1.0" src="https://img.shields.io/badge/WoW-retail%2012.1.0-B8873B"></a>
+  <a href="https://github.com/lasse-tech/raidex-keys/tree/main/addon/RaidexKeys"><img alt="World of Warcraft 12.1.5" src="https://img.shields.io/badge/WoW-retail%2012.1.5-B8873B"></a>
   <a href="https://github.com/lasse-tech/raidex-keys/blob/main/LICENSE"><img alt="licence" src="https://img.shields.io/badge/licence-MIT-2C7BB6"></a>
   <a href="https://raidex.app/keys/"><img alt="languages" src="https://img.shields.io/badge/languages-DE%20%C2%B7%20EN-3B7DD8"></a>
   <a href="https://raidex.app"><img alt="made with love in Europe" src="https://img.shields.io/badge/made%20with%20%3C3%20in-Europe-003399"></a>

@@ -913,8 +913,7 @@ local function chatLocked()
 end
 
 local function sayToGroup(text)
-    local send = C_ChatInfo and C_ChatInfo.SendChatMessage or SendChatMessage
-    if send and IsInGroup and IsInGroup() and not chatLocked() and pcall(send, text, "PARTY") then return end
+    if IsInGroup() and not chatLocked() and pcall(C_ChatInfo.SendChatMessage, text, "PARTY") then return end
     T.Addon:Print(text)
 end
 

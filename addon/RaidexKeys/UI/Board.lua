@@ -116,8 +116,7 @@ local function formDefaults()
 end
 
 local function whisper(name)
-    local tell = (ChatFrameUtil and ChatFrameUtil.SendTell) or ChatFrame_SendTell
-    if tell and name and name ~= T.Board.Me() then tell(name) end
+    if name and name ~= T.Board.Me() then ChatFrameUtil.SendTell(name) end
 end
 BoardPane.Whisper = whisper
 
